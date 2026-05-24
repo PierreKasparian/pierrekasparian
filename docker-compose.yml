@@ -1,0 +1,40 @@
+volumes:
+  caddy-data:
+  caddy-config:
+
+networks:
+  web:
+    driver: bridge
+
+services:
+  app:
+    image: ${APP_IMAGE:-ghcr.io/pierrekasparian/pierrekasparian:latest}
+    build:
+      context: .
+    container_name: pierrekasparian-app
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - HOSTNAME=0.0.0.0
+    networks:
+      - web
+    expose:
+      - "3000"
+
+  caddy:
+    image: caddy:2.10-alpine
+    container_name: caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    networks:
+      - web
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      - app
