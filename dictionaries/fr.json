@@ -1,0 +1,27 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "about": "À propos",
+    "prestations": "Prestations",
+    "projects": "Projets",
+    "blog": "Blog",
+    "tools": "Outils",
+    "contact": "Contact"
+  },
+  "home": {
+    "badge": "Étudiant ingénieur UTT · Freelance IA",
+    "title": "Intégration IA sur mesure, conforme RGPD.",
+    "subtitle": "J'aide les PME et startups à intégrer des LLM, RAG et agents dans leurs outils — sans envoyer leurs données hors d'Europe.",
+    "ctaPrimary": "Voir mes prestations",
+    "ctaSecondary": "Me contacter",
+    "trustTitle": "Pourquoi travailler avec moi",
+    "trustItems": [
+      { "title": "Conformité RGPD by design", "body": "Hébergement EU, anonymisation, audit du flux de données. Vos données restent chez vous." },
+      { "title": "Stack IA à jour", "body": "LLM frontier & open source, RAG, fine-tuning, agents — je suis en veille active." },
+      { "title": "Livraison pragmatique", "body": "POC en quelques jours, mise en production cadrée, transfert de compétences inclus." }
+    ],
+    "projectsTitle": "Projets sélectionnés",
+    "projectsCta": "Voir tous les projets",
+    "footerNote": "Basé en France · Disponible pour des missions à distance"
+  }
+}

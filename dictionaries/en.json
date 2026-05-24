@@ -1,0 +1,27 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "prestations": "Services",
+    "projects": "Projects",
+    "blog": "Blog",
+    "tools": "Tools",
+    "contact": "Contact"
+  },
+  "home": {
+    "badge": "Engineering student at UTT · AI freelancer",
+    "title": "Custom AI integration, GDPR-compliant.",
+    "subtitle": "I help SMEs and startups integrate LLMs, RAG and agents into their tools — without sending their data outside Europe.",
+    "ctaPrimary": "See my services",
+    "ctaSecondary": "Get in touch",
+    "trustTitle": "Why work with me",
+    "trustItems": [
+      { "title": "GDPR-compliant by design", "body": "EU hosting, anonymisation, data-flow audit. Your data stays where it belongs." },
+      { "title": "Up-to-date AI stack", "body": "Frontier & open-source LLMs, RAG, fine-tuning, agents — I stay actively informed." },
+      { "title": "Pragmatic delivery", "body": "POC in days, framed productionisation, knowledge transfer included." }
+    ],
+    "projectsTitle": "Selected projects",
+    "projectsCta": "See all projects",
+    "footerNote": "Based in France · Available for remote work"
+  }
+}
