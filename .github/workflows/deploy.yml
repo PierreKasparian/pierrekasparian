@@ -1,0 +1,275 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Image tag to deploy (defaults to current SHA). Use sha-XXXXXXX to rollback."
+        required: false
+        type: string
+
+# Only one deploy at a time. New pushes wait — they don't cancel an in-flight deploy
+# (canceling mid-build/mid-up could leave the VPS in a half-state).
+concurrency:
+  group: deploy-prod
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  REGISTRY: ghcr.io
+  # Lowercase convention for GHCR. Hardcoded to avoid ${{ github.repository_owner }}
+  # returning "PierreKasparian" with mixed case.
+  IMAGE_OWNER: pierrekasparian
+  IMAGE_NAME: pierrekasparian
+
+jobs:
+  # Lint gate — `deploy.yml` is the only workflow that runs on push to main,
+  # so without this a direct push bypassing CI could ship broken code.
+  lint:
+    name: Lint (TypeScript / ESLint)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        run: npm run lint
+
+  build:
+    name: Build & push image
+    runs-on: ubuntu-latest
+    needs: [lint]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Compute image tag
+        id: meta
+        run: |
+          short_sha="${GITHUB_SHA:0:7}"
+          tag="${{ inputs.tag }}"
+          if [ -z "$tag" ]; then tag="sha-${short_sha}"; fi
+          echo "tag=${tag}" >> "$GITHUB_OUTPUT"
+          echo "image_ref=${REGISTRY}/${IMAGE_OWNER}/${IMAGE_NAME}" >> "$GITHUB_OUTPUT"
+
+      - name: Build & push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ steps.meta.outputs.image_ref }}:latest
+            ${{ steps.meta.outputs.image_ref }}:${{ steps.meta.outputs.tag }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          # Add NEXT_PUBLIC_* build-args here when needed:
+          # build-args: |
+          #   NEXT_PUBLIC_EXAMPLE=${{ secrets.NEXT_PUBLIC_EXAMPLE }}
+
+  deploy:
+    name: Deploy to VPS
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Compute tag
+        id: tag
+        run: |
+          short_sha="${GITHUB_SHA:0:7}"
+          tag="${{ inputs.tag }}"
+          if [ -z "$tag" ]; then tag="sha-${short_sha}"; fi
+          echo "tag=${tag}" >> "$GITHUB_OUTPUT"
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.2.0
+        env:
+          GHCR_USER: ${{ github.actor }}
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GIT_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPO: ${{ github.repository }}
+          IMAGE_TAG: ${{ steps.tag.outputs.tag }}
+          REGISTRY: ${{ env.REGISTRY }}
+          IMAGE_OWNER: ${{ env.IMAGE_OWNER }}
+          IMAGE_NAME: ${{ env.IMAGE_NAME }}
+          GIT_REF: ${{ github.sha }}
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_PORT || 22 }}
+          envs: GHCR_USER,GHCR_TOKEN,GIT_TOKEN,GITHUB_REPO,IMAGE_TAG,REGISTRY,IMAGE_OWNER,IMAGE_NAME,GIT_REF
+          script_stop: true
+          script: |
+            set -euo pipefail
+            cd /home/portfoliouser/pierrekasparian
+
+            echo "::group::Snapshot previous state (for rollback)"
+            PREV_SHA=$(git rev-parse HEAD || echo "")
+            {
+              echo "PREVIOUS_SHA=${PREV_SHA}"
+              if [ -f .env.deploy ]; then cat .env.deploy; fi
+            } > .deploy.previous.env
+            echo "Snapshot:"
+            cat .deploy.previous.env
+            echo "::endgroup::"
+
+            echo "::group::Sync repo"
+            git remote set-url origin "https://x-access-token:${GIT_TOKEN}@github.com/${GITHUB_REPO}.git"
+            git fetch --prune origin
+            # Hard reset so a manually-edited file on the VPS never blocks a deploy.
+            git reset --hard "${GIT_REF}"
+            git remote set-url origin "https://github.com/${GITHUB_REPO}.git"
+            echo "::endgroup::"
+
+            export APP_IMAGE="${REGISTRY}/${IMAGE_OWNER}/${IMAGE_NAME}:${IMAGE_TAG}"
+            echo "Deploying APP_IMAGE=${APP_IMAGE}"
+
+            # Persist tag so a `docker compose up -d` after a reboot picks the right image.
+            cat > .env.deploy <<EOF
+            APP_IMAGE=${APP_IMAGE}
+            EOF
+
+            echo "::group::GHCR login"
+            echo "${GHCR_TOKEN}" | docker login "${REGISTRY}" -u "${GHCR_USER}" --password-stdin
+            echo "::endgroup::"
+
+            echo "::group::Pull image"
+            docker compose pull app
+            echo "::endgroup::"
+
+            echo "::group::Rolling up"
+            # `up -d` recreates only services whose image/config changed (no full outage).
+            # --wait blocks until healthchecks pass before we run the smoke test.
+            docker compose up -d --remove-orphans --wait --wait-timeout 120
+            echo "::endgroup::"
+
+            echo "::group::Reload Caddy"
+            # Caddyfile is bind-mounted — reload picks up any changes without downtime.
+            docker compose exec -T caddy caddy reload --config /etc/caddy/Caddyfile --adapter caddyfile \
+              || docker compose restart caddy
+            echo "::endgroup::"
+
+            echo "::group::Logout & prune"
+            docker logout "${REGISTRY}" || true
+            # Only dangling images. Keeps tagged sha-XXX images around for rollback.
+            docker image prune -f
+            echo "::endgroup::"
+
+      - name: Smoke test
+        id: smoke
+        run: |
+          TARGET="https://pierrekasparian.com/api/health"
+          for i in $(seq 1 12); do
+            if curl -fsS --max-time 10 "${TARGET}"; then
+              echo "Health OK"; exit 0
+            fi
+            echo "Health check attempt $i failed, retrying in 5s..."
+            sleep 5
+          done
+          echo "Health check failed after 12 attempts (60s)" >&2
+          exit 1
+
+      # Triggers if "Deploy via SSH" or "Smoke test" failed.
+      # Reads the snapshot captured at deploy start and redeploys the previous ref + image.
+      - name: Auto-rollback on failure
+        if: failure()
+        uses: appleboy/ssh-action@v1.2.0
+        env:
+          GHCR_USER: ${{ github.actor }}
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GIT_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPO: ${{ github.repository }}
+          REGISTRY: ${{ env.REGISTRY }}
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_PORT || 22 }}
+          envs: GHCR_USER,GHCR_TOKEN,GIT_TOKEN,GITHUB_REPO,REGISTRY
+          script_stop: false
+          script: |
+            set -uo pipefail
+            cd /home/portfoliouser/pierrekasparian
+
+            if [ ! -f .deploy.previous.env ]; then
+              echo "::warning::No .deploy.previous.env snapshot — nothing to roll back to (likely the first-ever deploy). Skipping."
+              exit 0
+            fi
+
+            echo "::group::Loading previous snapshot"
+            cat .deploy.previous.env
+            # shellcheck disable=SC1091
+            source .deploy.previous.env
+            echo "::endgroup::"
+
+            if [ -z "${PREVIOUS_SHA:-}" ] || [ -z "${APP_IMAGE:-}" ]; then
+              echo "::warning::Snapshot incomplete (PREVIOUS_SHA or APP_IMAGE missing). Skipping rollback."
+              exit 0
+            fi
+
+            echo "::group::Rolling back to ${PREVIOUS_SHA} / ${APP_IMAGE}"
+            git remote set-url origin "https://x-access-token:${GIT_TOKEN}@github.com/${GITHUB_REPO}.git"
+            git fetch --prune origin
+            git reset --hard "${PREVIOUS_SHA}"
+            git remote set-url origin "https://github.com/${GITHUB_REPO}.git"
+            echo "::endgroup::"
+
+            export APP_IMAGE
+
+            cat > .env.deploy <<EOF
+            APP_IMAGE=${APP_IMAGE}
+            EOF
+
+            echo "::group::GHCR login"
+            echo "${GHCR_TOKEN}" | docker login "${REGISTRY}" -u "${GHCR_USER}" --password-stdin
+            echo "::endgroup::"
+
+            echo "::group::Pull previous image (cached)"
+            docker compose pull app || true
+            echo "::endgroup::"
+
+            echo "::group::Rolling up (previous version)"
+            docker compose up -d --remove-orphans
+            echo "::endgroup::"
+
+            echo "::group::Reload Caddy"
+            docker compose exec -T caddy caddy reload --config /etc/caddy/Caddyfile --adapter caddyfile \
+              || docker compose restart caddy
+            echo "::endgroup::"
+
+            docker logout "${REGISTRY}" || true
+
+            echo "::group::Verify rollback health"
+            TARGET="https://pierrekasparian.com/api/health"
+            for i in 1 2 3 4 5; do
+              if curl -fsS --max-time 10 "${TARGET}"; then
+                echo "Rollback healthy ✓"
+                exit 0
+              fi
+              echo "Rollback health attempt $i failed, retrying in 5s..."
+              sleep 5
+            done
+            # Don't exit non-zero — surface the ORIGINAL failure, not the rollback check.
+            echo "::warning::Rollback completed but health check still failing. Manual intervention needed."
+            echo "::endgroup::"
