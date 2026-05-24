@@ -164,12 +164,6 @@ jobs:
             docker compose up -d --remove-orphans --wait --wait-timeout 120
             echo "::endgroup::"
 
-            echo "::group::Reload Caddy"
-            # Caddyfile is bind-mounted — reload picks up any changes without downtime.
-            docker compose exec -T caddy caddy reload --config /etc/caddy/Caddyfile --adapter caddyfile \
-              || docker compose restart caddy
-            echo "::endgroup::"
-
             echo "::group::Logout & prune"
             docker logout "${REGISTRY}" || true
             # Only dangling images. Keeps tagged sha-XXX images around for rollback.
@@ -251,11 +245,6 @@ jobs:
 
             echo "::group::Rolling up (previous version)"
             docker compose up -d --remove-orphans
-            echo "::endgroup::"
-
-            echo "::group::Reload Caddy"
-            docker compose exec -T caddy caddy reload --config /etc/caddy/Caddyfile --adapter caddyfile \
-              || docker compose restart caddy
             echo "::endgroup::"
 
             docker logout "${REGISTRY}" || true

@@ -1,10 +1,14 @@
-volumes:
-  caddy-data:
-  caddy-config:
+# The host-level reverse proxy (Caddy/nginx running for another site) is the
+# entrypoint on 80/443. This stack only exposes the app on the shared `proxy`
+# network — no port binding here, no second Caddy.
+#
+# Pre-req on the VPS:
+#   docker network create proxy
+#   docker network connect proxy <existing_caddy_or_nginx_container>
 
 networks:
-  web:
-    driver: bridge
+  proxy:
+    external: true
 
 services:
   app:
@@ -18,23 +22,6 @@ services:
       - PORT=3000
       - HOSTNAME=0.0.0.0
     networks:
-      - web
+      - proxy
     expose:
       - "3000"
-
-  caddy:
-    image: caddy:2.10-alpine
-    container_name: caddy
-    restart: unless-stopped
-    ports:
-      - "80:80"
-      - "443:443"
-      - "443:443/udp"
-    networks:
-      - web
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile:ro
-      - caddy-data:/data
-      - caddy-config:/config
-    depends_on:
-      - app
