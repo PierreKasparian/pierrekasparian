@@ -121,11 +121,14 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
                 className="group"
               >
                 <Card className="h-full overflow-hidden transition-shadow group-hover:shadow-md">
-                  <div className="aspect-[16/10] w-full overflow-hidden bg-[var(--muted)]">
-                    {/* placeholder: images réelles à recopier dans /public */}
-                    <div className="flex h-full items-center justify-center text-xs text-[var(--muted-foreground)]">
-                      {project.imagePrincipale}
-                    </div>
+                  <div className="relative aspect-[16/10] w-full overflow-hidden bg-[var(--muted)]">
+                    <Image
+                      src={project.imagePrincipale}
+                      alt={project.title[lang]}
+                      fill
+                      className="object-cover transition-transform duration-300 group-hover:scale-105"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    />
                   </div>
                   <CardContent className="pt-6">
                     <CardTitle className="mb-2 text-base">
