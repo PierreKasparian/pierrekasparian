@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { Mail, MapPin, Clock } from "lucide-react";
+import { MapPin, Clock } from "lucide-react";
 import { getDictionary, hasLocale, type Locale } from "../dictionaries";
 import { ContactForm } from "@/components/contact-form";
 import { buildAlternates } from "@/lib/seo";
@@ -44,21 +44,6 @@ export default async function ContactPage({
           <div className="grid gap-16 lg:grid-cols-[1fr_2fr]">
             {/* LEFT — infos */}
             <aside className="space-y-6">
-              <div className="flex items-start gap-3">
-                <div className="mt-0.5 inline-flex size-8 shrink-0 items-center justify-center rounded-md bg-[var(--accent)] text-[var(--accent-foreground)]">
-                  <Mail className="size-4" />
-                </div>
-                <div>
-                  <p className="text-sm font-medium">Email</p>
-                  <a
-                    href="mailto:kasparianpierre@gmail.com"
-                    className="text-sm text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
-                  >
-                    kasparianpierre@gmail.com
-                  </a>
-                </div>
-              </div>
-
               <div className="flex items-start gap-3">
                 <div className="mt-0.5 inline-flex size-8 shrink-0 items-center justify-center rounded-md bg-[var(--accent)] text-[var(--accent-foreground)]">
                   <MapPin className="size-4" />
