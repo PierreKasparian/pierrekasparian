@@ -9,14 +9,15 @@
     "contact": "Contact"
   },
   "home": {
-    "badge": "AI freelancer · Engineering student",
-    "title": "Custom AI integration, GDPR-compliant.",
-    "subtitle": "I help SMEs and startups integrate LLMs, RAG and agents, without sending their data outside Europe.",
+    "badge": "AI & Data freelancer · Engineering student",
+    "title": "AI integration and data engineering, GDPR-compliant.",
+    "subtitle": "I help SMEs and startups transform raw data and deploy LLMs, RAG and AI agents, without sending their data outside Europe.",
     "ctaPrimary": "See my services",
     "ctaSecondary": "Get in touch",
     "trustTitle": "Why work with me",
     "trustItems": [
       { "title": "GDPR-compliant by design", "body": "EU hosting, anonymisation, data-flow audit. Your data stays where it belongs." },
+      { "title": "Data engineering included", "body": "SQL, DBT, transformation pipelines. I start from raw data and make it usable before AI even enters the picture." },
       { "title": "Up-to-date AI stack", "body": "Frontier & open-source LLMs, RAG, fine-tuning, agents. I stay actively informed." },
       { "title": "Pragmatic delivery", "body": "POC in days, framed productionisation, knowledge transfer included." }
     ],
@@ -25,21 +26,21 @@
       { "text": "I'm Pierre Kasparian, a ", "bold": false },
       { "text": "4th year computer engineering student at UTT", "bold": true },
       { "text": " (Université de Technologie de Troyes) and ", "bold": false },
-      { "text": "AI integration freelancer", "bold": true },
-      { "text": ". I design and deploy custom AI solutions for SMEs and startups, with one obsession: keeping your ", "bold": false },
+      { "text": "AI integration & data engineering freelancer", "bold": true },
+      { "text": ". I transform raw data into usable pipelines (SQL, DBT) and deploy custom AI solutions, with one obsession: keeping your ", "bold": false },
       { "text": "data in Europe", "bold": true },
       { "text": " and under your control.", "bold": false }
     ],
     "aboutSkillsLabel": "Skills",
     "aboutSkills": [
-      "LLM Engineering",
-      "RAG",
-      "Fine-tuning",
-      "AI Agents",
       "Python",
+      "LangChain",
+      "RAG",
+      "AI Agents",
+      "Data Engineering",
+      "SQL",
+      "DBT",
       "Machine Learning",
-      "Data Science",
-      "GDPR",
       "Next.js",
       "TypeScript"
     ],
@@ -71,9 +72,9 @@
   },
   "prestations": {
     "metaTitle": "Services",
-    "metaDescription": "AI audit, LLM integration, RAG, fine-tuning and team training - GDPR-compliant AI integration services.",
+    "metaDescription": "AI audit, LLM integration, RAG, fine-tuning, SQL/DBT data engineering and team training - GDPR-compliant services.",
     "heading": "My services",
-    "subtitle": "Custom AI integration with EU hosting and GDPR compliance by design.",
+    "subtitle": "Custom AI integration and data transformation (SQL, DBT), with EU hosting and GDPR compliance by design.",
     "contactCta": "Let's discuss your project",
     "back": "← Back to services",
     "askFor": "Get in touch about this service"
@@ -90,11 +91,11 @@
   },
   "about": {
     "metaTitle": "About",
-    "metaDescription": "4th year engineering student at UTT and AI integration freelancer, Pierre Kasparian.",
+    "metaDescription": "4th year engineering student at UTT, AI integration and data engineering freelancer (SQL, DBT), Pierre Kasparian.",
     "heading": "About",
-    "role": "AI freelancer · Engineering student at UTT",
+    "role": "AI & Data Engineering Freelancer · Engineering student at UTT",
     "introTitle": "Who I am",
-    "introBody": "I'm Pierre Kasparian, a 4th year computer engineering student at UTT (Université de Technologie de Troyes) and an AI integration freelancer. I design and deploy custom AI solutions for SMEs and startups, with one obsession: keeping your data in Europe and under your control.",
+    "introBody": "I'm Pierre Kasparian, a 4th year computer engineering student at UTT (Université de Technologie de Troyes) and an AI integration & data engineering freelancer. I transform raw data into usable pipelines (SQL, DBT) and deploy custom AI solutions for SMEs and startups, with one obsession: keeping your data in Europe and under your control.",
     "parcourTitle": "Background",
     "parcourItems": [
       { "title": "UTT - Computer Science & Information Systems", "date": "2022 – 2027", "body": "4th year. Generalist engineering programme, specialising in information systems and software development." },
