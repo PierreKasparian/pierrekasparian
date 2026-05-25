@@ -132,7 +132,7 @@
     "metaTitle": "Contact",
     "metaDescription": "Prenez contact pour discuter de votre projet d'intégration IA.",
     "heading": "Parlons de votre projet",
-    "subtitle": "Une idée, un projet, une question ? Je réponds sous 48h.",
+    "subtitle": "Une idée, un projet, une question ? Je réponds en quelques jours.",
     "nameLabel": "Nom",
     "namePlaceholder": "Votre nom",
     "emailLabel": "Email",
@@ -143,7 +143,7 @@
     "messagePlaceholder": "Décrivez votre projet ou votre question…",
     "send": "Envoyer le message",
     "sending": "Envoi en cours…",
-    "success": "Message envoyé ! Je vous réponds sous 48h.",
+    "success": "Message envoyé ! Je vous réponds en quelques jours.",
     "error": "Une erreur s'est produite. Réessayez ou écrivez-moi directement."
   }
 }

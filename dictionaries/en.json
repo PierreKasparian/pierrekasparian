@@ -132,7 +132,7 @@
     "metaTitle": "Contact",
     "metaDescription": "Get in touch to discuss your AI integration project.",
     "heading": "Let's talk about your project",
-    "subtitle": "An idea, a project, a question? I reply within 48 hours.",
+    "subtitle": "An idea, a project, a question? I reply within a few days.",
     "nameLabel": "Name",
     "namePlaceholder": "Your name",
     "emailLabel": "Email",
@@ -143,7 +143,7 @@
     "messagePlaceholder": "Describe your project or question…",
     "send": "Send message",
     "sending": "Sending…",
-    "success": "Message sent! I'll reply within 48 hours.",
+    "success": "Message sent! I'll reply within a few days.",
     "error": "Something went wrong. Please try again or write to me directly."
   }
 }
