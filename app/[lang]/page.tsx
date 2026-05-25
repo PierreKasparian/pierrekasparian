@@ -25,7 +25,7 @@ const LINKEDIN_PROFILE_URL =
 const CONTACT_EMAIL = "kasparianpierre@gmail.com";
 
 const STATS_LINKS: (string | null)[] = [
-  null,
+  "#featured-projects",
   null,
   "https://www.utt.fr/actualites/defi-etudiants-entrepreneurs-prix-coup-de-coeur-pour-pierre-kasparian",
   "https://trustmrr.com/startup/podcastify",
@@ -43,7 +43,12 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
   return (
     <>
       {/* HERO */}
-      <section className="border-b border-[var(--border)]">
+      <section className="relative overflow-hidden border-b border-[var(--border)]">
+        {/* Decorative blob */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute top-1/2 left-[8%] size-[380px] -translate-y-1/2 rounded-full bg-[var(--accent-strong)] opacity-[0.08] blur-3xl"
+        />
         <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 px-6 py-24 sm:py-32 md:grid-cols-2">
           {/* Texte */}
           <div className="flex flex-col items-start gap-6">
@@ -110,14 +115,23 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
                   className="inline-flex items-baseline px-10"
                 >
                   {href ? (
-                    <a
-                      href={href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-baseline transition-opacity hover:opacity-75"
-                    >
-                      {inner}
-                    </a>
+                    href.startsWith("#") ? (
+                      <a
+                        href={href}
+                        className="inline-flex items-baseline transition-opacity hover:opacity-75"
+                      >
+                        {inner}
+                      </a>
+                    ) : (
+                      <a
+                        href={href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-baseline transition-opacity hover:opacity-75"
+                      >
+                        {inner}
+                      </a>
+                    )
                   ) : (
                     inner
                   )}
@@ -169,7 +183,12 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
       </section>
 
       {/* EDUCATION */}
-      <section className="border-b border-[var(--border)] bg-[var(--secondary)]/30">
+      <section className="relative overflow-hidden border-b border-[var(--border)]">
+        {/* Decorative blob */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -top-24 right-6 size-[420px] rounded-full bg-[var(--primary)] opacity-[0.07] blur-3xl"
+        />
         <div className="mx-auto max-w-6xl px-6 py-20">
           <h2 className="mb-10 text-center text-2xl font-semibold tracking-tight sm:text-3xl">
             {dict.home.educationTitle}
@@ -221,7 +240,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
       </section>
 
       {/* FEATURED PROJECTS */}
-      <section className="border-b border-[var(--border)]">
+      <section id="featured-projects" className="border-b border-[var(--border)]">
         <div className="mx-auto max-w-6xl px-6 py-20">
           <div className="mb-10 flex items-end justify-between">
             <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
@@ -300,7 +319,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
                   <blockquote className="flex flex-grow flex-col gap-2 font-serif text-lg leading-relaxed text-[var(--foreground)] italic">
                     <Quote
                       aria-hidden="true"
-                      className="size-6 rotate-180 text-[var(--primary)]/40"
+                      className="size-6 rotate-180 text-[var(--accent-strong)]/50"
                       strokeWidth={2}
                     />
                     <div className="flex flex-col gap-2 px-1">
@@ -310,7 +329,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
                     </div>
                     <Quote
                       aria-hidden="true"
-                      className="size-6 self-end text-[var(--primary)]/40"
+                      className="size-6 self-end text-[var(--accent-strong)]/50"
                       strokeWidth={2}
                     />
                   </blockquote>
@@ -331,73 +350,80 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
       </section>
 
       {/* GET IN TOUCH */}
-      <section className="mx-auto max-w-6xl px-6 py-20">
-        <div className="mb-10 text-center">
-          <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
-            {dict.home.contactTitle}
-          </h2>
-          <p className="mt-3 text-[var(--muted-foreground)]">
-            {dict.home.contactSubtitle}
-          </p>
-        </div>
-        <div className="mx-auto grid max-w-2xl gap-6 sm:grid-cols-2">
-          {/* LinkedIn */}
-          <Card className="flex flex-col bg-[var(--background)] transition-colors hover:border-[var(--primary)]">
-            <CardContent className="flex flex-grow flex-col gap-4 pt-6">
-              <div className="flex items-center gap-3">
-                <div className="flex size-10 items-center justify-center rounded-lg bg-[var(--primary)]/10 text-[var(--primary)]">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    className="size-5"
-                    aria-hidden="true"
-                  >
-                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-                  </svg>
+      <section className="relative overflow-hidden">
+        {/* Decorative blob */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute bottom-12 left-3/4 size-[440px] -translate-x-1/2 rounded-full bg-[var(--accent-strong)] opacity-[0.07] blur-3xl"
+        />
+        <div className="mx-auto max-w-6xl px-6 py-20">
+          <div className="mb-10 text-center">
+            <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+              {dict.home.contactTitle}
+            </h2>
+            <p className="mt-3 text-[var(--muted-foreground)]">
+              {dict.home.contactSubtitle}
+            </p>
+          </div>
+          <div className="mx-auto grid max-w-2xl gap-6 sm:grid-cols-2">
+            {/* LinkedIn */}
+            <Card className="flex flex-col bg-[var(--background)] transition-colors hover:border-[var(--primary)]">
+              <CardContent className="flex flex-grow flex-col gap-4 pt-6">
+                <div className="flex items-center gap-3">
+                  <div className="flex size-10 items-center justify-center rounded-lg bg-[var(--accent-strong)]/10 text-[var(--accent-strong)]">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      className="size-5"
+                      aria-hidden="true"
+                    >
+                      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                    </svg>
+                  </div>
+                  <CardTitle className="text-base">
+                    {dict.home.contactLinkedinTitle}
+                  </CardTitle>
                 </div>
-                <CardTitle className="text-base">
-                  {dict.home.contactLinkedinTitle}
-                </CardTitle>
-              </div>
-              <CardDescription className="flex-grow">
-                {dict.home.contactLinkedinBody}
-              </CardDescription>
-              <a
-                href={LINKEDIN_PROFILE_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={buttonVariants({ variant: "outline", size: "sm" })}
-              >
-                {dict.home.contactLinkedinCta}
-                <ArrowRight className="ml-1.5 size-3.5" />
-              </a>
-            </CardContent>
-          </Card>
+                <CardDescription className="flex-grow">
+                  {dict.home.contactLinkedinBody}
+                </CardDescription>
+                <a
+                  href={LINKEDIN_PROFILE_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={buttonVariants({ variant: "outline", size: "sm" })}
+                >
+                  {dict.home.contactLinkedinCta}
+                  <ArrowRight className="ml-1.5 size-3.5" />
+                </a>
+              </CardContent>
+            </Card>
 
-          {/* Email */}
-          <Card className="flex flex-col bg-[var(--background)] transition-colors hover:border-[var(--primary)]">
-            <CardContent className="flex flex-grow flex-col gap-4 pt-6">
-              <div className="flex items-center gap-3">
-                <div className="flex size-10 items-center justify-center rounded-lg bg-[var(--primary)]/10 text-[var(--primary)]">
-                  <Mail className="size-5" />
+            {/* Email */}
+            <Card className="flex flex-col bg-[var(--background)] transition-colors hover:border-[var(--primary)]">
+              <CardContent className="flex flex-grow flex-col gap-4 pt-6">
+                <div className="flex items-center gap-3">
+                  <div className="flex size-10 items-center justify-center rounded-lg bg-[var(--primary)]/10 text-[var(--primary)]">
+                    <Mail className="size-5" />
+                  </div>
+                  <CardTitle className="text-base">
+                    {dict.home.contactEmailTitle}
+                  </CardTitle>
                 </div>
-                <CardTitle className="text-base">
-                  {dict.home.contactEmailTitle}
-                </CardTitle>
-              </div>
-              <CardDescription className="flex-grow">
-                {dict.home.contactEmailBody}
-              </CardDescription>
-              <a
-                href={`mailto:${CONTACT_EMAIL}`}
-                className={buttonVariants({ variant: "default", size: "sm" })}
-              >
-                {dict.home.contactEmailCta}
-                <ArrowRight className="ml-1.5 size-3.5" />
-              </a>
-            </CardContent>
-          </Card>
+                <CardDescription className="flex-grow">
+                  {dict.home.contactEmailBody}
+                </CardDescription>
+                <a
+                  href={`mailto:${CONTACT_EMAIL}`}
+                  className={buttonVariants({ variant: "default", size: "sm" })}
+                >
+                  {dict.home.contactEmailCta}
+                  <ArrowRight className="ml-1.5 size-3.5" />
+                </a>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </section>
     </>
