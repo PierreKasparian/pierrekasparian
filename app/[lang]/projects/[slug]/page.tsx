@@ -54,14 +54,15 @@ export default async function ProjectDetailPage({
       </Link>
 
       {/* HERO IMAGE */}
-      <div className="relative mt-8 aspect-[16/8] w-full overflow-hidden rounded-xl bg-[var(--muted)]">
+      <div className="mt-8 w-full overflow-hidden rounded-xl bg-[var(--muted)]">
         <Image
           src={project.imagePrincipale}
           alt={project.title[lang]}
-          fill
-          className="object-cover"
+          width={0}
+          height={0}
           sizes="(max-width: 768px) 100vw, 896px"
           priority
+          className="h-auto w-full"
         />
       </div>
 
@@ -89,14 +90,15 @@ export default async function ProjectDetailPage({
           {project.images.map((img) => (
             <div
               key={img}
-              className="relative aspect-[4/3] overflow-hidden rounded-lg bg-[var(--muted)]"
+              className="overflow-hidden rounded-lg bg-[var(--muted)]"
             >
               <Image
                 src={img}
                 alt=""
-                fill
-                className="object-cover"
+                width={0}
+                height={0}
                 sizes="(max-width: 640px) 100vw, 50vw"
+                className="h-auto w-full"
               />
             </div>
           ))}
