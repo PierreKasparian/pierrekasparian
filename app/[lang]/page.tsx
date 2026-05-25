@@ -1,4 +1,11 @@
-import { ArrowRight, ShieldCheck, Sparkles, Star, Zap } from "lucide-react";
+import {
+  ArrowRight,
+  Quote,
+  ShieldCheck,
+  Sparkles,
+  Star,
+  Zap,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -225,7 +232,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
                 key={t.name}
                 className="flex flex-col bg-[var(--background)]"
               >
-                <CardContent className="flex flex-grow flex-col gap-4 pt-6">
+                <CardContent className="relative flex flex-grow flex-col gap-5 pt-6">
                   <div
                     className="flex gap-0.5 text-[var(--primary)]"
                     aria-label="5 / 5"
@@ -234,9 +241,19 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
                       <Star key={i} className="size-4 fill-current" />
                     ))}
                   </div>
-                  <p className="flex-grow text-sm leading-relaxed">
-                    &ldquo;{t.text[lang]}&rdquo;
-                  </p>
+                  <blockquote className="flex flex-grow flex-col gap-2 font-serif text-lg leading-relaxed text-[var(--foreground)] italic">
+                    <Quote
+                      aria-hidden="true"
+                      className="size-6 rotate-180 text-[var(--primary)]/40"
+                      strokeWidth={2}
+                    />
+                    <p className="px-1">{t.text[lang]}</p>
+                    <Quote
+                      aria-hidden="true"
+                      className="size-6 self-end text-[var(--primary)]/40"
+                      strokeWidth={2}
+                    />
+                  </blockquote>
                   <div className="border-t border-[var(--border)] pt-4">
                     <p className="text-sm font-semibold">{t.name}</p>
                     <p className="text-xs text-[var(--muted-foreground)]">
