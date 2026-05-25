@@ -1,8 +1,12 @@
 import Link from "next/link";
+
 import type { Dictionary, Locale } from "@/app/[lang]/dictionaries";
 import { buttonVariants } from "@/components/ui/button";
 
-type Props = { lang: Locale; dict: Dictionary };
+interface Props {
+  lang: Locale;
+  dict: Dictionary;
+}
 
 export function SiteHeader({ lang, dict }: Props) {
   const otherLang: Locale = lang === "fr" ? "en" : "fr";
@@ -38,7 +42,7 @@ export function SiteHeader({ lang, dict }: Props) {
         <div className="flex items-center gap-2">
           <Link
             href={`/${otherLang}`}
-            className="rounded-md border border-[var(--border)] px-2 py-1 text-xs uppercase text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
+            className="rounded-md border border-[var(--border)] px-2 py-1 text-xs text-[var(--muted-foreground)] uppercase hover:text-[var(--foreground)]"
             aria-label={`Switch to ${otherLang}`}
           >
             {otherLang}

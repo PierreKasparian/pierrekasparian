@@ -1,20 +1,22 @@
-import Link from "next/link";
-import type { Metadata } from "next";
-import { notFound } from "next/navigation";
 import { ExternalLink } from "lucide-react";
+import type { Metadata } from "next";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+
+import { buttonVariants } from "@/components/ui/button";
+import { projects } from "@/data/projects";
+import { buildAlternates } from "@/lib/seo";
+
 import {
   getDictionary,
   hasLocale,
   locales,
   type Locale,
 } from "../../dictionaries";
-import { projects } from "@/data/projects";
-import { buttonVariants } from "@/components/ui/button";
-import { buildAlternates } from "@/lib/seo";
 
 export async function generateStaticParams() {
   return locales.flatMap((lang) =>
-    projects.map((p) => ({ lang, slug: p.slug }))
+    projects.map((p) => ({ lang, slug: p.slug })),
   );
 }
 
@@ -38,7 +40,7 @@ export default async function ProjectDetailPage({
   if (!hasLocale(lang)) notFound();
   const project = projects.find((p) => p.slug === slug);
   if (!project) notFound();
-  const dict = await getDictionary(lang as Locale);
+  const dict = await getDictionary(lang);
 
   return (
     <article className="mx-auto max-w-4xl px-6 py-16">
@@ -65,17 +67,15 @@ export default async function ProjectDetailPage({
           </p>
         )}
         <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-          {project.title[lang as Locale]}
+          {project.title[lang]}
         </h1>
         <p className="mt-3 text-xl text-[var(--muted-foreground)]">
-          {project.description[lang as Locale]}
+          {project.description[lang]}
         </p>
       </div>
 
       {/* BODY */}
-      <p className="mt-8 leading-relaxed">
-        {project.descriptionLong[lang as Locale]}
-      </p>
+      <p className="mt-8 leading-relaxed">{project.descriptionLong[lang]}</p>
 
       {/* EXTRA IMAGES */}
       {project.images.length > 0 && (

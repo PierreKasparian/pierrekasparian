@@ -1,20 +1,17 @@
-import Link from "next/link";
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
-import {
-  getDictionary,
-  hasLocale,
-  locales,
-  type Locale,
-} from "../../dictionaries";
-import { getAllArticles, getArticle } from "@/lib/mdx";
+
 import { Badge } from "@/components/ui/badge";
+import { getAllArticles, getArticle } from "@/lib/mdx";
 import { buildAlternates } from "@/lib/seo";
+
+import { getDictionary, hasLocale, locales } from "../../dictionaries";
 
 export async function generateStaticParams() {
   return locales.flatMap((lang) =>
-    getAllArticles(lang).map((article) => ({ lang, slug: article.slug }))
+    getAllArticles(lang).map((article) => ({ lang, slug: article.slug })),
   );
 }
 
@@ -38,7 +35,7 @@ export default async function BlogPostPage({
   if (!hasLocale(lang)) notFound();
   const article = getArticle(lang, slug);
   if (!article) notFound();
-  const dict = await getDictionary(lang as Locale);
+  const dict = await getDictionary(lang);
 
   return (
     <article className="mx-auto max-w-4xl px-6 py-16">
@@ -66,7 +63,7 @@ export default async function BlogPostPage({
           {article.meta.date &&
             new Date(article.meta.date).toLocaleDateString(
               lang === "fr" ? "fr-FR" : "en-US",
-              { year: "numeric", month: "long", day: "numeric" }
+              { year: "numeric", month: "long", day: "numeric" },
             )}
           {" · "}
           {article.meta.readingTime} {dict.blog.minuteRead}

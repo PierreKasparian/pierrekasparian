@@ -1,10 +1,17 @@
-import Link from "next/link";
-import type { Metadata } from "next";
-import { notFound } from "next/navigation";
 import { Wrench } from "lucide-react";
-import { getDictionary, hasLocale, locales, type Locale } from "../dictionaries";
+import type { Metadata } from "next";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+
 import { buttonVariants } from "@/components/ui/button";
 import { buildAlternates } from "@/lib/seo";
+
+import {
+  getDictionary,
+  hasLocale,
+  locales,
+  type Locale,
+} from "../dictionaries";
 
 export async function generateStaticParams() {
   return locales.map((lang) => ({ lang }));
@@ -22,10 +29,12 @@ export async function generateMetadata({
   };
 }
 
-export default async function ToolsPage({ params }: PageProps<"/[lang]/tools">) {
+export default async function ToolsPage({
+  params,
+}: PageProps<"/[lang]/tools">) {
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
-  const dict = await getDictionary(lang as Locale);
+  const dict = await getDictionary(lang);
 
   return (
     <>

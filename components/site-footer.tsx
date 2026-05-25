@@ -1,11 +1,14 @@
 import Link from "next/link";
+
 import type { Dictionary, Locale } from "@/app/[lang]/dictionaries";
 
 export function SiteFooter({ lang, dict }: { lang: Locale; dict: Dictionary }) {
   return (
     <footer className="border-t border-[var(--border)] py-10">
       <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-4 px-6 text-sm text-[var(--muted-foreground)] sm:flex-row sm:items-center">
-        <p>© {new Date().getFullYear()} Pierre Kasparian. {dict.home.footerNote}</p>
+        <p>
+          © {new Date().getFullYear()} Pierre Kasparian. {dict.home.footerNote}
+        </p>
         <div className="flex gap-4">
           <Link
             href="https://github.com/PierreKasparian/"

@@ -1,6 +1,6 @@
 import type { LocalizedString } from "./projects";
 
-export type Prestation = {
+export interface Prestation {
   id: string;
   title: LocalizedString;
   tagline: LocalizedString;
@@ -8,7 +8,7 @@ export type Prestation = {
   tags: string[];
   icon: string; // lucide-react icon name
   featured?: boolean;
-};
+}
 
 export const prestations: Prestation[] = [
   {

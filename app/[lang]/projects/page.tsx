@@ -1,15 +1,17 @@
-import Link from "next/link";
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getDictionary, hasLocale, type Locale } from "../dictionaries";
-import { projects } from "@/data/projects";
+
 import {
   Card,
   CardContent,
   CardDescription,
   CardTitle,
 } from "@/components/ui/card";
+import { projects } from "@/data/projects";
 import { buildAlternates } from "@/lib/seo";
+
+import { getDictionary, hasLocale, type Locale } from "../dictionaries";
 
 export async function generateMetadata({
   params,
@@ -28,7 +30,7 @@ export default async function ProjectsPage({
 }: PageProps<"/[lang]/projects">) {
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
-  const dict = await getDictionary(lang as Locale);
+  const dict = await getDictionary(lang);
 
   return (
     <>
@@ -62,10 +64,10 @@ export default async function ProjectsPage({
                   </div>
                   <CardContent className="pt-6">
                     <CardTitle className="mb-2 text-base">
-                      {project.title[lang as Locale]}
+                      {project.title[lang]}
                     </CardTitle>
                     <CardDescription>
-                      {project.description[lang as Locale]}
+                      {project.description[lang]}
                     </CardDescription>
                     {project.date && (
                       <p className="mt-3 text-xs text-[var(--muted-foreground)]">

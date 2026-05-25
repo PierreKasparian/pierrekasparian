@@ -1,15 +1,12 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { notFound } from "next/navigation";
+
 import "../globals.css";
-import {
-  getDictionary,
-  hasLocale,
-  locales,
-  type Locale,
-} from "./dictionaries";
-import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { SiteHeader } from "@/components/site-header";
+
+import { getDictionary, hasLocale, locales } from "./dictionaries";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({
@@ -36,17 +33,17 @@ export default async function RootLayout({
 }: LayoutProps<"/[lang]">) {
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
-  const dict = await getDictionary(lang as Locale);
+  const dict = await getDictionary(lang);
 
   return (
     <html
       lang={lang}
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col font-sans">
-        <SiteHeader lang={lang as Locale} dict={dict} />
+      <body className="flex min-h-full flex-col font-sans">
+        <SiteHeader lang={lang} dict={dict} />
         <main className="flex-1">{children}</main>
-        <SiteFooter lang={lang as Locale} dict={dict} />
+        <SiteFooter lang={lang} dict={dict} />
       </body>
     </html>
   );

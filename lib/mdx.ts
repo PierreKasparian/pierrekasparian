@@ -1,11 +1,12 @@
 import "server-only";
 import fs from "fs";
 import path from "path";
+
 import matter from "gray-matter";
 
 const CONTENT_DIR = path.join(process.cwd(), "content", "blog");
 
-export type ArticleMeta = {
+export interface ArticleMeta {
   slug: string;
   title: string;
   description: string;
@@ -13,10 +14,40 @@ export type ArticleMeta = {
   tags: string[];
   readingTime: number;
   lang: string;
-};
+}
 
 function getArticlesDir(lang: string) {
   return path.join(CONTENT_DIR, lang);
+}
+
+function asString(value: unknown, fallback: string): string {
+  return typeof value === "string" ? value : fallback;
+}
+
+function asNumber(value: unknown, fallback: number): number {
+  return typeof value === "number" ? value : fallback;
+}
+
+function asStringArray(value: unknown): string[] {
+  return Array.isArray(value) && value.every((v) => typeof v === "string")
+    ? value
+    : [];
+}
+
+function buildMeta(
+  data: Record<string, unknown>,
+  slug: string,
+  lang: string,
+): ArticleMeta {
+  return {
+    slug,
+    title: asString(data.title, slug),
+    description: asString(data.description, ""),
+    date: asString(data.date, ""),
+    tags: asStringArray(data.tags),
+    readingTime: asNumber(data.readingTime, 5),
+    lang,
+  };
 }
 
 /** Returns all articles for a given locale, sorted newest first. */
@@ -31,15 +62,7 @@ export function getAllArticles(lang: string): ArticleMeta[] {
       const slug = filename.replace(/\.mdx$/, "");
       const raw = fs.readFileSync(path.join(dir, filename), "utf-8");
       const { data } = matter(raw);
-      return {
-        slug,
-        title: (data.title as string) ?? slug,
-        description: (data.description as string) ?? "",
-        date: (data.date as string) ?? "",
-        tags: (data.tags as string[]) ?? [],
-        readingTime: (data.readingTime as number) ?? 5,
-        lang,
-      } satisfies ArticleMeta;
+      return buildMeta(data, slug, lang);
     })
     .sort((a, b) => (a.date < b.date ? 1 : -1));
 }
@@ -47,7 +70,7 @@ export function getAllArticles(lang: string): ArticleMeta[] {
 /** Returns a single article's metadata + raw MDX content string. */
 export function getArticle(
   lang: string,
-  slug: string
+  slug: string,
 ): { meta: ArticleMeta; content: string } | null {
   const filePath = path.join(getArticlesDir(lang), `${slug}.mdx`);
   if (!fs.existsSync(filePath)) return null;
@@ -56,15 +79,7 @@ export function getArticle(
   const { data, content } = matter(raw);
 
   return {
-    meta: {
-      slug,
-      title: (data.title as string) ?? slug,
-      description: (data.description as string) ?? "",
-      date: (data.date as string) ?? "",
-      tags: (data.tags as string[]) ?? [],
-      readingTime: (data.readingTime as number) ?? 5,
-      lang,
-    },
+    meta: buildMeta(data, slug, lang),
     content,
   };
 }

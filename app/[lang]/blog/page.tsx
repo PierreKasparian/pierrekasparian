@@ -1,16 +1,18 @@
-import Link from "next/link";
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getDictionary, hasLocale, type Locale } from "../dictionaries";
-import { getAllArticles } from "@/lib/mdx";
+
+import { Badge } from "@/components/ui/badge";
 import {
   Card,
   CardContent,
   CardDescription,
   CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { getAllArticles } from "@/lib/mdx";
 import { buildAlternates } from "@/lib/seo";
+
+import { getDictionary, hasLocale, type Locale } from "../dictionaries";
 
 export async function generateMetadata({
   params,
@@ -27,7 +29,7 @@ export async function generateMetadata({
 export default async function BlogPage({ params }: PageProps<"/[lang]/blog">) {
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
-  const dict = await getDictionary(lang as Locale);
+  const dict = await getDictionary(lang);
   const articles = getAllArticles(lang);
 
   return (
@@ -82,7 +84,7 @@ export default async function BlogPage({ params }: PageProps<"/[lang]/blog">) {
                               year: "numeric",
                               month: "long",
                               day: "numeric",
-                            }
+                            },
                           )}
                         {" · "}
                         {article.readingTime} {dict.blog.minuteRead}

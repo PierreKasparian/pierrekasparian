@@ -1,6 +1,3 @@
-import Link from "next/link";
-import type { Metadata } from "next";
-import { notFound } from "next/navigation";
 import {
   ShieldCheck,
   Cpu,
@@ -10,16 +7,21 @@ import {
   Sparkles,
   type LucideIcon,
 } from "lucide-react";
+import type { Metadata } from "next";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+
+import { Badge } from "@/components/ui/badge";
+import { buttonVariants } from "@/components/ui/button";
+import { prestations } from "@/data/prestations";
+import { buildAlternates } from "@/lib/seo";
+
 import {
   getDictionary,
   hasLocale,
   locales,
   type Locale,
 } from "../../dictionaries";
-import { prestations } from "@/data/prestations";
-import { Badge } from "@/components/ui/badge";
-import { buttonVariants } from "@/components/ui/button";
-import { buildAlternates } from "@/lib/seo";
 
 const ICON_MAP: Record<string, LucideIcon> = {
   ShieldCheck,
@@ -32,7 +34,7 @@ const ICON_MAP: Record<string, LucideIcon> = {
 
 export async function generateStaticParams() {
   return locales.flatMap((lang) =>
-    prestations.map((p) => ({ lang, id: p.id }))
+    prestations.map((p) => ({ lang, id: p.id })),
   );
 }
 
@@ -56,7 +58,7 @@ export default async function PrestationDetailPage({
   if (!hasLocale(lang)) notFound();
   const prestation = prestations.find((p) => p.id === id);
   if (!prestation) notFound();
-  const dict = await getDictionary(lang as Locale);
+  const dict = await getDictionary(lang);
   const Icon = ICON_MAP[prestation.icon] ?? Sparkles;
 
   return (
@@ -83,15 +85,13 @@ export default async function PrestationDetailPage({
       </div>
 
       <h1 className="mt-6 text-3xl font-semibold tracking-tight sm:text-4xl">
-        {prestation.title[lang as Locale]}
+        {prestation.title[lang]}
       </h1>
       <p className="mt-3 text-xl text-[var(--muted-foreground)]">
-        {prestation.tagline[lang as Locale]}
+        {prestation.tagline[lang]}
       </p>
 
-      <p className="mt-8 leading-relaxed">
-        {prestation.descriptionLong[lang as Locale]}
-      </p>
+      <p className="mt-8 leading-relaxed">{prestation.descriptionLong[lang]}</p>
 
       {/* CTA */}
       <div className="mt-12 rounded-xl border border-[var(--border)] bg-[var(--secondary)]/30 p-6">

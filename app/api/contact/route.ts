@@ -1,16 +1,36 @@
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
-export async function POST(request: Request) {
-  console.log("Received contact form submission");
+interface ContactPayload {
+  name?: string;
+  email?: string;
+  subject?: string;
+  message?: string;
+}
 
+function isContactPayload(value: unknown): value is ContactPayload {
+  if (typeof value !== "object" || value === null) return false;
+  const v = value as Record<string, unknown>;
+  return (
+    (v.name === undefined || typeof v.name === "string") &&
+    (v.email === undefined || typeof v.email === "string") &&
+    (v.subject === undefined || typeof v.subject === "string") &&
+    (v.message === undefined || typeof v.message === "string")
+  );
+}
+
+export async function POST(request: Request) {
   try {
-    const { name, email, subject, message } = await request.json();
+    const body: unknown = await request.json();
+    if (!isContactPayload(body)) {
+      return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
+    }
+    const { name, email, subject, message } = body;
 
     if (!email || !subject || !message) {
       return NextResponse.json(
         { error: "Email, subject and message are required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -40,7 +60,7 @@ export async function POST(request: Request) {
     console.error("Contact form error:", error);
     return NextResponse.json(
       { error: "Failed to send message" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

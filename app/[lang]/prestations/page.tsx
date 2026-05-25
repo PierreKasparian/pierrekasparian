@@ -1,6 +1,3 @@
-import Link from "next/link";
-import type { Metadata } from "next";
-import { notFound } from "next/navigation";
 import {
   ShieldCheck,
   Cpu,
@@ -10,17 +7,22 @@ import {
   Sparkles,
   type LucideIcon,
 } from "lucide-react";
-import { getDictionary, hasLocale, type Locale } from "../dictionaries";
-import { prestations } from "@/data/prestations";
+import type { Metadata } from "next";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+
+import { Badge } from "@/components/ui/badge";
+import { buttonVariants } from "@/components/ui/button";
 import {
   Card,
   CardHeader,
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { buttonVariants } from "@/components/ui/button";
+import { prestations } from "@/data/prestations";
 import { buildAlternates } from "@/lib/seo";
+
+import { getDictionary, hasLocale, type Locale } from "../dictionaries";
 
 const ICON_MAP: Record<string, LucideIcon> = {
   ShieldCheck,
@@ -48,7 +50,7 @@ export default async function PrestationsPage({
 }: PageProps<"/[lang]/prestations">) {
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
-  const dict = await getDictionary(lang as Locale);
+  const dict = await getDictionary(lang);
 
   return (
     <>
@@ -81,10 +83,8 @@ export default async function PrestationsPage({
                       <div className="mb-3 inline-flex size-10 items-center justify-center rounded-md bg-[var(--accent)] text-[var(--accent-foreground)]">
                         <Icon className="size-5" />
                       </div>
-                      <CardTitle>{p.title[lang as Locale]}</CardTitle>
-                      <CardDescription>
-                        {p.tagline[lang as Locale]}
-                      </CardDescription>
+                      <CardTitle>{p.title[lang]}</CardTitle>
+                      <CardDescription>{p.tagline[lang]}</CardDescription>
                       <div className="flex flex-wrap gap-2 pt-2">
                         {p.tags.map((tag) => (
                           <Badge

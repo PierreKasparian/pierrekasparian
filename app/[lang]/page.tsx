@@ -1,13 +1,10 @@
-import Link from "next/link";
-import Image from "next/image";
-import { notFound } from "next/navigation";
 import { ArrowRight, ShieldCheck, Sparkles, Zap } from "lucide-react";
-import {
-  getDictionary,
-  hasLocale,
-  type Locale,
-} from "./dictionaries";
+import Image from "next/image";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+
 import { Badge } from "@/components/ui/badge";
+import { buttonVariants } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -15,15 +12,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { buttonVariants } from "@/components/ui/button";
 import { projects } from "@/data/projects";
+
+import { getDictionary, hasLocale } from "./dictionaries";
 
 const TRUST_ICONS = [ShieldCheck, Sparkles, Zap];
 
 export default async function HomePage({ params }: PageProps<"/[lang]">) {
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
-  const dict = await getDictionary(lang as Locale);
+  const dict = await getDictionary(lang);
   const featured = projects.filter((p) => p.featured).slice(0, 3);
 
   return (
@@ -37,7 +35,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
               <span className="size-1.5 rounded-full bg-emerald-500" />
               {dict.home.badge}
             </Badge>
-            <h1 className="text-4xl font-semibold leading-tight tracking-tight sm:text-5xl lg:text-6xl">
+            <h1 className="text-4xl leading-tight font-semibold tracking-tight sm:text-5xl lg:text-6xl">
               {dict.home.title}
             </h1>
             <p className="text-lg text-[var(--muted-foreground)] sm:text-xl">
@@ -131,10 +129,10 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
                   </div>
                   <CardContent className="pt-6">
                     <CardTitle className="mb-2 text-base">
-                      {project.title[lang as Locale]}
+                      {project.title[lang]}
                     </CardTitle>
                     <CardDescription>
-                      {project.description[lang as Locale]}
+                      {project.description[lang]}
                     </CardDescription>
                   </CardContent>
                 </Card>

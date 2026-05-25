@@ -8,8 +8,8 @@ function detectLocale(request: NextRequest): string {
   if (!accept) return defaultLocale;
   const preferred = accept
     .split(",")
-    .map((p) => p.split(";")[0].trim().toLowerCase())
-    .map((tag) => tag.split("-")[0]);
+    .map((p) => (p.split(";")[0] ?? "").trim().toLowerCase())
+    .map((tag) => tag.split("-")[0] ?? "");
   for (const tag of preferred) {
     if ((locales as readonly string[]).includes(tag)) return tag;
   }
@@ -19,8 +19,7 @@ function detectLocale(request: NextRequest): string {
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const pathnameHasLocale = locales.some(
-    (locale) =>
-      pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`,
+    (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`,
   );
   if (pathnameHasLocale) return;
 

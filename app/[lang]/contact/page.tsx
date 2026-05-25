@@ -1,9 +1,11 @@
+import { MapPin, Clock } from "lucide-react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { MapPin, Clock } from "lucide-react";
-import { getDictionary, hasLocale, type Locale } from "../dictionaries";
+
 import { ContactForm } from "@/components/contact-form";
 import { buildAlternates } from "@/lib/seo";
+
+import { getDictionary, hasLocale, type Locale } from "../dictionaries";
 
 export async function generateMetadata({
   params,
@@ -22,7 +24,7 @@ export default async function ContactPage({
 }: PageProps<"/[lang]/contact">) {
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
-  const dict = await getDictionary(lang as Locale);
+  const dict = await getDictionary(lang);
 
   return (
     <>
@@ -53,7 +55,8 @@ export default async function ContactPage({
                     {lang === "fr" ? "Localisation" : "Location"}
                   </p>
                   <p className="text-sm text-[var(--muted-foreground)]">
-                    France — {lang === "fr" ? "remote possible" : "remote available"}
+                    France —{" "}
+                    {lang === "fr" ? "remote possible" : "remote available"}
                   </p>
                 </div>
               </div>

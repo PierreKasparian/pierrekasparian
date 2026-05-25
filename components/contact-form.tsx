@@ -1,12 +1,13 @@
 "use client";
 
 import { useState } from "react";
+
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 type FormState = "idle" | "loading" | "success" | "error";
 
-type ContactDict = {
+interface ContactDict {
   nameLabel: string;
   namePlaceholder: string;
   emailLabel: string;
@@ -19,7 +20,7 @@ type ContactDict = {
   sending: string;
   success: string;
   error: string;
-};
+}
 
 const inputClass =
   "w-full rounded-md border border-[var(--border)] bg-[var(--background)] px-3 py-2 text-sm outline-none ring-offset-[var(--background)] transition-colors placeholder:text-[var(--muted-foreground)] focus-visible:ring-2 focus-visible:ring-[var(--ring)] focus-visible:ring-offset-2";
@@ -34,12 +35,12 @@ export function ContactForm({ dict }: { dict: ContactDict }) {
   });
 
   function update(
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   }
 
-  async function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
     e.preventDefault();
     setState("loading");
     try {
@@ -149,7 +150,7 @@ export function ContactForm({ dict }: { dict: ContactDict }) {
         className={cn(
           buttonVariants({ size: "lg" }),
           "w-full sm:w-auto",
-          state === "loading" && "opacity-70 cursor-not-allowed"
+          state === "loading" && "cursor-not-allowed opacity-70",
         )}
       >
         {state === "loading" ? dict.sending : dict.send}

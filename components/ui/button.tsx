@@ -1,5 +1,6 @@
-import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
+import * as React from "react";
+
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
@@ -11,8 +12,7 @@ const buttonVariants = cva(
           "bg-[var(--primary)] text-[var(--primary-foreground)] hover:opacity-90",
         outline:
           "border border-[var(--border)] bg-transparent hover:bg-[var(--accent)] hover:text-[var(--accent-foreground)]",
-        ghost:
-          "hover:bg-[var(--accent)] hover:text-[var(--accent-foreground)]",
+        ghost: "hover:bg-[var(--accent)] hover:text-[var(--accent-foreground)]",
         secondary:
           "bg-[var(--secondary)] text-[var(--secondary-foreground)] hover:opacity-90",
         link: "text-[var(--primary)] underline-offset-4 hover:underline",
@@ -29,7 +29,8 @@ const buttonVariants = cva(
 );
 
 export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+  extends
+    React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {}
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(

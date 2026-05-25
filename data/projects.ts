@@ -1,6 +1,9 @@
-export type LocalizedString = { fr: string; en: string };
+export interface LocalizedString {
+  fr: string;
+  en: string;
+}
 
-export type Project = {
+export interface Project {
   slug: string;
   title: LocalizedString;
   description: LocalizedString;
@@ -10,7 +13,7 @@ export type Project = {
   date: string;
   link: string;
   featured?: boolean;
-};
+}
 
 export const projects: Project[] = [
   {
@@ -94,7 +97,10 @@ export const projects: Project[] = [
   },
   {
     slug: "java-pocket-imperium",
-    title: { fr: "Projet Java — Pocket Imperium", en: "Java project — Pocket Imperium" },
+    title: {
+      fr: "Projet Java — Pocket Imperium",
+      en: "Java project — Pocket Imperium",
+    },
     description: {
       fr: "Jeu de plateau stratégique en Java avec modélisation UML.",
       en: "Strategic board game in Java, with UML modelling and OOP design.",
@@ -110,7 +116,10 @@ export const projects: Project[] = [
   },
   {
     slug: "machine-learning-course",
-    title: { fr: "Formation Machine Learning & Data Science", en: "Machine Learning and Data Science course" },
+    title: {
+      fr: "Formation Machine Learning & Data Science",
+      en: "Machine Learning and Data Science course",
+    },
     description: {
       fr: "Maîtrise des bases du ML et construction de modèles prédictifs en Python.",
       en: "Master ML fundamentals and build predictive models in Python.",
@@ -126,7 +135,10 @@ export const projects: Project[] = [
   },
   {
     slug: "stock-price-prediction",
-    title: { fr: "Prédiction de cours boursiers par régression linéaire", en: "Stock Price Prediction with Linear Regression" },
+    title: {
+      fr: "Prédiction de cours boursiers par régression linéaire",
+      en: "Stock Price Prediction with Linear Regression",
+    },
     description: {
       fr: "Modèle prédictif basé sur la régression linéaire pour prévoir les cours.",
       en: "Predictive model using Linear Regression to forecast stock prices.",
