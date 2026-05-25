@@ -50,7 +50,6 @@
     "projectsCta": "See all projects",
     "testimonialsTitle": "What clients say",
     "testimonialsCta": "See recommendations source",
-    "footerNote": "Based in France · Available for remote work",
     "statsItems": [
       { "value": "+9", "label": "projects completed" },
       { "value": "+2 years", "label": "of experience" },
@@ -99,7 +98,7 @@
     "parcourTitle": "Background",
     "parcourItems": [
       { "title": "UTT - Computer Science & Information Systems", "date": "2022 – 2027", "body": "4th year. Generalist engineering programme, specialising in information systems and software development." },
-      { "title": "LLM Engineering Training", "date": "January 2025", "body": "Intensive programme with Ed Donner: RAG, QLoRA fine-tuning, autonomous agents, 20+ frontier and open-source models. Flagship project: Python-to-C++ optimiser with 60,000× speedups." },
+      { "title": "Online LLM Engineering Training", "date": "January 2025", "body": "Intensive programme : RAG, QLoRA fine-tuning, autonomous agents, deploying open-source models." },
       { "title": "Machine Learning & Data Science Training", "date": "March 2025", "body": "ML fundamentals: regression, classification, clustering, scikit-learn, Python. Applied to stock price prediction." }
     ],
     "valuesTitle": "My values",

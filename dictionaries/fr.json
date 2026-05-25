@@ -50,7 +50,6 @@
     "projectsCta": "Voir tous les projets",
     "testimonialsTitle": "Ce que disent mes clients",
     "testimonialsCta": "Voir la source des recommandations",
-    "footerNote": "Basé en France · Disponible pour des missions à distance",
     "statsItems": [
       { "value": "+9", "label": "projets réalisés" },
       { "value": "+2 ans", "label": "d'expérience" },
@@ -99,7 +98,7 @@
     "parcourTitle": "Parcours",
     "parcourItems": [
       { "title": "UTT - Informatique et Systèmes d'Information", "date": "2022 – 2027", "body": "4e année. Formation ingénieur généraliste avec spécialisation systèmes d'information et développement logiciel." },
-      { "title": "Formation LLM Engineering", "date": "Janvier 2025", "body": "Programme intensif avec Ed Donner : RAG, fine-tuning QLoRA, agents autonomes, 20+ modèles frontier et open source. Projet phare : optimiseur Python → C++ avec gains ×60 000." },
+      { "title": "Formation LLM Engineering en ligne", "date": "Janvier 2025", "body": "Programme intensif : RAG, fine-tuning QLoRA, agents autonomes, déploiement de modèles open source." },
       { "title": "Formation Machine Learning & Data Science", "date": "Mars 2025", "body": "Fondamentaux ML : régression, classification, clustering, scikit-learn, Python. Application sur la prédiction de cours boursiers." }
     ],
     "valuesTitle": "Mes valeurs",
