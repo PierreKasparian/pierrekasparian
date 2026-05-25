@@ -298,7 +298,11 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
                       className="size-6 rotate-180 text-[var(--primary)]/40"
                       strokeWidth={2}
                     />
-                    <p className="px-1">{t.text[lang]}</p>
+                    <div className="flex flex-col gap-2 px-1">
+                      {t.text[lang].split("\n").map((line, i) => (
+                        <p key={i}>{line}</p>
+                      ))}
+                    </div>
                     <Quote
                       aria-hidden="true"
                       className="size-6 self-end text-[var(--primary)]/40"
