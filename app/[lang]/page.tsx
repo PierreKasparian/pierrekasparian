@@ -29,11 +29,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
   return (
     <>
       {/* HERO */}
-      <section className="relative overflow-hidden border-b border-[var(--border)]">
-        <div
-          aria-hidden
-          className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,_var(--accent),_transparent_60%)]"
-        />
+      <section className="border-b border-[var(--border)]">
         <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 px-6 py-24 sm:py-32 md:grid-cols-2">
           {/* Texte */}
           <div className="flex flex-col items-start gap-6">
@@ -66,7 +62,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
 
           {/* Portrait */}
           <div className="flex justify-center md:justify-end">
-            <div className="relative w-72 overflow-hidden rounded-2xl shadow-xl ring-1 ring-[var(--border)] sm:w-80 lg:w-96">
+            <div className="relative w-72 overflow-hidden rounded-2xl shadow-xl ring-2 ring-[var(--primary)] sm:w-80 lg:w-96">
               <Image
                 src="/IMG_4704.jpg"
                 alt="Pierre Kasparian — Ingénieur IA & consulting"
