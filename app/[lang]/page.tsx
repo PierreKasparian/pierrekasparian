@@ -1,4 +1,4 @@
-import { ArrowRight, ShieldCheck, Sparkles, Zap } from "lucide-react";
+import { ArrowRight, ShieldCheck, Sparkles, Star, Zap } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -13,10 +13,24 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { projects } from "@/data/projects";
+import { testimonials } from "@/data/testimonials";
 
 import { getDictionary, hasLocale } from "./dictionaries";
 
 const TRUST_ICONS = [ShieldCheck, Sparkles, Zap];
+
+const LINKEDIN_RECOMMENDATIONS_URL =
+  "https://www.linkedin.com/in/pierre-kasparian-486101259/details/recommendations/";
+
+const STATS_LINKS: (string | null)[] = [
+  null,
+  null,
+  "https://www.utt.fr/actualites/defi-etudiants-entrepreneurs-prix-coup-de-coeur-pour-pierre-kasparian",
+  "https://trustmrr.com/startup/podcastify",
+  LINKEDIN_RECOMMENDATIONS_URL,
+  LINKEDIN_RECOMMENDATIONS_URL,
+  LINKEDIN_RECOMMENDATIONS_URL,
+];
 
 export default async function HomePage({ params }: PageProps<"/[lang]">) {
   const { lang } = await params;
@@ -71,6 +85,50 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
               />
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* STATS BAND */}
+      <section className="overflow-hidden border-b border-[var(--border)] py-6">
+        <div className="animate-marquee flex w-max items-center">
+          {[0, 1, 2, 3].flatMap((pass) =>
+            dict.home.statsItems.map((stat, i) => {
+              const href = STATS_LINKS[i] ?? null;
+              const inner = (
+                <>
+                  <span className="text-2xl font-bold text-[var(--primary)]">
+                    {stat.value}
+                  </span>
+                  <span className="ml-2 text-sm font-medium">{stat.label}</span>
+                </>
+              );
+              return (
+                <span
+                  key={`${String(pass)}-${String(i)}`}
+                  className="inline-flex items-baseline px-10"
+                >
+                  {href ? (
+                    <a
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-baseline transition-opacity hover:opacity-75"
+                    >
+                      {inner}
+                    </a>
+                  ) : (
+                    inner
+                  )}
+                  <span
+                    className="ml-10 text-[var(--muted-foreground)] select-none"
+                    aria-hidden="true"
+                  >
+                    -
+                  </span>
+                </span>
+              );
+            }),
+          )}
         </div>
       </section>
 
@@ -140,6 +198,56 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
                   </CardContent>
                 </Card>
               </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* TESTIMONIALS */}
+      <section className="border-b border-[var(--border)] bg-[var(--secondary)]/30">
+        <div className="mx-auto max-w-6xl px-6 py-20">
+          <div className="mb-10 flex items-end justify-between">
+            <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+              {dict.home.testimonialsTitle}
+            </h2>
+            <a
+              href="https://www.linkedin.com/in/pierre-kasparian-486101259/details/recommendations/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm font-medium text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
+            >
+              {dict.home.testimonialsCta} →
+            </a>
+          </div>
+          <div className="grid gap-6 md:grid-cols-3">
+            {testimonials.map((t) => (
+              <Card
+                key={t.name}
+                className="flex flex-col bg-[var(--background)]"
+              >
+                <CardContent className="flex flex-grow flex-col gap-4 pt-6">
+                  <div
+                    className="flex gap-0.5 text-[var(--primary)]"
+                    aria-label="5 / 5"
+                  >
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <Star key={i} className="size-4 fill-current" />
+                    ))}
+                  </div>
+                  <p className="flex-grow text-sm leading-relaxed">
+                    &ldquo;{t.text[lang]}&rdquo;
+                  </p>
+                  <div className="border-t border-[var(--border)] pt-4">
+                    <p className="text-sm font-semibold">{t.name}</p>
+                    <p className="text-xs text-[var(--muted-foreground)]">
+                      {t.role[lang]}
+                    </p>
+                    <p className="text-xs text-[var(--muted-foreground)]">
+                      {t.date[lang]}
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
             ))}
           </div>
         </div>

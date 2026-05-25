@@ -22,7 +22,16 @@
     ],
     "projectsTitle": "Projets sélectionnés",
     "projectsCta": "Voir tous les projets",
-    "footerNote": "Basé en France · Disponible pour des missions à distance"
+    "testimonialsTitle": "Ce que disent mes clients",
+    "testimonialsCta": "Voir toutes les recommandations",
+    "footerNote": "Basé en France · Disponible pour des missions à distance",
+    "statsItems": [
+      { "value": "+9", "label": "projets réalisés" },
+      { "value": "+2 ans", "label": "d'expérience" },
+      { "value": "1 prix", "label": "entrepreneurial" },
+      { "value": "1 SaaS", "label": "profitable" },
+      { "value": "3", "label": "recommandations client" }
+    ]
   },
   "projects": {
     "metaTitle": "Projets",
@@ -31,6 +40,7 @@
     "subtitle": "Dev, IA, data science : des projets réels.",
     "viewProject": "Voir le projet",
     "viewSource": "Voir le code",
+    "viewAward": "Voir le prix",
     "back": "← Retour aux projets"
   },
   "prestations": {

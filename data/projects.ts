@@ -12,6 +12,7 @@ export interface Project {
   images: string[];
   date: string;
   link: string;
+  awardLink?: string;
   featured?: boolean;
 }
 
@@ -77,6 +78,8 @@ export const projects: Project[] = [
     ],
     date: "2024-01-01",
     link: "https://www.linkedin.com/posts/pierre-kasparian-486101259_et-si-on-appliquait-lia-%C3%A0-l%C3%A9ducation-activity-7202609841444401152-v__9",
+    awardLink:
+      "https://www.utt.fr/actualites/defi-etudiants-entrepreneurs-prix-coup-de-coeur-pour-pierre-kasparian",
     featured: true,
   },
   {

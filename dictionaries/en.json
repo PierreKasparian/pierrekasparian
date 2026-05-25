@@ -22,7 +22,16 @@
     ],
     "projectsTitle": "Selected projects",
     "projectsCta": "See all projects",
-    "footerNote": "Based in France · Available for remote work"
+    "testimonialsTitle": "What clients say",
+    "testimonialsCta": "See all recommendations",
+    "footerNote": "Based in France · Available for remote work",
+    "statsItems": [
+      { "value": "+9", "label": "projects completed" },
+      { "value": "+2 yrs", "label": "of experience" },
+      { "value": "1 prize", "label": "entrepreneurship" },
+      { "value": "1 SaaS", "label": "profitable" },
+      { "value": "3", "label": "customer recommendations" }
+    ]
   },
   "projects": {
     "metaTitle": "Projects",
@@ -31,6 +40,7 @@
     "subtitle": "Dev, AI, data science: real projects.",
     "viewProject": "View project",
     "viewSource": "View source",
+    "viewAward": "View award",
     "back": "← Back to projects"
   },
   "prestations": {
