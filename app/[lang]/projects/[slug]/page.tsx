@@ -106,32 +106,39 @@ export default async function ProjectDetailPage({
       )}
 
       {/* LINKS */}
-      {(project.link || project.awardLink) && (
-        <div className="mt-10 flex flex-wrap gap-3">
-          {project.link && (
-            <a
-              href={project.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={buttonVariants({ variant: "default" })}
-            >
-              {dict.projects.viewProject}
-              <ExternalLink className="ml-2 size-4" />
-            </a>
-          )}
-          {project.awardLink && (
-            <a
-              href={project.awardLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={buttonVariants({ variant: "outline" })}
-            >
-              {dict.projects.viewAward}
-              <ExternalLink className="ml-2 size-4" />
-            </a>
-          )}
-        </div>
-      )}
+      <div className="mt-10 flex flex-wrap gap-3">
+        <a
+          href={project.link}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={buttonVariants({ variant: "default" })}
+        >
+          {dict.projects.viewProject}
+          <ExternalLink className="ml-2 size-4" />
+        </a>
+        {project.awardLink && (
+          <a
+            href={project.awardLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={buttonVariants({ variant: "outline" })}
+          >
+            {dict.projects.viewAward}
+            <ExternalLink className="ml-2 size-4" />
+          </a>
+        )}
+        {project.mrrLink && (
+          <a
+            href={project.mrrLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={buttonVariants({ variant: "outline" })}
+          >
+            {dict.projects.viewMrr}
+            <ExternalLink className="ml-2 size-4" />
+          </a>
+        )}
+      </div>
     </article>
   );
 }

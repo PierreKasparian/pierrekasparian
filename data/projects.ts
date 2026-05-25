@@ -13,10 +13,32 @@ export interface Project {
   date: string;
   link: string;
   awardLink?: string;
+  mrrLink?: string;
   featured?: boolean;
 }
 
 export const projects: Project[] = [
+  {
+    slug: "podcastify",
+    title: {
+      fr: "Podcastify - Générateur de podcasts IA",
+      en: "Podcastify - AI Podcast Generator",
+    },
+    description: {
+      fr: "SaaS qui transforme articles, PDFs et notes en épisodes podcast à deux voix en moins de 2 minutes.",
+      en: "SaaS that turns blog posts, PDFs and notes into two-host podcast episodes in under 2 minutes.",
+    },
+    descriptionLong: {
+      fr: "Podcastify génère automatiquement des épisodes de podcast à deux voix à partir de n'importe quel contenu : articles de blog, PDFs, notes. L'utilisateur précise son angle et le ton souhaité, révise la transcription, puis lance la génération audio. Pensé pour les étudiants qui veulent apprendre en déplacement, les créateurs souhaitant recycler du contenu ou toute personne cherchant à gagner du temps sur la lecture.\n\nStack technique : frontend Next.js avec paiement Stripe, analytics PostHog, base de données Supabase. Le backend Python tourne sur un VPS avec une architecture worker/API découplée via Redis. Celery Beat gère les relances email automatisées vers les utilisateurs n'ayant pas encore activé leur essai gratuit.\n\nMarketing : Google Ads, Reddit, et surtout une stratégie SEO/GEO pour capter un trafic organique qualifié. Le projet génère du MRR.",
+      en: "Podcastify automatically generates two-host podcast episodes from any content: blog posts, PDFs, notes. Users set their focus and tone, review the transcript, then generate the audio. Built for students who want to learn during their commute, content creators repurposing content, or anyone looking to save time on reading.\n\nTech stack: Next.js frontend with Stripe payments, PostHog analytics, Supabase database. The Python backend runs on a VPS with a decoupled worker/API architecture communicating over Redis. Celery Beat handles automated email retargeting for users who have not triggered their free trial yet.\n\nMarketing: Google Ads, Reddit, and above all an SEO/GEO strategy to capture qualified organic traffic. The project generates MRR.",
+    },
+    imagePrincipale: "/icon.png",
+    images: ["/Capture d’écran du 2026-05-07 09-51-35.png"],
+    date: "2025-01-01",
+    link: "https://podcastify.io/",
+    mrrLink: "https://trustmrr.com/startup/podcastify",
+    featured: true,
+  },
   {
     slug: "site-de-reportages-photos",
     title: {
@@ -35,7 +57,6 @@ export const projects: Project[] = [
     images: ["/reportage.jpg", "/tirages_en_vente.jpg"],
     date: "2024-01-01",
     link: "https://kasparian-reportages-photo.kasparian-reportages-photo.workers.dev/",
-    featured: true,
   },
   {
     slug: "algorithme-jouant-aux-echecs",

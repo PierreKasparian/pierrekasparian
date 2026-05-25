@@ -23,7 +23,7 @@
     "projectsTitle": "Projets sélectionnés",
     "projectsCta": "Voir tous les projets",
     "testimonialsTitle": "Ce que disent mes clients",
-    "testimonialsCta": "Voir toutes les recommandations",
+    "testimonialsCta": "Voir la source des recommandations",
     "footerNote": "Basé en France · Disponible pour des missions à distance",
     "statsItems": [
       { "value": "+9", "label": "projets réalisés" },
@@ -41,6 +41,7 @@
     "viewProject": "Voir le projet",
     "viewSource": "Voir le code",
     "viewAward": "Voir le prix",
+    "viewMrr": "Voir le MRR",
     "back": "← Retour aux projets"
   },
   "prestations": {
