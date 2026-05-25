@@ -1,5 +1,6 @@
 import { ExternalLink } from "lucide-react";
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -53,10 +54,15 @@ export default async function ProjectDetailPage({
       </Link>
 
       {/* HERO IMAGE */}
-      <div className="mt-8 aspect-[16/8] w-full overflow-hidden rounded-xl bg-[var(--muted)]">
-        <div className="flex h-full items-center justify-center text-sm text-[var(--muted-foreground)]">
-          {project.imagePrincipale}
-        </div>
+      <div className="relative mt-8 aspect-[16/8] w-full overflow-hidden rounded-xl bg-[var(--muted)]">
+        <Image
+          src={project.imagePrincipale}
+          alt={project.title[lang]}
+          fill
+          className="object-cover"
+          sizes="(max-width: 768px) 100vw, 896px"
+          priority
+        />
       </div>
 
       {/* TITLE */}
@@ -83,11 +89,15 @@ export default async function ProjectDetailPage({
           {project.images.map((img) => (
             <div
               key={img}
-              className="aspect-[4/3] overflow-hidden rounded-lg bg-[var(--muted)]"
+              className="relative aspect-[4/3] overflow-hidden rounded-lg bg-[var(--muted)]"
             >
-              <div className="flex h-full items-center justify-center text-xs text-[var(--muted-foreground)]">
-                {img}
-              </div>
+              <Image
+                src={img}
+                alt=""
+                fill
+                className="object-cover"
+                sizes="(max-width: 640px) 100vw, 50vw"
+              />
             </div>
           ))}
         </div>
