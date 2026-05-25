@@ -101,8 +101,8 @@ export const projects: Project[] = [
   {
     slug: "java-pocket-imperium",
     title: {
-      fr: "Projet Java — Pocket Imperium",
-      en: "Java project — Pocket Imperium",
+      fr: "Projet Java - Pocket Imperium",
+      en: "Java project - Pocket Imperium",
     },
     description: {
       fr: "Jeu de plateau stratégique en Java avec modélisation UML.",

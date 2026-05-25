@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Pierre Kasparian — Intégration IA freelance",
+    default: "Pierre Kasparian · Intégration IA freelance",
     template: "%s · Pierre Kasparian",
   },
   description:

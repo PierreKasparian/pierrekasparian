@@ -55,7 +55,7 @@ export default async function ContactPage({
                     {lang === "fr" ? "Localisation" : "Location"}
                   </p>
                   <p className="text-sm text-[var(--muted-foreground)]">
-                    France —{" "}
+                    France,{" "}
                     {lang === "fr" ? "remote possible" : "remote available"}
                   </p>
                 </div>

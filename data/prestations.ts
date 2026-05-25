@@ -59,7 +59,7 @@ export const prestations: Prestation[] = [
     },
     descriptionLong: {
       fr: "Un système RAG (Retrieval-Augmented Generation) connecte un LLM à vos documents (PDF, Notion, Confluence, SharePoint…) pour répondre à des questions en s'appuyant sur votre base de connaissances propre. Le modèle ne sort rien de son imagination : chaque réponse cite ses sources. Hébergeable 100 % on-premise ou EU-cloud. Stack : LangChain / LlamaIndex, embeddings open source, vector DB (Chroma, pgvector, Qdrant).",
-      en: "A RAG system connects a LLM to your documents (PDF, Notion, Confluence, SharePoint…) to answer questions grounded in your own knowledge base. The model cites its sources — no hallucination. Fully on-premise or EU-cloud deployable. Stack: LangChain / LlamaIndex, open-source embeddings, vector DB (Chroma, pgvector, Qdrant).",
+      en: "A RAG system connects a LLM to your documents (PDF, Notion, Confluence, SharePoint…) to answer questions grounded in your own knowledge base. The model cites its sources, no hallucination. Fully on-premise or EU-cloud deployable. Stack: LangChain / LlamaIndex, open-source embeddings, vector DB (Chroma, pgvector, Qdrant).",
     },
     tags: ["RAG", "LLM", "Documents", "Vector DB"],
     icon: "Database",
@@ -77,7 +77,7 @@ export const prestations: Prestation[] = [
     },
     descriptionLong: {
       fr: "Le fine-tuning permet d'obtenir un modèle compact, spécialisé sur votre vocabulaire et vos cas d'usage, plus performant qu'un modèle généraliste sur votre domaine. Techniques : QLoRA (4-bit), instruction tuning, RLHF allégé. Modèles de base : Mistral, Llama, Qwen, Phi. Le modèle final vous appartient et peut être hébergé chez vous. Inclus : préparation du dataset, entraînement, évaluation et déploiement.",
-      en: "Fine-tuning gives you a compact model specialised on your vocabulary and use cases — outperforming a general model on your domain. Techniques: QLoRA (4-bit), instruction tuning, lightweight RLHF. Base models: Mistral, Llama, Qwen, Phi. The resulting model belongs to you and can be self-hosted. Includes: dataset preparation, training, evaluation and deployment.",
+      en: "Fine-tuning gives you a compact model specialised on your vocabulary and use cases, outperforming a general model on your domain. Techniques: QLoRA (4-bit), instruction tuning, lightweight RLHF. Base models: Mistral, Llama, Qwen, Phi. The resulting model belongs to you and can be self-hosted. Includes: dataset preparation, training, evaluation and deployment.",
     },
     tags: ["Fine-tuning", "QLoRA", "Open source", "MLOps"],
     icon: "Brain",

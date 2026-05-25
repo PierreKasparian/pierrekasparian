@@ -11,13 +11,13 @@
   "home": {
     "badge": "Étudiant ingénieur UTT · Freelance IA",
     "title": "Intégration IA sur mesure, conforme RGPD.",
-    "subtitle": "J'aide les PME et startups à intégrer des LLM, RAG et agents dans leurs outils — sans envoyer leurs données hors d'Europe.",
+    "subtitle": "J'aide les PME et startups à intégrer des LLM, RAG et agents dans leurs outils, sans envoyer leurs données hors d'Europe.",
     "ctaPrimary": "Voir mes prestations",
     "ctaSecondary": "Me contacter",
     "trustTitle": "Pourquoi travailler avec moi",
     "trustItems": [
       { "title": "Conformité RGPD by design", "body": "Hébergement EU, anonymisation, audit du flux de données. Vos données restent chez vous." },
-      { "title": "Stack IA à jour", "body": "LLM frontier & open source, RAG, fine-tuning, agents — je suis en veille active." },
+      { "title": "Stack IA à jour", "body": "LLM frontier & open source, RAG, fine-tuning, agents. Je suis en veille active." },
       { "title": "Livraison pragmatique", "body": "POC en quelques jours, mise en production cadrée, transfert de compétences inclus." }
     ],
     "projectsTitle": "Projets sélectionnés",
@@ -28,14 +28,14 @@
     "metaTitle": "Projets",
     "metaDescription": "Portfolio de mes projets en développement, IA et data science.",
     "heading": "Mes projets",
-    "subtitle": "Dev, IA, data science — des projets réels.",
+    "subtitle": "Dev, IA, data science : des projets réels.",
     "viewProject": "Voir le projet",
     "viewSource": "Voir le code",
     "back": "← Retour aux projets"
   },
   "prestations": {
     "metaTitle": "Prestations",
-    "metaDescription": "Audit IA, intégration LLM, RAG, fine-tuning et formation équipe — prestations d'intégration IA conformes RGPD.",
+    "metaDescription": "Audit IA, intégration LLM, RAG, fine-tuning et formation équipe - prestations d'intégration IA conformes RGPD.",
     "heading": "Mes prestations",
     "subtitle": "Intégration IA sur mesure, avec hébergement EU et conformité RGPD by design.",
     "contactCta": "Discutons de votre projet",
@@ -54,20 +54,20 @@
   },
   "about": {
     "metaTitle": "À propos",
-    "metaDescription": "Étudiant ingénieur UTT 4e année et freelance en intégration IA — Pierre Kasparian.",
+    "metaDescription": "Étudiant ingénieur UTT 4e année et freelance en intégration IA, Pierre Kasparian.",
     "heading": "À propos",
     "role": "Étudiant ingénieur · Freelance IA",
     "introTitle": "Qui suis-je",
-    "introBody": "Je suis Pierre Kasparian, étudiant en 4e année d'ingénierie informatique à l'UTT (Université de Technologie de Troyes) et freelance en intégration IA. Je conçois et déploie des solutions IA sur mesure pour les PME et startups — avec une obsession : que vos données restent en Europe et sous votre contrôle.",
+    "introBody": "Je suis Pierre Kasparian, étudiant en 4e année d'ingénierie informatique à l'UTT (Université de Technologie de Troyes) et freelance en intégration IA. Je conçois et déploie des solutions IA sur mesure pour les PME et startups, avec une obsession : que vos données restent en Europe et sous votre contrôle.",
     "parcourTitle": "Parcours",
     "parcourItems": [
-      { "title": "UTT — Génie Informatique", "body": "4e année. Formation ingénieur généraliste avec spécialisation systèmes d'information et développement logiciel." },
-      { "title": "LLM Engineering — 8 semaines", "body": "Programme intensif avec Ed Donner : RAG, fine-tuning QLoRA, agents autonomes, 20+ modèles frontier et open source. Projet phare : optimiseur Python → C++ avec gains ×60 000." },
+      { "title": "UTT - Génie Informatique", "body": "4e année. Formation ingénieur généraliste avec spécialisation systèmes d'information et développement logiciel." },
+      { "title": "LLM Engineering - 8 semaines", "body": "Programme intensif avec Ed Donner : RAG, fine-tuning QLoRA, agents autonomes, 20+ modèles frontier et open source. Projet phare : optimiseur Python → C++ avec gains ×60 000." },
       { "title": "Machine Learning & Data Science", "body": "Fondamentaux ML : régression, classification, clustering, scikit-learn, Python. Application sur la prédiction de cours boursiers." }
     ],
     "valuesTitle": "Mes valeurs",
     "valuesItems": [
-      { "title": "RGPD by design", "body": "Chaque intégration est pensée pour la conformité dès le départ — pas une case à cocher en fin de projet." },
+      { "title": "RGPD by design", "body": "Chaque intégration est pensée pour la conformité dès le départ, pas une case à cocher en fin de projet." },
       { "title": "Pédagogie", "body": "Je transfère les compétences. À la fin d'une mission, vous devez pouvoir maintenir et faire évoluer ce qu'on a construit." },
       { "title": "Pragmatisme", "body": "POC rapide, feedback loop court, livraison itérative. Pas de sur-ingénierie." }
     ],
@@ -81,14 +81,14 @@
     "metaDescription": "Mini-apps et outils en ligne pour accélérer certaines tâches IA et développement.",
     "heading": "Outils",
     "subtitle": "Des mini-apps utiles, disponibles directement dans le navigateur.",
-    "comingSoon": "Outils en cours de développement — revenez bientôt.",
+    "comingSoon": "Outils en cours de développement, revenez bientôt.",
     "suggest": "Vous avez besoin d'un outil spécifique ?"
   },
   "contact": {
     "metaTitle": "Contact",
     "metaDescription": "Prenez contact pour discuter de votre projet d'intégration IA.",
     "heading": "Parlons de votre projet",
-    "subtitle": "Une idée, un projet, une question — je réponds sous 48h.",
+    "subtitle": "Une idée, un projet, une question ? Je réponds sous 48h.",
     "nameLabel": "Nom",
     "namePlaceholder": "Votre nom",
     "emailLabel": "Email",

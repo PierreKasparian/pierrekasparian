@@ -11,13 +11,13 @@
   "home": {
     "badge": "Engineering student at UTT · AI freelancer",
     "title": "Custom AI integration, GDPR-compliant.",
-    "subtitle": "I help SMEs and startups integrate LLMs, RAG and agents into their tools — without sending their data outside Europe.",
+    "subtitle": "I help SMEs and startups integrate LLMs, RAG and agents into their tools, without sending their data outside Europe.",
     "ctaPrimary": "See my services",
     "ctaSecondary": "Get in touch",
     "trustTitle": "Why work with me",
     "trustItems": [
       { "title": "GDPR-compliant by design", "body": "EU hosting, anonymisation, data-flow audit. Your data stays where it belongs." },
-      { "title": "Up-to-date AI stack", "body": "Frontier & open-source LLMs, RAG, fine-tuning, agents — I stay actively informed." },
+      { "title": "Up-to-date AI stack", "body": "Frontier & open-source LLMs, RAG, fine-tuning, agents. I stay actively informed." },
       { "title": "Pragmatic delivery", "body": "POC in days, framed productionisation, knowledge transfer included." }
     ],
     "projectsTitle": "Selected projects",
@@ -28,14 +28,14 @@
     "metaTitle": "Projects",
     "metaDescription": "Portfolio of my development, AI and data science projects.",
     "heading": "My projects",
-    "subtitle": "Dev, AI, data science — real projects.",
+    "subtitle": "Dev, AI, data science: real projects.",
     "viewProject": "View project",
     "viewSource": "View source",
     "back": "← Back to projects"
   },
   "prestations": {
     "metaTitle": "Services",
-    "metaDescription": "AI audit, LLM integration, RAG, fine-tuning and team training — GDPR-compliant AI integration services.",
+    "metaDescription": "AI audit, LLM integration, RAG, fine-tuning and team training - GDPR-compliant AI integration services.",
     "heading": "My services",
     "subtitle": "Custom AI integration with EU hosting and GDPR compliance by design.",
     "contactCta": "Let's discuss your project",
@@ -54,20 +54,20 @@
   },
   "about": {
     "metaTitle": "About",
-    "metaDescription": "4th year engineering student at UTT and AI integration freelancer — Pierre Kasparian.",
+    "metaDescription": "4th year engineering student at UTT and AI integration freelancer, Pierre Kasparian.",
     "heading": "About",
     "role": "Engineering student · AI freelancer",
     "introTitle": "Who I am",
-    "introBody": "I'm Pierre Kasparian, a 4th year computer engineering student at UTT (Université de Technologie de Troyes) and an AI integration freelancer. I design and deploy custom AI solutions for SMEs and startups — with one obsession: keeping your data in Europe and under your control.",
+    "introBody": "I'm Pierre Kasparian, a 4th year computer engineering student at UTT (Université de Technologie de Troyes) and an AI integration freelancer. I design and deploy custom AI solutions for SMEs and startups, with one obsession: keeping your data in Europe and under your control.",
     "parcourTitle": "Background",
     "parcourItems": [
-      { "title": "UTT — Computer Engineering", "body": "4th year. Generalist engineering programme, specialising in information systems and software development." },
-      { "title": "LLM Engineering — 8 weeks", "body": "Intensive programme with Ed Donner: RAG, QLoRA fine-tuning, autonomous agents, 20+ frontier and open-source models. Flagship project: Python-to-C++ optimiser with 60,000× speedups." },
+      { "title": "UTT - Computer Engineering", "body": "4th year. Generalist engineering programme, specialising in information systems and software development." },
+      { "title": "LLM Engineering - 8 weeks", "body": "Intensive programme with Ed Donner: RAG, QLoRA fine-tuning, autonomous agents, 20+ frontier and open-source models. Flagship project: Python-to-C++ optimiser with 60,000× speedups." },
       { "title": "Machine Learning & Data Science", "body": "ML fundamentals: regression, classification, clustering, scikit-learn, Python. Applied to stock price prediction." }
     ],
     "valuesTitle": "My values",
     "valuesItems": [
-      { "title": "GDPR by design", "body": "Every integration is built for compliance from day one — not bolted on at the end of the project." },
+      { "title": "GDPR by design", "body": "Every integration is built for compliance from day one, not bolted on at the end of the project." },
       { "title": "Knowledge transfer", "body": "I hand over the skills. At the end of an engagement, you should be able to maintain and evolve what we built." },
       { "title": "Pragmatism", "body": "Fast POC, short feedback loop, iterative delivery. No over-engineering." }
     ],
@@ -81,14 +81,14 @@
     "metaDescription": "Mini-apps and online tools to speed up AI and development tasks.",
     "heading": "Tools",
     "subtitle": "Useful mini-apps, available directly in your browser.",
-    "comingSoon": "Tools are in development — check back soon.",
+    "comingSoon": "Tools are in development, check back soon.",
     "suggest": "Need a specific tool?"
   },
   "contact": {
     "metaTitle": "Contact",
     "metaDescription": "Get in touch to discuss your AI integration project.",
     "heading": "Let's talk about your project",
-    "subtitle": "An idea, a project, a question — I reply within 48 hours.",
+    "subtitle": "An idea, a project, a question? I reply within 48 hours.",
     "nameLabel": "Name",
     "namePlaceholder": "Your name",
     "emailLabel": "Email",
