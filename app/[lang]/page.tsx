@@ -1,4 +1,4 @@
-import { ArrowRight, Quote, Star } from "lucide-react";
+import { ArrowRight, Mail, Quote, Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -18,6 +18,11 @@ import { getDictionary, hasLocale } from "./dictionaries";
 
 const LINKEDIN_RECOMMENDATIONS_URL =
   "https://www.linkedin.com/in/pierre-kasparian-486101259/details/recommendations/";
+
+const LINKEDIN_PROFILE_URL =
+  "https://www.linkedin.com/in/pierre-kasparian-486101259/";
+
+const CONTACT_EMAIL = "kasparianpierre@gmail.com";
 
 const STATS_LINKS: (string | null)[] = [
   null,
@@ -322,6 +327,77 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
               </Card>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* GET IN TOUCH */}
+      <section className="mx-auto max-w-6xl px-6 py-20">
+        <div className="mb-10 text-center">
+          <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+            {dict.home.contactTitle}
+          </h2>
+          <p className="mt-3 text-[var(--muted-foreground)]">
+            {dict.home.contactSubtitle}
+          </p>
+        </div>
+        <div className="mx-auto grid max-w-2xl gap-6 sm:grid-cols-2">
+          {/* LinkedIn */}
+          <Card className="flex flex-col bg-[var(--background)] transition-colors hover:border-[var(--primary)]">
+            <CardContent className="flex flex-grow flex-col gap-4 pt-6">
+              <div className="flex items-center gap-3">
+                <div className="flex size-10 items-center justify-center rounded-lg bg-[var(--primary)]/10 text-[var(--primary)]">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    className="size-5"
+                    aria-hidden="true"
+                  >
+                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                  </svg>
+                </div>
+                <CardTitle className="text-base">
+                  {dict.home.contactLinkedinTitle}
+                </CardTitle>
+              </div>
+              <CardDescription className="flex-grow">
+                {dict.home.contactLinkedinBody}
+              </CardDescription>
+              <a
+                href={LINKEDIN_PROFILE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={buttonVariants({ variant: "outline", size: "sm" })}
+              >
+                {dict.home.contactLinkedinCta}
+                <ArrowRight className="ml-1.5 size-3.5" />
+              </a>
+            </CardContent>
+          </Card>
+
+          {/* Email */}
+          <Card className="flex flex-col bg-[var(--background)] transition-colors hover:border-[var(--primary)]">
+            <CardContent className="flex flex-grow flex-col gap-4 pt-6">
+              <div className="flex items-center gap-3">
+                <div className="flex size-10 items-center justify-center rounded-lg bg-[var(--primary)]/10 text-[var(--primary)]">
+                  <Mail className="size-5" />
+                </div>
+                <CardTitle className="text-base">
+                  {dict.home.contactEmailTitle}
+                </CardTitle>
+              </div>
+              <CardDescription className="flex-grow">
+                {dict.home.contactEmailBody}
+              </CardDescription>
+              <a
+                href={`mailto:${CONTACT_EMAIL}`}
+                className={buttonVariants({ variant: "default", size: "sm" })}
+              >
+                {dict.home.contactEmailCta}
+                <ArrowRight className="ml-1.5 size-3.5" />
+              </a>
+            </CardContent>
+          </Card>
         </div>
       </section>
     </>
