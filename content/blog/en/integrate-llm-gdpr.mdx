@@ -1,0 +1,51 @@
+---
+title: "How to integrate a LLM without violating GDPR"
+description: "A practical guide for EU companies wanting to use generative AI while staying compliant."
+date: "2025-01-15"
+tags: ["LLM", "GDPR", "Compliance"]
+readingTime: 6
+---
+
+The rise of LLMs raises a crucial question for European businesses: **can you use ChatGPT or similar models while staying GDPR-compliant?**
+
+The answer is yes — but only if you make the right architectural choices from the start.
+
+## The problem
+
+When you send data to an API like OpenAI, that data travels to US servers subject to the Cloud Act. If your prompts contain personal data (names, emails, customer ticket content, HR data), you're subject to GDPR obligations:
+
+- **Transparency requirement**: inform the data subjects
+- **Transfer outside the EU**: requires adequate safeguards (standard contractual clauses, but OpenAI doesn't offer strong guarantees)
+- **Data retention**: training and fine-tuning data can be problematic
+
+## Solutions
+
+### 1. EU hosting
+
+Choose providers that host their models in Europe:
+
+- **Mistral AI** (Paris) — frontier models with a GDPR-friendly API
+- **OVHcloud AI Deploy** — on-premise or FR-cloud hosting
+- **Azure West Europe + DPA** — acceptable with a signed Data Processing Agreement
+
+### 2. Open-source on-premise models
+
+Models like **Mistral 7B**, **Llama 3**, or **Qwen** can be hosted directly on your own infrastructure. No token leaves your perimeter. With a decent GPU (or via vLLM on CPU), performance is sufficient for most internal use cases.
+
+### 3. Input anonymisation
+
+Before sending a prompt to an external LLM, run it through an anonymisation pipeline: replace PII (names, emails, phone numbers) with reversible tokens. The model's response is then de-anonymised server-side.
+
+### 4. Privacy-by-design architecture
+
+The best approach: design the integration with GDPR in mind from the start, not as an afterthought. This means:
+
+- Logging exchanges with the model (right of access, right to erasure)
+- Documenting data flows in your processing register
+- Having your DPO (if you have one) validate the architecture
+
+## Conclusion
+
+GDPR compliance is not incompatible with AI — it simply requires thoughtful architecture. If your use case processes sensitive data, an upfront audit can save you from costly penalties.
+
+Feel free to get in touch to discuss your situation.

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { ArrowRight, ShieldCheck, Sparkles, Zap } from "lucide-react";
 import {
@@ -33,31 +34,48 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
           aria-hidden
           className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,_var(--accent),_transparent_60%)]"
         />
-        <div className="mx-auto flex max-w-6xl flex-col items-start gap-6 px-6 py-24 sm:py-32">
-          <Badge variant="outline" className="gap-2">
-            <span className="size-1.5 rounded-full bg-emerald-500" />
-            {dict.home.badge}
-          </Badge>
-          <h1 className="max-w-3xl text-4xl font-semibold leading-tight tracking-tight sm:text-6xl">
-            {dict.home.title}
-          </h1>
-          <p className="max-w-2xl text-lg text-[var(--muted-foreground)] sm:text-xl">
-            {dict.home.subtitle}
-          </p>
-          <div className="flex flex-wrap gap-3">
-            <Link
-              href={`/${lang}/prestations`}
-              className={buttonVariants({ size: "lg" })}
-            >
-              {dict.home.ctaPrimary}
-              <ArrowRight />
-            </Link>
-            <Link
-              href={`/${lang}/contact`}
-              className={buttonVariants({ variant: "outline", size: "lg" })}
-            >
-              {dict.home.ctaSecondary}
-            </Link>
+        <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 px-6 py-24 sm:py-32 md:grid-cols-2">
+          {/* Texte */}
+          <div className="flex flex-col items-start gap-6">
+            <Badge variant="outline" className="gap-2">
+              <span className="size-1.5 rounded-full bg-emerald-500" />
+              {dict.home.badge}
+            </Badge>
+            <h1 className="text-4xl font-semibold leading-tight tracking-tight sm:text-5xl lg:text-6xl">
+              {dict.home.title}
+            </h1>
+            <p className="text-lg text-[var(--muted-foreground)] sm:text-xl">
+              {dict.home.subtitle}
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <Link
+                href={`/${lang}/prestations`}
+                className={buttonVariants({ size: "lg" })}
+              >
+                {dict.home.ctaPrimary}
+                <ArrowRight />
+              </Link>
+              <Link
+                href={`/${lang}/contact`}
+                className={buttonVariants({ variant: "outline", size: "lg" })}
+              >
+                {dict.home.ctaSecondary}
+              </Link>
+            </div>
+          </div>
+
+          {/* Portrait */}
+          <div className="flex justify-center md:justify-end">
+            <div className="relative w-72 overflow-hidden rounded-2xl shadow-xl ring-1 ring-[var(--border)] sm:w-80 lg:w-96">
+              <Image
+                src="/IMG_4704.jpg"
+                alt="Pierre Kasparian — Ingénieur IA & consulting"
+                width={600}
+                height={800}
+                priority
+                className="object-cover"
+              />
+            </div>
           </div>
         </div>
       </section>

@@ -1,0 +1,51 @@
+---
+title: "Comment intégrer un LLM sans violer le RGPD"
+description: "Un guide pratique pour les PME françaises qui veulent utiliser l'IA générative en restant conformes."
+date: "2025-01-15"
+tags: ["LLM", "RGPD", "Conformité"]
+readingTime: 6
+---
+
+L'essor des LLM soulève une question cruciale pour les entreprises françaises et européennes : **peut-on utiliser ChatGPT ou des modèles similaires en restant conforme au RGPD ?**
+
+La réponse est oui — mais à condition de faire les bons choix architecturaux dès le départ.
+
+## Le problème
+
+Quand vous envoyez des données à une API comme OpenAI, ces données transitent vers des serveurs américains soumis au Cloud Act. Si vos prompts contiennent des données personnelles (noms, e-mails, contenu de tickets clients, données RH), vous êtes soumis aux obligations du RGPD :
+
+- **Obligation de transparence** : informer les personnes concernées
+- **Transfert hors EU** : nécessite des garanties adéquates (clauses contractuelles types, mais OpenAI n'offre pas de garantie forte)
+- **Conservation des données** : les données d'entraînement et de fine-tuning peuvent poser problème
+
+## Les solutions
+
+### 1. Hébergement EU
+
+Privilégiez des fournisseurs qui hébergent leurs modèles en Europe :
+
+- **Mistral AI** (Paris) — modèles frontier avec API RGPD-friendly
+- **OVHcloud AI Deploy** — hébergement on-premise ou cloud FR
+- **Azure West Europe + DPA** — acceptable avec un Data Processing Agreement signé
+
+### 2. Modèles open source on-premise
+
+Des modèles comme **Mistral 7B**, **Llama 3** ou **Qwen** peuvent être hébergés directement sur votre infrastructure. Aucun token ne quitte votre périmètre. Avec une GPU correcte (ou via vLLM sur CPU), les performances sont suffisantes pour la plupart des cas d'usage internes.
+
+### 3. Anonymisation des inputs
+
+Avant d'envoyer un prompt à un LLM externe, passez-le dans une pipeline d'anonymisation : remplacement des PII (noms, e-mails, téléphones, SIRET) par des tokens réversibles. La réponse du modèle est ensuite désanonymisée côté serveur.
+
+### 4. Architecture "privacy by design"
+
+La meilleure approche : concevoir l'intégration avec le RGPD en tête, pas après coup. Cela signifie :
+
+- Logger les échanges avec le modèle (droit d'accès, droit à l'oubli)
+- Documenter les flux de données dans votre registre de traitements
+- Vérifier que votre DPO (si vous en avez un) valide l'architecture
+
+## Conclusion
+
+La conformité RGPD n'est pas incompatible avec l'IA — elle demande simplement une architecture réfléchie. Si votre cas d'usage traite des données sensibles, un audit préalable peut vous éviter des sanctions coûteuses.
+
+N'hésitez pas à me contacter pour discuter de votre situation.
