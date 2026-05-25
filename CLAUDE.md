@@ -55,3 +55,5 @@ Toutes les routes vivent sous `app/[lang]/` :
 - **`params` est async** en Next 16 : `const { lang } = await params`. Utiliser les helpers globaux `PageProps<'/[lang]'>` et `LayoutProps<'/[lang]'>`.
 - **Pas de contenu textuel à peaufiner pour l'instant** : on met des placeholders propres et on itère la copie plus tard. La priorité c'est la structure, le routing, le design system.
 - **Accessibilité et SEO** : balises sémantiques, `<h1>` unique par page, metadata par route (`generateMetadata`), `alt` sur les images, `hreflang` pour i18n.
+
+After a code edit, check if lint is alright
