@@ -20,6 +20,31 @@
       { "title": "Stack IA à jour", "body": "LLM frontier & open source, RAG, fine-tuning, agents. Je suis en veille active." },
       { "title": "Livraison pragmatique", "body": "POC en quelques jours, mise en production cadrée, transfert de compétences inclus." }
     ],
+    "aboutTitle": "À propos de moi",
+    "aboutBody": [
+      { "text": "Je suis Pierre Kasparian, ", "bold": false },
+      { "text": "étudiant en 4e année d'ingénierie informatique à l'UTT", "bold": true },
+      { "text": " (Université de Technologie de Troyes) et ", "bold": false },
+      { "text": "freelance en intégration IA", "bold": true },
+      { "text": ". Je conçois et déploie des solutions IA sur mesure pour les PME et startups, avec une obsession : que vos ", "bold": false },
+      { "text": "données restent en Europe", "bold": true },
+      { "text": " et sous votre contrôle.", "bold": false }
+    ],
+    "aboutSkillsLabel": "Compétences",
+    "aboutSkills": [
+      "LLM Engineering",
+      "RAG",
+      "Fine-tuning",
+      "Agents IA",
+      "Python",
+      "Machine Learning",
+      "Data Science",
+      "RGPD",
+      "Next.js",
+      "TypeScript"
+    ],
+    "aboutCta": "En savoir plus",
+    "educationTitle": "Formation",
     "projectsTitle": "Projets sélectionnés",
     "projectsCta": "Voir tous les projets",
     "testimonialsTitle": "Ce que disent mes clients",
@@ -72,9 +97,9 @@
     "introBody": "Je suis Pierre Kasparian, étudiant en 4e année d'ingénierie informatique à l'UTT (Université de Technologie de Troyes) et freelance en intégration IA. Je conçois et déploie des solutions IA sur mesure pour les PME et startups, avec une obsession : que vos données restent en Europe et sous votre contrôle.",
     "parcourTitle": "Parcours",
     "parcourItems": [
-      { "title": "UTT - Génie Informatique", "body": "4e année. Formation ingénieur généraliste avec spécialisation systèmes d'information et développement logiciel." },
-      { "title": "LLM Engineering - 8 semaines", "body": "Programme intensif avec Ed Donner : RAG, fine-tuning QLoRA, agents autonomes, 20+ modèles frontier et open source. Projet phare : optimiseur Python → C++ avec gains ×60 000." },
-      { "title": "Machine Learning & Data Science", "body": "Fondamentaux ML : régression, classification, clustering, scikit-learn, Python. Application sur la prédiction de cours boursiers." }
+      { "title": "UTT - Informatique et Systèmes d'Information", "date": "2022 – 2027", "body": "4e année. Formation ingénieur généraliste avec spécialisation systèmes d'information et développement logiciel." },
+      { "title": "Formation LLM Engineering", "date": "Janvier 2025", "body": "Programme intensif avec Ed Donner : RAG, fine-tuning QLoRA, agents autonomes, 20+ modèles frontier et open source. Projet phare : optimiseur Python → C++ avec gains ×60 000." },
+      { "title": "Formation Machine Learning & Data Science", "date": "Mars 2025", "body": "Fondamentaux ML : régression, classification, clustering, scikit-learn, Python. Application sur la prédiction de cours boursiers." }
     ],
     "valuesTitle": "Mes valeurs",
     "valuesItems": [

@@ -20,6 +20,31 @@
       { "title": "Up-to-date AI stack", "body": "Frontier & open-source LLMs, RAG, fine-tuning, agents. I stay actively informed." },
       { "title": "Pragmatic delivery", "body": "POC in days, framed productionisation, knowledge transfer included." }
     ],
+    "aboutTitle": "About me",
+    "aboutBody": [
+      { "text": "I'm Pierre Kasparian, a ", "bold": false },
+      { "text": "4th year computer engineering student at UTT", "bold": true },
+      { "text": " (Université de Technologie de Troyes) and ", "bold": false },
+      { "text": "AI integration freelancer", "bold": true },
+      { "text": ". I design and deploy custom AI solutions for SMEs and startups, with one obsession: keeping your ", "bold": false },
+      { "text": "data in Europe", "bold": true },
+      { "text": " and under your control.", "bold": false }
+    ],
+    "aboutSkillsLabel": "Skills",
+    "aboutSkills": [
+      "LLM Engineering",
+      "RAG",
+      "Fine-tuning",
+      "AI Agents",
+      "Python",
+      "Machine Learning",
+      "Data Science",
+      "GDPR",
+      "Next.js",
+      "TypeScript"
+    ],
+    "aboutCta": "Learn more",
+    "educationTitle": "Education",
     "projectsTitle": "Selected projects",
     "projectsCta": "See all projects",
     "testimonialsTitle": "What clients say",
@@ -72,9 +97,9 @@
     "introBody": "I'm Pierre Kasparian, a 4th year computer engineering student at UTT (Université de Technologie de Troyes) and an AI integration freelancer. I design and deploy custom AI solutions for SMEs and startups, with one obsession: keeping your data in Europe and under your control.",
     "parcourTitle": "Background",
     "parcourItems": [
-      { "title": "UTT - Computer Engineering", "body": "4th year. Generalist engineering programme, specialising in information systems and software development." },
-      { "title": "LLM Engineering - 8 weeks", "body": "Intensive programme with Ed Donner: RAG, QLoRA fine-tuning, autonomous agents, 20+ frontier and open-source models. Flagship project: Python-to-C++ optimiser with 60,000× speedups." },
-      { "title": "Machine Learning & Data Science", "body": "ML fundamentals: regression, classification, clustering, scikit-learn, Python. Applied to stock price prediction." }
+      { "title": "UTT - Computer Science & Information Systems", "date": "2022 – 2027", "body": "4th year. Generalist engineering programme, specialising in information systems and software development." },
+      { "title": "LLM Engineering Training", "date": "January 2025", "body": "Intensive programme with Ed Donner: RAG, QLoRA fine-tuning, autonomous agents, 20+ frontier and open-source models. Flagship project: Python-to-C++ optimiser with 60,000× speedups." },
+      { "title": "Machine Learning & Data Science Training", "date": "March 2025", "body": "ML fundamentals: regression, classification, clustering, scikit-learn, Python. Applied to stock price prediction." }
     ],
     "valuesTitle": "My values",
     "valuesItems": [

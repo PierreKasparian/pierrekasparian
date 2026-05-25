@@ -1,11 +1,4 @@
-import {
-  ArrowRight,
-  Quote,
-  ShieldCheck,
-  Sparkles,
-  Star,
-  Zap,
-} from "lucide-react";
+import { ArrowRight, Quote, Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -16,15 +9,12 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import { projects } from "@/data/projects";
 import { testimonials } from "@/data/testimonials";
 
 import { getDictionary, hasLocale } from "./dictionaries";
-
-const TRUST_ICONS = [ShieldCheck, Sparkles, Zap];
 
 const LINKEDIN_RECOMMENDATIONS_URL =
   "https://www.linkedin.com/in/pierre-kasparian-486101259/details/recommendations/";
@@ -139,27 +129,88 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
         </div>
       </section>
 
-      {/* TRUST */}
+      {/* ABOUT PREVIEW */}
+      <section className="border-b border-[var(--border)]">
+        <div className="mx-auto max-w-3xl px-6 py-20 text-center">
+          <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+            {dict.home.aboutTitle}
+          </h2>
+          <p className="mt-6 text-lg leading-relaxed text-[var(--foreground)]">
+            {dict.home.aboutBody.map((seg, i) =>
+              seg.bold ? (
+                <strong key={i} className="font-semibold">
+                  {seg.text}
+                </strong>
+              ) : (
+                <span key={i}>{seg.text}</span>
+              ),
+            )}
+          </p>
+          <div className="mt-8 flex flex-wrap justify-center gap-2">
+            {dict.home.aboutSkills.map((skill) => (
+              <Badge key={skill} variant="secondary">
+                {skill}
+              </Badge>
+            ))}
+          </div>
+          <Link
+            href={`/${lang}/about`}
+            className={`${buttonVariants({ variant: "outline" })} mt-8`}
+          >
+            {dict.home.aboutCta}
+            <ArrowRight />
+          </Link>
+        </div>
+      </section>
+
+      {/* EDUCATION */}
       <section className="border-b border-[var(--border)] bg-[var(--secondary)]/30">
         <div className="mx-auto max-w-6xl px-6 py-20">
-          <h2 className="mb-10 text-2xl font-semibold tracking-tight sm:text-3xl">
-            {dict.home.trustTitle}
+          <h2 className="mb-10 text-center text-2xl font-semibold tracking-tight sm:text-3xl">
+            {dict.home.educationTitle}
           </h2>
-          <div className="grid gap-6 md:grid-cols-3">
-            {dict.home.trustItems.map((item, i) => {
-              const Icon = TRUST_ICONS[i] ?? Sparkles;
-              return (
-                <Card key={item.title} className="bg-[var(--background)]">
-                  <CardHeader>
-                    <div className="mb-2 inline-flex size-10 items-center justify-center rounded-md bg-[var(--accent)] text-[var(--accent-foreground)]">
-                      <Icon className="size-5" />
+
+          <div className="relative">
+            {/* Horizontal connector line — desktop */}
+            <div
+              aria-hidden="true"
+              className="absolute top-[0.5625rem] right-[calc(100%/6)] left-[calc(100%/6)] hidden h-px bg-[var(--border)] md:block"
+            />
+            {/* Vertical connector line — mobile */}
+            <div
+              aria-hidden="true"
+              className="absolute top-3 bottom-3 left-[0.5625rem] w-px bg-[var(--border)] md:hidden"
+            />
+
+            <ul className="grid gap-6 md:grid-cols-3">
+              {dict.about.parcourItems.map((item) => (
+                <li
+                  key={item.title}
+                  className="relative flex gap-4 md:flex-col md:gap-0"
+                >
+                  {/* Dot */}
+                  <div className="flex shrink-0 md:justify-center">
+                    <span
+                      aria-hidden="true"
+                      className="relative z-10 block size-[1.125rem] shrink-0 rounded-full border-2 border-[var(--primary)] bg-[var(--background)]"
+                    />
+                  </div>
+
+                  {/* Card */}
+                  <div className="flex-1 rounded-lg border border-[var(--border)] bg-[var(--background)] p-5 md:mt-5">
+                    <div className="flex items-start justify-between gap-2">
+                      <p className="text-sm font-semibold">{item.title}</p>
+                      <span className="shrink-0 text-xs text-[var(--muted-foreground)]">
+                        {item.date}
+                      </span>
                     </div>
-                    <CardTitle>{item.title}</CardTitle>
-                    <CardDescription>{item.body}</CardDescription>
-                  </CardHeader>
-                </Card>
-              );
-            })}
+                    <p className="mt-2 text-sm text-[var(--muted-foreground)]">
+                      {item.body}
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </section>
