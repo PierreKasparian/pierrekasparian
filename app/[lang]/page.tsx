@@ -240,7 +240,10 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
       </section>
 
       {/* FEATURED PROJECTS */}
-      <section id="featured-projects" className="border-b border-[var(--border)]">
+      <section
+        id="featured-projects"
+        className="border-b border-[var(--border)]"
+      >
         <div className="mx-auto max-w-6xl px-6 py-20">
           <div className="mb-10 flex items-end justify-between">
             <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
@@ -370,7 +373,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
             <Card className="flex flex-col bg-[var(--background)] transition-colors hover:border-[var(--primary)]">
               <CardContent className="flex flex-grow flex-col gap-4 pt-6">
                 <div className="flex items-center gap-3">
-                  <div className="flex size-10 items-center justify-center rounded-lg bg-[var(--accent-strong)]/10 text-[var(--accent-strong)]">
+                  <div className="flex size-10 items-center justify-center rounded-lg bg-[var(--primary)]/10 text-[var(--primary)]">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
@@ -404,7 +407,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
             <Card className="flex flex-col bg-[var(--background)] transition-colors hover:border-[var(--primary)]">
               <CardContent className="flex flex-grow flex-col gap-4 pt-6">
                 <div className="flex items-center gap-3">
-                  <div className="flex size-10 items-center justify-center rounded-lg bg-[var(--primary)]/10 text-[var(--primary)]">
+                  <div className="flex size-10 items-center justify-center rounded-lg bg-[var(--accent-strong)]/10 text-[var(--accent-strong)]">
                     <Mail className="size-5" />
                   </div>
                   <CardTitle className="text-base">
@@ -416,7 +419,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
                 </CardDescription>
                 <a
                   href={`mailto:${CONTACT_EMAIL}`}
-                  className={buttonVariants({ variant: "default", size: "sm" })}
+                  className={buttonVariants({ variant: "accent", size: "sm" })}
                 >
                   {dict.home.contactEmailCta}
                   <ArrowRight className="ml-1.5 size-3.5" />
