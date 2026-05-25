@@ -9,9 +9,9 @@
     "contact": "Contact"
   },
   "home": {
-    "badge": "Engineering student at UTT · AI freelancer",
+    "badge": "AI freelancer · Engineering student",
     "title": "Custom AI integration, GDPR-compliant.",
-    "subtitle": "I help SMEs and startups integrate LLMs, RAG and agents into their tools, without sending their data outside Europe.",
+    "subtitle": "I help SMEs and startups integrate LLMs, RAG and agents, without sending their data outside Europe.",
     "ctaPrimary": "See my services",
     "ctaSecondary": "Get in touch",
     "trustTitle": "Why work with me",
@@ -92,7 +92,7 @@
     "metaTitle": "About",
     "metaDescription": "4th year engineering student at UTT and AI integration freelancer, Pierre Kasparian.",
     "heading": "About",
-    "role": "Engineering student · AI freelancer",
+    "role": "AI freelancer · Engineering student at UTT",
     "introTitle": "Who I am",
     "introBody": "I'm Pierre Kasparian, a 4th year computer engineering student at UTT (Université de Technologie de Troyes) and an AI integration freelancer. I design and deploy custom AI solutions for SMEs and startups, with one obsession: keeping your data in Europe and under your control.",
     "parcourTitle": "Background",

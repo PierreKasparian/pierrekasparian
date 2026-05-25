@@ -9,9 +9,9 @@
     "contact": "Contact"
   },
   "home": {
-    "badge": "Étudiant ingénieur UTT · Freelance IA",
+    "badge": "Freelance IA · Étudiant ingénieur",
     "title": "Intégration IA sur mesure, conforme RGPD.",
-    "subtitle": "J'aide les PME et startups à intégrer des LLM, RAG et agents dans leurs outils, sans envoyer leurs données hors d'Europe.",
+    "subtitle": "J'aide les PME et startups à intégrer des LLM, RAG et agents, sans envoyer leurs données hors d'Europe.",
     "ctaPrimary": "Voir mes prestations",
     "ctaSecondary": "Me contacter",
     "trustTitle": "Pourquoi travailler avec moi",
@@ -92,7 +92,7 @@
     "metaTitle": "À propos",
     "metaDescription": "Étudiant ingénieur UTT 4e année et freelance en intégration IA, Pierre Kasparian.",
     "heading": "À propos",
-    "role": "Étudiant ingénieur · Freelance IA",
+    "role": "Freelance IA · Étudiant ingénieur",
     "introTitle": "Qui suis-je",
     "introBody": "Je suis Pierre Kasparian, étudiant en 4e année d'ingénierie informatique à l'UTT (Université de Technologie de Troyes) et freelance en intégration IA. Je conçois et déploie des solutions IA sur mesure pour les PME et startups, avec une obsession : que vos données restent en Europe et sous votre contrôle.",
     "parcourTitle": "Parcours",

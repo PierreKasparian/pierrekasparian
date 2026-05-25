@@ -71,7 +71,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
 
           {/* Portrait */}
           <div className="flex justify-center md:justify-end">
-            <div className="relative w-72 overflow-hidden rounded-2xl shadow-xl ring-2 ring-[var(--primary)] sm:w-80 lg:w-96">
+            <div className="animate-float relative w-72 overflow-hidden rounded-2xl shadow-xl ring-2 ring-[var(--primary)] sm:w-80 lg:w-96">
               <Image
                 src="/IMG_4704.jpg"
                 alt="Pierre Kasparian, Ingénieur IA & consulting"
