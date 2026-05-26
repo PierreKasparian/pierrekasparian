@@ -5,7 +5,6 @@ import {
   Compass,
   Cpu,
   Database,
-  FileText,
   GraduationCap,
   Mail,
   Quote,
