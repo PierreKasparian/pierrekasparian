@@ -11,32 +11,107 @@ export interface Project {
   imagePrincipale: string;
   images: string[];
   date: string;
-  link: string;
+  link?: string;
   awardLink?: string;
   mrrLink?: string;
+  relatedProjectSlug?: string;
   featured?: boolean;
 }
 
 export const projects: Project[] = [
   {
-    slug: "pretto-ia",
+    slug: "pretto-langfuse",
     title: {
-      fr: "Ingénieur IA & Data - Pretto",
-      en: "AI & Data Engineer - Pretto",
+      fr: "Plateforme d'évaluation de prompts - Pretto",
+      en: "Prompt Evaluation Platform - Pretto",
     },
     description: {
-      fr: "Pipeline d'évaluation de prompts, inférences par batch et auto-amélioration LLM pour une fintech du crédit immobilier.",
-      en: "Prompt evaluation pipeline, batch inference service and LLM auto-improvement for a mortgage fintech.",
+      fr: "Plateforme d'évaluation de prompts via Langfuse permettant de comparer des versions de prompts sur des datasets métiers annotés.",
+      en: "Langfuse-based prompt evaluation platform to benchmark prompt versions against annotated business datasets.",
     },
     descriptionLong: {
-      fr: "Stage puis mission freelance chez Pretto, fintech spécialisée dans le crédit immobilier.\n\nStage (août 2025 - février 2026) : création d'une pipeline d'auto-amélioration de prompt, développement d'une pipeline de suggestion automatique d'ajout d'éléments à un dataset, développement backend orienté architecture IA (Airflow, Google BigQuery).\n\nFreelance (février 2026 - avril 2026) : fiabilisation de la pipeline d'évaluation de prompt et amélioration de l'UX pour les équipes métier, création et mise en production d'un service d'inférences par batch.",
-      en: "Internship then freelance at Pretto, a mortgage fintech.\n\nInternship (Aug 2025 - Feb 2026): built a prompt auto-improvement pipeline, a dataset auto-augmentation suggestion pipeline, backend development with an AI-oriented architecture (Airflow, Google BigQuery).\n\nFreelance (Feb 2026 - Apr 2026): hardened the prompt evaluation pipeline and improved UX for business teams, built and deployed a batch inference service.",
+      fr: "Développement d'une plateforme d'évaluation des prompts pour les équipes IA de Pretto, en utilisant Langfuse comme moteur d'observabilité.\n\nÀ partir de datasets annotés (inputs et sorties attendues), la plateforme permettait de lancer des évaluations automatisées sur plusieurs versions d'un même prompt et de visualiser les résultats comparatifs.\n\nExemple d'application concret : un chatbot client capable d'appeler des outils métiers (réservation de créneaux, requêtes de données). Les datasets contenaient des cas d'usage réels et les comportements attendus pour chaque situation, permettant d'évaluer objectivement la qualité et la robustesse de chaque version du prompt.\n\nRésultat : une boucle d'itération rapide sur les prompts, fiabilisée et partageable entre les équipes techniques et métier.",
+      en: "Development of a prompt evaluation platform for Pretto's AI teams, using Langfuse as the observability engine.\n\nFrom annotated datasets (inputs and expected outputs), the platform ran automated evaluations across multiple versions of the same prompt and displayed comparative results.\n\nPractical example: a customer chatbot capable of calling business tools (slot booking, data queries). Datasets contained real use cases and expected behaviours for each scenario, enabling objective quality and robustness scoring for each prompt version.\n\nResult: a fast, reliable, team-shareable prompt iteration loop.",
     },
     imagePrincipale: "",
     images: [],
     date: "2025-08-01",
-    link: "https://www.pretto.fr/",
     featured: true,
+  },
+  {
+    slug: "pretto-prompt-pipeline",
+    title: {
+      fr: "Pipeline d'auto-amélioration de prompt - Pretto",
+      en: "Prompt Auto-improvement Pipeline - Pretto",
+    },
+    description: {
+      fr: "Pipeline IA qui synthétise automatiquement les faiblesses d'un prompt à partir des mauvais résultats, puis le réécrit.",
+      en: "AI pipeline that automatically identifies prompt weaknesses from bad outputs, then rewrites the prompt.",
+    },
+    descriptionLong: {
+      fr: "En s'appuyant sur la plateforme d'évaluation de prompts développée en parallèle, ce pipeline automatise le cycle d'amélioration des prompts.\n\nFonctionnement en deux étapes :\n1. Un premier LLM analyse les sorties incorrectes ou sous-optimales détectées lors des évaluations et synthétise les points faibles structurels du prompt.\n2. Un second LLM prend en entrée le prompt original et le rapport de faiblesses pour générer une version améliorée.\n\nCe pipeline a été conçu pour s'intégrer directement dans le workflow d'évaluation Langfuse, permettant aux équipes de déclencher une amélioration automatique en un clic.",
+      en: "Building on the prompt evaluation platform developed in parallel, this pipeline automates the prompt improvement cycle.\n\nTwo-step process:\n1. A first LLM analyses incorrect or suboptimal outputs flagged during evaluations and synthesises the structural weaknesses of the current prompt.\n2. A second LLM takes the original prompt and the weakness report as input to generate an improved version.\n\nThe pipeline was designed to integrate directly into the Langfuse evaluation workflow, letting teams trigger an automatic improvement with one click.",
+    },
+    imagePrincipale: "",
+    images: [],
+    date: "2025-09-01",
+    relatedProjectSlug: "pretto-langfuse",
+  },
+  {
+    slug: "pretto-batch-inference",
+    title: {
+      fr: "Service d'inférence batch - Pretto",
+      en: "Batch Inference Service - Pretto",
+    },
+    description: {
+      fr: "Service d'inférence batch unifié supportant +3 000 inputs lourds vers tous les fournisseurs LLM.",
+      en: "Unified batch inference service handling 3,000+ heavy inputs across all major LLM providers.",
+    },
+    descriptionLong: {
+      fr: "Conception et développement d'un service d'inférence batch centralisé pour unifier les appels vers tous les fournisseurs de LLM (OpenAI, Anthropic, Mistral, Google...).\n\nContraintes techniques majeures : gestion de volumes élevés (plus de 3 000 inputs par batch), traitement de documents lourds, et implémentations de tests unitaires.\n\nFonctionnalités clés : abstraction unifiée des APIs fournisseurs et monitoring des coûts.\n\nCe service a ensuite été utilisé comme infrastructure de base pour d'autres projets IA au sein de Pretto.",
+      en: "Design and development of a centralised batch inference service to unify LLM provider calls (OpenAI, Anthropic, Mistral, Google...).\n\nKey technical constraints: handling high volumes (3,000+ inputs per batch), processing heavy documents, unitaries tests.\n\nKey features: unified provider API abstraction and cost monitoring.\n\nThis service was subsequently used as the base infrastructure for other AI projects within Pretto.",
+    },
+    imagePrincipale: "",
+    images: [],
+    date: "2025-12-01",
+    featured: true,
+  },
+  {
+    slug: "pretto-email-pipeline",
+    title: {
+      fr: "Pipeline de traitement d'emails - Pretto",
+      en: "Email Processing Pipeline - Pretto",
+    },
+    description: {
+      fr: "Pipeline IA de traitement automatisé des emails courtiers-banquiers pour extraire les évolutions de taux immobiliers via LLM.",
+      en: "AI pipeline for automated broker-banker email processing to extract mortgage rate changes via LLM.",
+    },
+    descriptionLong: {
+      fr: "Développement d'un pipeline de traitement automatique des emails échangés entre les courtiers immobiliers et les banquiers.\n\nObjectif final : extraire automatiquement des informations métiers clés (notamment les évolutions de taux) à partir de ces emails, en utilisant un LLM comme moteur d'analyse.\n\nLe pipeline se décompose en plusieurs étapes :\n1. Formatage de l'entrée LLM : nettoyage et structuration du contenu brut des emails.\n2. Filtrage des images : détection et exclusion automatique des logos envoyés en pièce jointe, inutiles pour l'analyse.\n3. Enrichissement : agrégation avec des données internes existantes dans l'entreprise avant l'envoi au LLM.\n4. Inférence : utilisation du service de batch développé précédemment pour traiter les volumes en production.",
+      en: "Development of an automated pipeline to process emails exchanged between mortgage brokers and bank representatives.\n\nEnd goal: automatically extract key business information (particularly rate changes) from these emails using an LLM as the analysis engine.\n\nThe pipeline consists of several steps:\n1. LLM input formatting: cleaning and structuring raw email content.\n2. Image filtering: automatic detection and exclusion of logo attachments, irrelevant to the analysis.\n3. Enrichment: aggregation with existing internal company data before sending to the LLM.\n4. Inference: use of the previously built batch service to handle production volumes.",
+    },
+    imagePrincipale: "",
+    images: [],
+    date: "2026-01-01",
+    relatedProjectSlug: "pretto-batch-inference",
+  },
+  {
+    slug: "pretto-llm-platform",
+    title: {
+      fr: "Fiabilisation de la plateforme LLM - Pretto",
+      en: "LLM Platform Reliability - Pretto",
+    },
+    description: {
+      fr: "Refactorisation et fiabilisation de la plateforme LLM existante de Pretto, résolvant les problèmes de surcharge des workers.",
+      en: "Refactoring and hardening of Pretto's existing LLM platform, resolving worker overload issues.",
+    },
+    descriptionLong: {
+      fr: "Diagnostic et refactorisation de la plateforme LLM interne de Pretto, existante avant mon arrivée et présentant des problèmes récurrents de stabilité.\n\nConstat initial : des workers surchargés provoquaient des dégradations de service régulières. L'analyse du code a révélé des traitements inutiles et des inefficacités architecturales qui consommaient les ressources sans valeur ajoutée.\n\nTravail réalisé :\n- Audit complet du code existant et identification des causes racines.\n- Refactorisation ciblée pour éliminer les traitements superflus.\n- Amélioration de l'uptime et de la résilience globale de la plateforme.",
+      en: "Diagnosis and refactoring of Pretto's internal LLM platform, which predated my arrival and was experiencing recurring stability issues.\n\nInitial finding: overloaded workers were causing regular service degradation. Code analysis revealed unnecessary processing and architectural inefficiencies consuming resources without added value.\n\nWork done:\n- Full audit of the existing codebase and root cause identification.\n- Targeted refactoring to eliminate redundant processing.\n- Improved uptime and overall platform resilience.",
+    },
+    imagePrincipale: "",
+    images: [],
+    date: "2026-02-01",
   },
   {
     slug: "ailog-rag",
@@ -55,8 +130,26 @@ export const projects: Project[] = [
     imagePrincipale: "",
     images: [],
     date: "2025-07-01",
-    link: "https://www.linkedin.com/in/pierre-kasparian-486101259/",
     featured: true,
+  },
+  {
+    slug: "livesession-formation",
+    title: {
+      fr: "Formation RAG - LiveSession",
+      en: "RAG Training - LiveSession",
+    },
+    description: {
+      fr: "Formation en 4 parties de l'équipe LiveSession sur leur RAG custom : fondamentaux, implémentation, limites et autonomie opérationnelle.",
+      en: "4-part RAG training programme for the LiveSession team: fundamentals, custom implementation, limitations and full operational autonomy.",
+    },
+    descriptionLong: {
+      fr: "Suite au développement du chatbot RAG multi-clients pour LiveSession, j'ai conçu et animé une formation complète en 4 parties pour permettre à l'équipe de maîtriser et maintenir le produit en toute autonomie.\n\nPartie 1 - Les fondamentaux du RAG\n\nComment fonctionnent les embeddings, le processus d'indexation et de retrieval, les différents types de RAG existants. Objectif : que l'équipe comprenne la technologie.\n\nPartie 2 - L'implémentation custom\n\nLa reformulation intelligente des questions utilisateurs, l'OCRisation automatique des PDFs, la gestion avancée des tableaux. Objectif : que l'équipe maîtrise parfaitement son propre produit.\n\nPartie 3 - Les limites du système\n\nPour quels types de questions le RAG ne fonctionne pas, sur quels documents il trouve ses limites, et les premiers soins en cas de défaillance. Objectif : que l'équipe sache réagir.\n\nPartie 4 - Atelier pratique\n\nRestauration de la base de données vectorielle, dashboard Grafana, scaling prévisionnel, veille technologique. Objectif : l'autonomie maximale.\n\nAujourd'hui, LiveSession maîtrise son produit et n'a plus besoin d'intervention externe pour la plupart des opérations.",
+      en: "Following the development of the multi-tenant RAG chatbot for LiveSession, I designed and delivered a comprehensive 4-part training programme to enable the team to fully master and maintain the product independently.\n\nPart 1 - RAG Fundamentals\n\nHow embeddings work, the indexation and retrieval process, the different types of RAG systems. Goal: team understands the technology.\n\nPart 2 - The Custom Implementation\n\nIntelligent user question reformulation, automatic PDF OCR, advanced table handling. Goal: team has complete command of their own product.\n\nPart 3 - System Limitations\nWhich question types the RAG handles poorly, which document types reach its limits, and first-aid steps when things break. Goal: team knows how to react.\n\nPart 4 - Hands-on Workshop\n\nVector database restoration, Grafana dashboard, predictive scaling, technology watch. Goal: maximum operational autonomy.\n\nToday, LiveSession has full command of its product and no longer needs external intervention for most operations.",
+    },
+    imagePrincipale: "/1770760454711.jpeg",
+    images: ["/Capture d'écran du 2026-05-26 16-40-46.png"],
+    date: "2025-08-01",
+    relatedProjectSlug: "ailog-rag",
   },
   {
     slug: "securite-solaire",
@@ -113,7 +206,6 @@ export const projects: Project[] = [
     imagePrincipale: "",
     images: [],
     date: "2024-09-01",
-    link: "https://www.linkedin.com/in/pierre-kasparian-486101259/",
   },
   {
     slug: "podcastify",
@@ -130,7 +222,7 @@ export const projects: Project[] = [
       en: "Podcastify automatically generates two-host podcast episodes from any content: blog posts, PDFs, notes. Users set their focus and tone, review the transcript, then generate the audio. Built for students who want to learn during their commute, content creators repurposing content, or anyone looking to save time on reading.\n\nTech stack: Next.js frontend with Stripe payments, PostHog analytics, Supabase database. The Python backend runs on a VPS with a decoupled worker/API architecture communicating over Redis. Celery Beat handles automated email retargeting for users who have not triggered their free trial yet.\n\nMarketing: Google Ads, Reddit, and above all an SEO/GEO strategy to capture qualified organic traffic. The project generates MRR.",
     },
     imagePrincipale: "/icon.png",
-    images: ["/Capture d’écran du 2026-05-07 09-51-35.png"],
+    images: ["/Capture d'écran du 2026-05-07 09-51-35.png"],
     date: "2026-01-01",
     link: "https://podcastify.io/",
     mrrLink: "https://trustmrr.com/startup/podcastify",
@@ -236,6 +328,5 @@ export const projects: Project[] = [
     imagePrincipale: "/stock_prediction_project.jpg",
     images: ["/correlation.png"],
     date: "2025-01-01",
-    link: "https://github.com/Pierre918",
   },
 ];
