@@ -176,6 +176,119 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
         </div>
       </section>
 
+      {/* FEATURED PROJECTS */}
+      <section
+        id="featured-projects"
+        className="border-b border-[var(--border)]"
+      >
+        <div className="mx-auto max-w-6xl px-6 py-20">
+          <div className="mb-10 flex items-end justify-between">
+            <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+              {dict.home.projectsTitle}
+            </h2>
+            <Link
+              href={`/${lang}/projects`}
+              className="text-sm font-medium text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
+            >
+              {dict.home.projectsCta} →
+            </Link>
+          </div>
+          <div className="grid gap-6 md:grid-cols-3">
+            {featured.map((project) => (
+              <Link
+                key={project.slug}
+                href={`/${lang}/projects/${project.slug}`}
+                className="group"
+              >
+                <Card className="h-full overflow-hidden transition-shadow group-hover:shadow-md">
+                  <div className="relative aspect-[16/10] w-full overflow-hidden bg-[var(--muted)]">
+                    <Image
+                      src={project.imagePrincipale}
+                      alt={project.title[lang]}
+                      fill
+                      className="object-cover transition-transform duration-300 group-hover:scale-105"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    />
+                  </div>
+                  <CardContent className="pt-6">
+                    <CardTitle className="mb-2 text-base">
+                      {project.title[lang]}
+                    </CardTitle>
+                    <CardDescription>
+                      {project.description[lang]}
+                    </CardDescription>
+                  </CardContent>
+                </Card>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* TESTIMONIALS */}
+      <section className="border-b border-[var(--border)] bg-[var(--secondary)]/30">
+        <div className="mx-auto max-w-6xl px-6 py-20">
+          <div className="mb-10 flex items-end justify-between">
+            <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+              {dict.home.testimonialsTitle}
+            </h2>
+            <a
+              href="https://www.linkedin.com/in/pierre-kasparian-486101259/details/recommendations/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm font-medium text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
+            >
+              {dict.home.testimonialsCta} →
+            </a>
+          </div>
+          <div className="grid gap-6 md:grid-cols-3">
+            {testimonials.map((t) => (
+              <Card
+                key={t.name}
+                className="flex flex-col bg-[var(--background)]"
+              >
+                <CardContent className="relative flex flex-grow flex-col gap-5 pt-6">
+                  <div
+                    className="flex gap-0.5 text-[var(--primary)]"
+                    aria-label="5 / 5"
+                  >
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <Star key={i} className="size-4 fill-current" />
+                    ))}
+                  </div>
+                  <blockquote className="flex flex-grow flex-col gap-2 font-serif text-lg leading-relaxed text-[var(--foreground)] italic">
+                    <Quote
+                      aria-hidden="true"
+                      className="size-6 rotate-180 text-[var(--accent-strong)]/50"
+                      strokeWidth={2}
+                    />
+                    <div className="flex flex-col gap-2 px-1">
+                      {t.text[lang].split("\n").map((line, i) => (
+                        <p key={i}>{line}</p>
+                      ))}
+                    </div>
+                    <Quote
+                      aria-hidden="true"
+                      className="size-6 self-end text-[var(--accent-strong)]/50"
+                      strokeWidth={2}
+                    />
+                  </blockquote>
+                  <div className="border-t border-[var(--border)] pt-4">
+                    <p className="text-sm font-semibold">{t.name}</p>
+                    <p className="text-xs text-[var(--muted-foreground)]">
+                      {t.role[lang]}
+                    </p>
+                    <p className="text-xs text-[var(--muted-foreground)]">
+                      {t.date[lang]}
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* SERVICES PREVIEW */}
       <section className="border-b border-[var(--border)]">
         <div className="mx-auto max-w-6xl px-6 py-20">
@@ -226,6 +339,53 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
         </div>
       </section>
 
+      {/* PROCESS / METHODOLOGY */}
+      <section className="relative overflow-hidden border-b border-[var(--border)]">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -bottom-24 left-[10%] size-[380px] rounded-full bg-[var(--accent-strong)] opacity-[0.06] blur-3xl"
+        />
+        <div className="mx-auto max-w-6xl px-6 py-20">
+          <div className="mb-14 text-center">
+            <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+              {dict.home.processTitle}
+            </h2>
+            <p className="mt-3 text-[var(--muted-foreground)]">
+              {dict.home.processSubtitle}
+            </p>
+          </div>
+
+          <ol className="relative grid gap-8 md:grid-cols-4 md:gap-6">
+            {/* Horizontal connector line (desktop only) */}
+            <div
+              aria-hidden="true"
+              className="absolute top-6 right-[12.5%] left-[12.5%] hidden h-px bg-[var(--border)] md:block"
+            />
+
+            {dict.home.processSteps.map((step, i) => {
+              const Icon = [Search, Compass, Code2, Rocket][i] ?? Sparkles;
+              return (
+                <li
+                  key={step.title}
+                  className="relative flex flex-col items-center text-center"
+                >
+                  <div className="relative z-10 mb-4 flex size-12 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--background)] text-[var(--primary)] shadow-sm">
+                    <Icon className="size-5" />
+                  </div>
+                  <span className="mb-2 text-xs font-semibold tracking-widest text-[var(--muted-foreground)] uppercase">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <h3 className="text-base font-semibold">{step.title}</h3>
+                  <p className="mt-2 text-sm text-[var(--muted-foreground)]">
+                    {step.body}
+                  </p>
+                </li>
+              );
+            })}
+          </ol>
+        </div>
+      </section>
+
       {/* ABOUT PREVIEW */}
       <section className="border-b border-[var(--border)]">
         <div className="mx-auto max-w-3xl px-6 py-20 text-center">
@@ -260,55 +420,6 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
             {dict.home.aboutCta}
             <ArrowRight />
           </Link>
-        </div>
-      </section>
-
-      {/* FEATURED PROJECTS */}
-      <section
-        id="featured-projects"
-        className="border-b border-[var(--border)]"
-      >
-        <div className="mx-auto max-w-6xl px-6 py-20">
-          <div className="mb-10 flex items-end justify-between">
-            <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
-              {dict.home.projectsTitle}
-            </h2>
-            <Link
-              href={`/${lang}/projects`}
-              className="text-sm font-medium text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
-            >
-              {dict.home.projectsCta} →
-            </Link>
-          </div>
-          <div className="grid gap-6 md:grid-cols-3">
-            {featured.map((project) => (
-              <Link
-                key={project.slug}
-                href={`/${lang}/projects/${project.slug}`}
-                className="group"
-              >
-                <Card className="h-full overflow-hidden transition-shadow group-hover:shadow-md">
-                  <div className="relative aspect-[16/10] w-full overflow-hidden bg-[var(--muted)]">
-                    <Image
-                      src={project.imagePrincipale}
-                      alt={project.title[lang]}
-                      fill
-                      className="object-cover transition-transform duration-300 group-hover:scale-105"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    />
-                  </div>
-                  <CardContent className="pt-6">
-                    <CardTitle className="mb-2 text-base">
-                      {project.title[lang]}
-                    </CardTitle>
-                    <CardDescription>
-                      {project.description[lang]}
-                    </CardDescription>
-                  </CardContent>
-                </Card>
-              </Link>
-            ))}
-          </div>
         </div>
       </section>
 
@@ -438,117 +549,6 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
                 </ul>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* PROCESS / METHODOLOGY */}
-      <section className="relative overflow-hidden border-b border-[var(--border)]">
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute -bottom-24 left-[10%] size-[380px] rounded-full bg-[var(--accent-strong)] opacity-[0.06] blur-3xl"
-        />
-        <div className="mx-auto max-w-6xl px-6 py-20">
-          <div className="mb-14 text-center">
-            <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
-              {dict.home.processTitle}
-            </h2>
-            <p className="mt-3 text-[var(--muted-foreground)]">
-              {dict.home.processSubtitle}
-            </p>
-          </div>
-
-          <ol className="relative grid gap-8 md:grid-cols-4 md:gap-6">
-            {/* Horizontal connector line (desktop only) */}
-            <div
-              aria-hidden="true"
-              className="absolute top-6 right-[12.5%] left-[12.5%] hidden h-px bg-[var(--border)] md:block"
-            />
-
-            {dict.home.processSteps.map((step, i) => {
-              const Icon = [Search, Compass, Code2, Rocket][i] ?? Sparkles;
-              return (
-                <li
-                  key={step.title}
-                  className="relative flex flex-col items-center text-center"
-                >
-                  <div className="relative z-10 mb-4 flex size-12 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--background)] text-[var(--primary)] shadow-sm">
-                    <Icon className="size-5" />
-                  </div>
-                  <span className="mb-2 text-xs font-semibold tracking-widest text-[var(--muted-foreground)] uppercase">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <h3 className="text-base font-semibold">{step.title}</h3>
-                  <p className="mt-2 text-sm text-[var(--muted-foreground)]">
-                    {step.body}
-                  </p>
-                </li>
-              );
-            })}
-          </ol>
-        </div>
-      </section>
-
-      {/* TESTIMONIALS */}
-      <section className="border-b border-[var(--border)] bg-[var(--secondary)]/30">
-        <div className="mx-auto max-w-6xl px-6 py-20">
-          <div className="mb-10 flex items-end justify-between">
-            <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
-              {dict.home.testimonialsTitle}
-            </h2>
-            <a
-              href="https://www.linkedin.com/in/pierre-kasparian-486101259/details/recommendations/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm font-medium text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
-            >
-              {dict.home.testimonialsCta} →
-            </a>
-          </div>
-          <div className="grid gap-6 md:grid-cols-3">
-            {testimonials.map((t) => (
-              <Card
-                key={t.name}
-                className="flex flex-col bg-[var(--background)]"
-              >
-                <CardContent className="relative flex flex-grow flex-col gap-5 pt-6">
-                  <div
-                    className="flex gap-0.5 text-[var(--primary)]"
-                    aria-label="5 / 5"
-                  >
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <Star key={i} className="size-4 fill-current" />
-                    ))}
-                  </div>
-                  <blockquote className="flex flex-grow flex-col gap-2 font-serif text-lg leading-relaxed text-[var(--foreground)] italic">
-                    <Quote
-                      aria-hidden="true"
-                      className="size-6 rotate-180 text-[var(--accent-strong)]/50"
-                      strokeWidth={2}
-                    />
-                    <div className="flex flex-col gap-2 px-1">
-                      {t.text[lang].split("\n").map((line, i) => (
-                        <p key={i}>{line}</p>
-                      ))}
-                    </div>
-                    <Quote
-                      aria-hidden="true"
-                      className="size-6 self-end text-[var(--accent-strong)]/50"
-                      strokeWidth={2}
-                    />
-                  </blockquote>
-                  <div className="border-t border-[var(--border)] pt-4">
-                    <p className="text-sm font-semibold">{t.name}</p>
-                    <p className="text-xs text-[var(--muted-foreground)]">
-                      {t.role[lang]}
-                    </p>
-                    <p className="text-xs text-[var(--muted-foreground)]">
-                      {t.date[lang]}
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
           </div>
         </div>
       </section>
