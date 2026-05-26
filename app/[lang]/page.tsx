@@ -1,4 +1,16 @@
-import { ArrowRight, Mail, Quote, Star } from "lucide-react";
+import {
+  ArrowRight,
+  Brain,
+  Cpu,
+  Database,
+  GraduationCap,
+  Mail,
+  Quote,
+  ShieldCheck,
+  Sparkles,
+  Star,
+  type LucideIcon,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -9,12 +21,23 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { prestations } from "@/data/prestations";
 import { projects } from "@/data/projects";
 import { testimonials } from "@/data/testimonials";
 
 import { getDictionary, hasLocale } from "./dictionaries";
+
+const PRESTATION_ICONS: Record<string, LucideIcon> = {
+  ShieldCheck,
+  Cpu,
+  Database,
+  Brain,
+  GraduationCap,
+  Sparkles,
+};
 
 const LINKEDIN_RECOMMENDATIONS_URL =
   "https://www.linkedin.com/in/pierre-kasparian-486101259/details/recommendations/";
@@ -39,6 +62,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
   if (!hasLocale(lang)) notFound();
   const dict = await getDictionary(lang);
   const featured = projects.filter((p) => p.featured).slice(0, 3);
+  const featuredPrestations = prestations.filter((p) => p.featured).slice(0, 3);
 
   return (
     <>
@@ -64,7 +88,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
             </p>
             <div className="flex flex-wrap gap-3">
               <Link
-                href={`/${lang}/prestations`}
+                href={`/${lang}/projects`}
                 className={buttonVariants({ size: "lg" })}
               >
                 {dict.home.ctaPrimary}
@@ -145,6 +169,56 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
               );
             }),
           )}
+        </div>
+      </section>
+
+      {/* SERVICES PREVIEW */}
+      <section className="border-b border-[var(--border)]">
+        <div className="mx-auto max-w-6xl px-6 py-20">
+          <div className="mb-10 flex items-end justify-between">
+            <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+              {dict.home.servicesTitle}
+            </h2>
+            <Link
+              href={`/${lang}/prestations`}
+              className="text-sm font-medium text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
+            >
+              {dict.home.servicesCta} →
+            </Link>
+          </div>
+          <div className="grid gap-6 md:grid-cols-3">
+            {featuredPrestations.map((p) => {
+              const Icon = PRESTATION_ICONS[p.icon] ?? Sparkles;
+              return (
+                <Link
+                  key={p.id}
+                  href={`/${lang}/prestations/${p.id}`}
+                  className="group"
+                >
+                  <Card className="h-full transition-shadow group-hover:shadow-md">
+                    <CardHeader>
+                      <div className="mb-3 inline-flex size-10 items-center justify-center rounded-md bg-[var(--accent)] text-[var(--accent-foreground)]">
+                        <Icon className="size-5" />
+                      </div>
+                      <CardTitle>{p.title[lang]}</CardTitle>
+                      <CardDescription>{p.tagline[lang]}</CardDescription>
+                      <div className="flex flex-wrap gap-2 pt-2">
+                        {p.tags.map((tag) => (
+                          <Badge
+                            key={tag}
+                            variant="secondary"
+                            className="text-xs"
+                          >
+                            {tag}
+                          </Badge>
+                        ))}
+                      </div>
+                    </CardHeader>
+                  </Card>
+                </Link>
+              );
+            })}
+          </div>
         </div>
       </section>
 
@@ -249,7 +323,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
           <div className="grid gap-16 md:grid-cols-2">
             {/* Education */}
             <div>
-              <h3 className="mb-8 text-base font-semibold text-[var(--muted-foreground)] uppercase tracking-widest">
+              <h3 className="mb-8 text-base font-semibold tracking-widest text-[var(--muted-foreground)] uppercase">
                 {dict.home.resumeEducationTitle}
               </h3>
               <div className="relative">
@@ -271,7 +345,9 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
                       {/* Card */}
                       <div className="flex-1 rounded-lg border border-[var(--border)] bg-[var(--background)] p-5">
                         <div className="flex items-start justify-between gap-2">
-                          <p className="text-base font-semibold leading-snug">{item.title}</p>
+                          <p className="text-base leading-snug font-semibold">
+                            {item.title}
+                          </p>
                           <span className="shrink-0 text-xs text-[var(--muted-foreground)]">
                             {item.date}
                           </span>
@@ -288,7 +364,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
 
             {/* Experience */}
             <div>
-              <h3 className="mb-8 text-base font-semibold text-[var(--muted-foreground)] uppercase tracking-widest">
+              <h3 className="mb-8 text-base font-semibold tracking-widest text-[var(--muted-foreground)] uppercase">
                 {dict.home.resumeExperienceTitle}
               </h3>
               <div className="relative">
@@ -310,14 +386,20 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
                       {/* Card */}
                       <div className="flex-1 rounded-lg border border-[var(--border)] bg-[var(--background)] p-5">
                         <div className="flex items-start justify-between gap-2">
-                          <p className="text-base font-semibold leading-snug">{item.title}</p>
+                          <p className="text-base leading-snug font-semibold">
+                            {item.title}
+                          </p>
                           <span className="shrink-0 text-xs text-[var(--muted-foreground)]">
                             {item.date}
                           </span>
                         </div>
-                        {"roles" in item && Array.isArray(item.roles) && item.roles.length > 0 ? (
+                        {"roles" in item &&
+                        Array.isArray(item.roles) &&
+                        item.roles.length > 0 ? (
                           <div className="mt-3 flex flex-col gap-3">
-                            {(item.roles as { subtitle: string; body: string }[]).map((role) => (
+                            {(
+                              item.roles as { subtitle: string; body: string }[]
+                            ).map((role) => (
                               <div key={role.subtitle}>
                                 <p className="text-sm font-semibold text-[var(--foreground)]">
                                   {role.subtitle}

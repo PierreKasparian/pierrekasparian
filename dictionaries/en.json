@@ -12,8 +12,10 @@
     "badge": "AI & Data freelancer · Engineering student",
     "title": "AI integration and data engineering, GDPR-compliant.",
     "subtitle": "I help SMEs and startups transform raw data and deploy LLMs, RAG and AI agents, without sending their data outside Europe.",
-    "ctaPrimary": "See my services",
+    "ctaPrimary": "See my work",
     "ctaSecondary": "Get in touch",
+    "servicesTitle": "What I offer",
+    "servicesCta": "See all services",
     "trustTitle": "Why work with me",
     "trustItems": [
       { "title": "GDPR-compliant by design", "body": "EU hosting, anonymisation, data-flow audit. Your data stays where it belongs." },

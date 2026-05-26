@@ -12,8 +12,10 @@
     "badge": "Freelance IA & Data · Étudiant ingénieur",
     "title": "Intégration IA et ingénierie des données, conforme RGPD.",
     "subtitle": "J'aide les PME et startups à transformer leurs données brutes et à déployer des LLM, RAG et agents IA, sans envoyer leurs données hors d'Europe.",
-    "ctaPrimary": "Voir mes prestations",
+    "ctaPrimary": "Voir mes réalisations",
     "ctaSecondary": "Me contacter",
+    "servicesTitle": "Ce que je propose",
+    "servicesCta": "Voir toutes les prestations",
     "trustTitle": "Pourquoi travailler avec moi",
     "trustItems": [
       { "title": "Conformité RGPD by design", "body": "Hébergement EU, anonymisation, audit du flux de données. Vos données restent chez vous." },
