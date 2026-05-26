@@ -185,63 +185,6 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
         </div>
       </section>
 
-      {/* EDUCATION */}
-      <section className="relative overflow-hidden border-b border-[var(--border)]">
-        {/* Decorative blob */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute -top-24 right-6 size-[420px] rounded-full bg-[var(--primary)] opacity-[0.07] blur-3xl"
-        />
-        <div className="mx-auto max-w-6xl px-6 py-20">
-          <h2 className="mb-10 text-center text-2xl font-semibold tracking-tight sm:text-3xl">
-            {dict.home.educationTitle}
-          </h2>
-
-          <div className="relative">
-            {/* Horizontal connector line — desktop */}
-            <div
-              aria-hidden="true"
-              className="absolute top-[0.5625rem] right-[calc(100%/6)] left-[calc(100%/6)] hidden h-px bg-[var(--border)] md:block"
-            />
-            {/* Vertical connector line — mobile */}
-            <div
-              aria-hidden="true"
-              className="absolute top-3 bottom-3 left-[0.5625rem] w-px bg-[var(--border)] md:hidden"
-            />
-
-            <ul className="grid gap-6 md:grid-cols-3">
-              {dict.about.parcourItems.map((item) => (
-                <li
-                  key={item.title}
-                  className="relative flex gap-4 md:flex-col md:gap-0"
-                >
-                  {/* Dot */}
-                  <div className="flex shrink-0 md:justify-center">
-                    <span
-                      aria-hidden="true"
-                      className="relative z-10 block size-[1.125rem] shrink-0 rounded-full border-2 border-[var(--primary)] bg-[var(--background)]"
-                    />
-                  </div>
-
-                  {/* Card */}
-                  <div className="flex-1 rounded-lg border border-[var(--border)] bg-[var(--background)] p-5 md:mt-5">
-                    <div className="flex items-start justify-between gap-2">
-                      <p className="text-sm font-semibold">{item.title}</p>
-                      <span className="shrink-0 text-xs text-[var(--muted-foreground)]">
-                        {item.date}
-                      </span>
-                    </div>
-                    <p className="mt-2 text-sm text-[var(--muted-foreground)]">
-                      {item.body}
-                    </p>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </section>
-
       {/* FEATURED PROJECTS */}
       <section
         id="featured-projects"
@@ -287,6 +230,128 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
                 </Card>
               </Link>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* RESUME */}
+      <section className="relative overflow-hidden border-b border-[var(--border)]">
+        {/* Decorative blob */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -top-24 right-6 size-[420px] rounded-full bg-[var(--primary)] opacity-[0.07] blur-3xl"
+        />
+        <div className="mx-auto max-w-6xl px-6 py-20">
+          <h2 className="mb-14 text-center text-2xl font-semibold tracking-tight sm:text-3xl">
+            {dict.home.resumeTitle}
+          </h2>
+
+          <div className="grid gap-16 md:grid-cols-2">
+            {/* Education */}
+            <div>
+              <h3 className="mb-8 text-base font-semibold text-[var(--muted-foreground)] uppercase tracking-widest">
+                {dict.home.resumeEducationTitle}
+              </h3>
+              <div className="relative">
+                {/* Vertical connector line */}
+                <div
+                  aria-hidden="true"
+                  className="absolute top-3 bottom-3 left-[0.5625rem] w-px bg-[var(--border)]"
+                />
+                <ul className="flex flex-col gap-6">
+                  {dict.about.parcourItems.map((item) => (
+                    <li key={item.title} className="relative flex gap-4">
+                      {/* Dot */}
+                      <div className="flex shrink-0">
+                        <span
+                          aria-hidden="true"
+                          className="relative z-10 block size-[1.125rem] shrink-0 rounded-full border-2 border-[var(--primary)] bg-[var(--background)]"
+                        />
+                      </div>
+                      {/* Card */}
+                      <div className="flex-1 rounded-lg border border-[var(--border)] bg-[var(--background)] p-5">
+                        <div className="flex items-start justify-between gap-2">
+                          <p className="text-base font-semibold leading-snug">{item.title}</p>
+                          <span className="shrink-0 text-xs text-[var(--muted-foreground)]">
+                            {item.date}
+                          </span>
+                        </div>
+                        <p className="mt-2 text-sm text-[var(--muted-foreground)]">
+                          {item.body}
+                        </p>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            {/* Experience */}
+            <div>
+              <h3 className="mb-8 text-base font-semibold text-[var(--muted-foreground)] uppercase tracking-widest">
+                {dict.home.resumeExperienceTitle}
+              </h3>
+              <div className="relative">
+                {/* Vertical connector line */}
+                <div
+                  aria-hidden="true"
+                  className="absolute top-3 bottom-3 left-[0.5625rem] w-px bg-[var(--border)]"
+                />
+                <ul className="flex flex-col gap-6">
+                  {dict.about.experienceItems.map((item) => (
+                    <li key={item.title} className="relative flex gap-4">
+                      {/* Dot */}
+                      <div className="flex shrink-0">
+                        <span
+                          aria-hidden="true"
+                          className="relative z-10 block size-[1.125rem] shrink-0 rounded-full border-2 border-[var(--accent-strong)] bg-[var(--background)]"
+                        />
+                      </div>
+                      {/* Card */}
+                      <div className="flex-1 rounded-lg border border-[var(--border)] bg-[var(--background)] p-5">
+                        <div className="flex items-start justify-between gap-2">
+                          <p className="text-base font-semibold leading-snug">{item.title}</p>
+                          <span className="shrink-0 text-xs text-[var(--muted-foreground)]">
+                            {item.date}
+                          </span>
+                        </div>
+                        {"roles" in item && Array.isArray(item.roles) && item.roles.length > 0 ? (
+                          <div className="mt-3 flex flex-col gap-3">
+                            {(item.roles as { subtitle: string; body: string }[]).map((role) => (
+                              <div key={role.subtitle}>
+                                <p className="text-sm font-semibold text-[var(--foreground)]">
+                                  {role.subtitle}
+                                </p>
+                                <p className="mt-1 text-sm text-[var(--muted-foreground)]">
+                                  {role.body}
+                                </p>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          "body" in item && (
+                            <>
+                              <p className="mt-3 text-sm text-[var(--muted-foreground)]">
+                                {(item as { body: string }).body}
+                              </p>
+                              {"cta" in item && (
+                                <Link
+                                  href={`/${lang}/prestations`}
+                                  className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-[var(--muted-foreground)] hover:underline"
+                                >
+                                  {(item as { cta: string }).cta}
+                                  <ArrowRight className="size-3" />
+                                </Link>
+                              )}
+                            </>
+                          )
+                        )}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
       </section>

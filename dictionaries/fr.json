@@ -46,7 +46,9 @@
     ],
     "aboutCta": "En savoir plus",
     "aboutSignature": "Pierre Kasparian",
-    "educationTitle": "Formation",
+    "resumeTitle": "Parcours",
+    "resumeEducationTitle": "Formation",
+    "resumeExperienceTitle": "Expérience",
     "projectsTitle": "Projets sélectionnés",
     "projectsCta": "Voir tous les projets",
     "testimonialsTitle": "Ce que disent mes clients",
@@ -106,9 +108,28 @@
     "introBody": "Étudiant en 4e année d'ingénierie informatique à l'UTT (Université de Technologie de Troyes) et freelance en intégration IA et ingénierie des données. Je transforme des données brutes en pipelines exploitables (SQL, DBT) et déploie des solutions IA sur mesure pour les PME et startups, avec une obsession : que vos données restent en Europe et sous votre contrôle.",
     "parcourTitle": "Parcours",
     "parcourItems": [
-      { "title": "UTT - Informatique et Systèmes d'Information", "date": "2022 – 2027", "body": "4e année. Formation ingénieur généraliste avec spécialisation systèmes d'information et développement logiciel." },
+      { "title": "Formation Machine Learning & Data Science", "date": "Mars 2025", "body": "Fondamentaux ML : régression, classification, clustering, scikit-learn, Python. Application sur la prédiction de cours boursiers." },
       { "title": "Formation LLM Engineering", "date": "Janvier 2025", "body": "Programme intensif : RAG, fine-tuning QLoRA, agents autonomes, déploiement de modèles open source." },
-      { "title": "Formation Machine Learning & Data Science", "date": "Mars 2025", "body": "Fondamentaux ML : régression, classification, clustering, scikit-learn, Python. Application sur la prédiction de cours boursiers." }
+      { "title": "UTT - Informatique et Systèmes d'Information", "date": "2022 – 2027", "body": "4e année. Formation ingénieur orientée systèmes d'information et développement logiciel avec spécialisation data." }
+    ],
+    "experienceItems": [
+      {
+        "title": "Pretto",
+        "date": "Août 2025 – Fév 2026",
+        "roles": [
+          { "subtitle": "Stage IA & Data", "body": "Développement de pipelines données et implémentations d'IA générative au sein de la fintech Pretto." },
+          { "subtitle": "Freelance IA & Data", "body": "Trois mois de freelance suite au stage, poursuite des sujets." }
+        ]
+      },
+      { "title": "Freelance IA & Data", "date": "2024 – maintenant", "body": "Création de chatbots, machine learning, RAG, automatisations IA et développement web. Ingénierie des données (SQL, DBT).", "cta": "Voir toutes mes prestations" },
+      {
+        "title": "Junior Conseil UTT",
+        "date": "2023 – 2025",
+        "roles": [
+          { "subtitle": "Directeur Technique et Chef de Projet", "body": "Pilotage de missions client, encadrement des équipes projet et coordination des livrables techniques." },
+          { "subtitle": "Responsable Communication & Événementiel", "body": "Gestion des réseaux sociaux, communication externe et organisation des événements de l'association." }
+        ]
+      }
     ],
     "valuesTitle": "Mes valeurs",
     "valuesItems": [

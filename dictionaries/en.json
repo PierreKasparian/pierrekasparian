@@ -46,7 +46,9 @@
     ],
     "aboutCta": "Learn more",
     "aboutSignature": "Pierre Kasparian",
-    "educationTitle": "Education",
+    "resumeTitle": "Resume",
+    "resumeEducationTitle": "Education",
+    "resumeExperienceTitle": "Experience",
     "projectsTitle": "Selected projects",
     "projectsCta": "See all projects",
     "testimonialsTitle": "What clients say",
@@ -106,9 +108,28 @@
     "introBody": "4th year computer engineering student at UTT (Université de Technologie de Troyes) and AI integration & data engineering freelancer. I transform raw data into usable pipelines (SQL, DBT) and deploy custom AI solutions for SMEs and startups, with one obsession: keeping your data in Europe and under your control.",
     "parcourTitle": "Background",
     "parcourItems": [
-      { "title": "UTT - Computer Science & Information Systems", "date": "2022 – 2027", "body": "4th year. Generalist engineering programme, specialising in information systems and software development." },
+      { "title": "Machine Learning & Data Science Training", "date": "March 2025", "body": "ML fundamentals: regression, classification, clustering, scikit-learn, Python. Applied to stock price prediction." },
       { "title": "LLM Engineering Training", "date": "January 2025", "body": "Intensive programme : RAG, QLoRA fine-tuning, autonomous agents, deploying open-source models." },
-      { "title": "Machine Learning & Data Science Training", "date": "March 2025", "body": "ML fundamentals: regression, classification, clustering, scikit-learn, Python. Applied to stock price prediction." }
+      { "title": "UTT - Computer Science & Information Systems", "date": "2022 – 2027", "body": "4th year. Engineering programme, oriented towards information systems and software development and specialised in data." }
+    ],
+    "experienceItems": [
+      {
+        "title": "Pretto",
+        "date": "Aug 2025 – Feb 2026",
+        "roles": [
+          { "subtitle": "AI & Data Intern", "body": "Built data pipelines and generative AI implementations at fintech Pretto." },
+          { "subtitle": "AI & Data Freelance", "body": "Three months of freelance following the internship, continuing data and AI projects." }
+        ]
+      },
+      { "title": "AI & Data Freelancer", "date": "2024 – present", "body": "Chatbot creation, machine learning, RAG, AI automation and web development. Data engineering (SQL, DBT).", "cta": "See all my services" },
+      {
+        "title": "Junior Conseil UTT",
+        "date": "2023 – 2025",
+        "roles": [
+          { "subtitle": "Technical Director and Project Lead", "body": "Led client projects, managed technical teams and coordinated deliverables." },
+          { "subtitle": "Head of Communications & Events", "body": "Managed social media, external communications and event organisation for the association." }
+        ]
+      }
     ],
     "valuesTitle": "My values",
     "valuesItems": [
