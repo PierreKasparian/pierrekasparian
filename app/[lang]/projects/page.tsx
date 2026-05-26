@@ -51,7 +51,7 @@ export default async function ProjectsPage({
       <section>
         <div className="mx-auto max-w-6xl px-6 py-16">
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {projects.map((project) => (
+            {[...projects].sort((a, b) => b.date.localeCompare(a.date)).map((project) => (
               <Link
                 key={project.slug}
                 href={`/${lang}/projects/${project.slug}`}

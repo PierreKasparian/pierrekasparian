@@ -41,15 +41,15 @@ export const projects: Project[] = [
   {
     slug: "ailog-rag",
     title: {
-      fr: "Chatbot RAG multi-clients - Ailog",
-      en: "Multi-tenant RAG chatbot - Ailog",
+      fr: "Chatbot RAG multi-clients - LiveSession",
+      en: "Multi-tenant RAG chatbot - LiveSession",
     },
     description: {
       fr: "Solution RAG multi-clients en production : isolation des données, 95 % de pertinence, réponses en moins de 5 secondes.",
       en: "Multi-tenant RAG solution in production: data isolation, 95% relevance, responses in under 5 seconds.",
     },
     descriptionLong: {
-      fr: "Développement et mise en production d'une solution RAG (Retrieval-Augmented Generation) multi-clients pour Ailog.\n\nChaque client peut indexer ses propres documents (PDF, Word, TXT, y compris OCR sur PDF image) et interroger son corpus via un chatbot dédié, créer et gérer plusieurs chatbots par organisation avec héritage des documents existants, et bénéficier d'une isolation stricte des données entre clients et entre sessions.\n\nFonctionnalités clés : API centralisée pour la gestion des utilisateurs, documents et chatbots. Optimisation des requêtes : reformulation automatique et sélection dynamique du modèle LLM (Mistral Small/Medium/Large) selon la complexité et la charge. Gestion fine des ressources : dépassement des rate limits, budgets par utilisateur/avatar, monitoring des coûts et alertes via webhooks. Snapshots journaliers des bases vectorielles, plan de reprise, conformité RGPD. Mise en cache des requêtes, architecture asynchrone.\n\nMise en production avec tests unitaires et stress tests (700 utilisateurs virtuels simultanés), monitoring Grafana, alerting.\n\nRésultats : réponses en moins de 5 secondes en moyenne, 95 % de pertinence sur les recherches internes, 0 fuite de données entre clients en production, solution déployée sur VPS OVH (conformité RGPD).",
+      fr: "Développement et mise en production d'une solution RAG (Retrieval-Augmented Generation) multi-clients pour LiveSession via Ailog.\n\nChaque client peut indexer ses propres documents (PDF, Word, TXT, y compris OCR sur PDF image) et interroger son corpus via un chatbot dédié, créer et gérer plusieurs chatbots par organisation avec héritage des documents existants, et bénéficier d'une isolation stricte des données entre clients et entre sessions.\n\nFonctionnalités clés : API centralisée pour la gestion des utilisateurs, documents et chatbots. Optimisation des requêtes : reformulation automatique et sélection dynamique du modèle LLM (Mistral Small/Medium/Large) selon la complexité et la charge. Gestion fine des ressources : dépassement des rate limits, budgets par utilisateur/avatar, monitoring des coûts et alertes via webhooks. Snapshots journaliers des bases vectorielles, plan de reprise, conformité RGPD. Mise en cache des requêtes, architecture asynchrone.\n\nMise en production avec tests unitaires et stress tests (700 utilisateurs virtuels simultanés), monitoring Grafana, alerting.\n\nRésultats : réponses en moins de 5 secondes en moyenne, 95 % de pertinence sur les recherches internes, 0 fuite de données entre clients en production, solution déployée sur VPS OVH (conformité RGPD).",
       en: "Development and production deployment of a multi-tenant RAG (Retrieval-Augmented Generation) solution for Ailog.\n\nEach client can index their own documents (PDF, Word, TXT, including OCR on image PDFs) and query their corpus via a dedicated chatbot, create and manage multiple chatbots per organisation with document inheritance, and benefit from strict data isolation between clients and sessions.\n\nKey features: centralised API for managing users, documents and chatbots. Query optimisation: automatic reformulation and dynamic LLM model selection (Mistral Small/Medium/Large) based on complexity and load. Fine-grained resource management: rate limit handling, per-user/avatar budgets, cost monitoring and webhook alerts. Daily vector database snapshots, recovery plan, GDPR compliance. Query caching, async architecture.\n\nLaunched with unit tests and stress tests (700 concurrent virtual users), Grafana monitoring, alerting.\n\nResults: responses in under 5 seconds on average, 95% relevance on internal searches, 0 data leaks between clients in production, deployed on OVH VPS (GDPR compliant).",
     },
     imagePrincipale: "",
@@ -75,7 +75,7 @@ export const projects: Project[] = [
     imagePrincipale: "",
     images: [],
     date: "2025-05-01",
-    link: "https://www.linkedin.com/in/pierre-kasparian-486101259/",
+    link: "https://securite-solaire.vercel.app/",
   },
   {
     slug: "medee-doddee",
@@ -88,13 +88,13 @@ export const projects: Project[] = [
       en: "UX overhaul, information architecture and access control for Doddee, as part of a team at Médée.",
     },
     descriptionLong: {
-      fr: "Participation au développement en équipe du site Doddee pour Médée, avec un focus sur l'amélioration de l'expérience utilisateur et la structure fonctionnelle du site.\n\nObjectifs : optimisation de l'UI/UX pour rendre la navigation plus intuitive et cohérente, refonte partielle de l'arborescence pour mieux organiser les contenus et guider l'utilisateur, renforcement du contrôle des accès utilisateurs.\n\nMéthodologie : entretiens réguliers avec la fondatrice pour comprendre les besoins, collaboration en équipe pour optimiser les délais de livraison.",
+      fr: "Participation au développement en équipe du site Doddee via l'intermédiaire Médée, avec un focus sur l'amélioration de l'expérience utilisateur et la structure fonctionnelle du site.\n\nObjectifs : optimisation de l'UI/UX pour rendre la navigation plus intuitive et cohérente, refonte partielle de l'arborescence pour mieux organiser les contenus et guider l'utilisateur, renforcement du contrôle des accès utilisateurs.\n\nMéthodologie : entretiens réguliers avec la fondatrice pour comprendre les besoins, collaboration en équipe pour optimiser les délais de livraison.",
       en: "Team development work on the Doddee website for Médée, with a focus on improving user experience and the site's functional structure.\n\nObjectives: UI/UX optimisation for more intuitive, consistent navigation; partial information architecture rework to better organise content and guide users; strengthened user access controls.\n\nMethodology: regular interviews with the founder to understand requirements; team collaboration to meet delivery deadlines.",
     },
     imagePrincipale: "",
     images: [],
     date: "2025-03-01",
-    link: "https://www.linkedin.com/in/pierre-kasparian-486101259/",
+    link: "https://doddee.fr/",
   },
   {
     slug: "medee-ml",
@@ -131,7 +131,7 @@ export const projects: Project[] = [
     },
     imagePrincipale: "/icon.png",
     images: ["/Capture d’écran du 2026-05-07 09-51-35.png"],
-    date: "2025-01-01",
+    date: "2026-01-01",
     link: "https://podcastify.io/",
     mrrLink: "https://trustmrr.com/startup/podcastify",
     featured: true,
@@ -152,7 +152,7 @@ export const projects: Project[] = [
     },
     imagePrincipale: "/landing_site_photo.jpg",
     images: ["/reportage.jpg", "/tirages_en_vente.jpg"],
-    date: "2024-01-01",
+    date: "2023-01-01",
     link: "https://kasparian-reportages-photo.kasparian-reportages-photo.workers.dev/",
   },
   {
@@ -171,7 +171,7 @@ export const projects: Project[] = [
     },
     imagePrincipale: "/landing_echec.png",
     images: ["/min_max.png"],
-    date: "2024-01-01",
+    date: "2023-02-01",
     link: "https://github.com/Pierre918/IAchess",
     featured: true,
   },
@@ -216,7 +216,7 @@ export const projects: Project[] = [
     },
     imagePrincipale: "/java_project.PNG",
     images: ["/fenetre_java.PNG"],
-    date: "",
+    date: "2024-01-01",
     link: "https://github.com/Pierre918/Pocket_Imperium",
   },
   {
@@ -235,7 +235,7 @@ export const projects: Project[] = [
     },
     imagePrincipale: "/stock_prediction_project.jpg",
     images: ["/correlation.png"],
-    date: "2023-10-01",
+    date: "2025-01-01",
     link: "https://github.com/Pierre918",
   },
 ];
