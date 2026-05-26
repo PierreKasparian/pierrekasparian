@@ -22,7 +22,7 @@ const LINKEDIN_RECOMMENDATIONS_URL =
 const LINKEDIN_PROFILE_URL =
   "https://www.linkedin.com/in/pierre-kasparian-486101259/";
 
-const CONTACT_EMAIL = "kasparianpierre@gmail.com";
+const CONTACT_EMAIL = "contact@pierrekasparian.com";
 
 const STATS_LINKS: (string | null)[] = [
   "#featured-projects",
@@ -164,6 +164,9 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
                 <span key={i}>{seg.text}</span>
               ),
             )}
+          </p>
+          <p className="mt-3 text-sm text-[var(--muted-foreground)] italic">
+            {dict.home.aboutSignature}
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-2">
             {dict.home.aboutSkills.map((skill) => (
