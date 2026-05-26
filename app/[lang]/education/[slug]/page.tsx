@@ -54,7 +54,7 @@ export default async function EducationDetailPage({
       </Link>
 
       {/* CERTIFICATE IMAGE */}
-      <div className="mt-8 w-full overflow-hidden rounded-xl bg-[var(--muted)] flex items-center justify-center p-8">
+      <div className="mt-8 flex w-full items-center justify-center overflow-hidden rounded-xl bg-[var(--muted)] p-8">
         <Image
           src={course.imagePrincipale}
           alt={course.title[lang]}

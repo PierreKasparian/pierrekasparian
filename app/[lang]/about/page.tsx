@@ -1,8 +1,7 @@
-import { ShieldCheck, BookOpen, Zap } from "lucide-react";
+import { ArrowRight, BookOpen, ShieldCheck, Zap } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowRight } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
@@ -116,10 +115,10 @@ export default async function AboutPage({
                   {item.educationSlug ? (
                     <Link
                       href={`/${lang}/education/${item.educationSlug}`}
-                      className="group inline-flex items-center gap-1 font-semibold hover:text-[var(--primary)] transition-colors"
+                      className="group inline-flex items-center gap-1 font-semibold transition-colors hover:text-[var(--primary)]"
                     >
                       {item.title}
-                      <ArrowRight className="size-3.5 opacity-0 -translate-x-1 transition-all group-hover:opacity-100 group-hover:translate-x-0" />
+                      <ArrowRight className="size-3.5 -translate-x-1 opacity-0 transition-all group-hover:translate-x-0 group-hover:opacity-100" />
                     </Link>
                   ) : (
                     <h3 className="font-semibold">{item.title}</h3>

@@ -63,7 +63,7 @@ export default async function EducationPage({
                       src={course.imagePrincipale}
                       alt={course.title[lang]}
                       fill
-                      className="object-contain transition-transform duration-300 group-hover:scale-105 p-4"
+                      className="object-contain p-4 transition-transform duration-300 group-hover:scale-105"
                       sizes="(max-width: 768px) 100vw, 50vw"
                     />
                   </div>

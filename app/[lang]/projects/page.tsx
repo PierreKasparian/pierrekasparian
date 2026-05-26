@@ -51,44 +51,46 @@ export default async function ProjectsPage({
       <section>
         <div className="mx-auto max-w-6xl px-6 py-16">
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {[...projects].sort((a, b) => b.date.localeCompare(a.date)).map((project) => (
-              <Link
-                key={project.slug}
-                href={`/${lang}/projects/${project.slug}`}
-                className="group"
-              >
-                <Card className="h-full overflow-hidden transition-shadow group-hover:shadow-md">
-                  <div className="relative aspect-[16/10] w-full overflow-hidden bg-[var(--muted)]">
-                    {project.imagePrincipale ? (
-                      <Image
-                        src={project.imagePrincipale}
-                        alt={project.title[lang]}
-                        fill
-                        className="object-cover transition-transform duration-300 group-hover:scale-105"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      />
-                    ) : (
-                      <div className="flex h-full w-full items-center justify-center text-2xl font-semibold text-[var(--muted-foreground)] select-none">
-                        {project.title[lang].charAt(0)}
-                      </div>
-                    )}
-                  </div>
-                  <CardContent className="pt-6">
-                    <CardTitle className="mb-2 text-base">
-                      {project.title[lang]}
-                    </CardTitle>
-                    <CardDescription>
-                      {project.description[lang]}
-                    </CardDescription>
-                    {project.date && (
-                      <p className="mt-3 text-xs text-[var(--muted-foreground)]">
-                        {new Date(project.date).getFullYear()}
-                      </p>
-                    )}
-                  </CardContent>
-                </Card>
-              </Link>
-            ))}
+            {[...projects]
+              .sort((a, b) => b.date.localeCompare(a.date))
+              .map((project) => (
+                <Link
+                  key={project.slug}
+                  href={`/${lang}/projects/${project.slug}`}
+                  className="group"
+                >
+                  <Card className="h-full overflow-hidden transition-shadow group-hover:shadow-md">
+                    <div className="relative aspect-[16/10] w-full overflow-hidden bg-[var(--muted)]">
+                      {project.imagePrincipale ? (
+                        <Image
+                          src={project.imagePrincipale}
+                          alt={project.title[lang]}
+                          fill
+                          className="object-cover transition-transform duration-300 group-hover:scale-105"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center text-2xl font-semibold text-[var(--muted-foreground)] select-none">
+                          {project.title[lang].charAt(0)}
+                        </div>
+                      )}
+                    </div>
+                    <CardContent className="pt-6">
+                      <CardTitle className="mb-2 text-base">
+                        {project.title[lang]}
+                      </CardTitle>
+                      <CardDescription>
+                        {project.description[lang]}
+                      </CardDescription>
+                      {project.date && (
+                        <p className="mt-3 text-xs text-[var(--muted-foreground)]">
+                          {new Date(project.date).getFullYear()}
+                        </p>
+                      )}
+                    </CardContent>
+                  </Card>
+                </Link>
+              ))}
           </div>
         </div>
       </section>

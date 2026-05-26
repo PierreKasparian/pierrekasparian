@@ -193,26 +193,29 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
             {featuredPrestations.map((p) => {
               const Icon = PRESTATION_ICONS[p.icon] ?? Sparkles;
               return (
-                  <Card className="h-full transition-shadow group-hover:shadow-md">
-                    <CardHeader>
-                      <div className="mb-3 inline-flex size-10 items-center justify-center rounded-md bg-[var(--accent)] text-[var(--accent-foreground)]">
-                        <Icon className="size-5" />
-                      </div>
-                      <CardTitle>{p.title[lang]}</CardTitle>
-                      <CardDescription>{p.tagline[lang]}</CardDescription>
-                      <div className="flex flex-wrap gap-2 pt-2">
-                        {p.tags.map((tag) => (
-                          <Badge
-                            key={tag}
-                            variant="secondary"
-                            className="text-xs"
-                          >
-                            {tag}
-                          </Badge>
-                        ))}
-                      </div>
-                    </CardHeader>
-                  </Card>
+                <Card
+                  key={p.id}
+                  className="h-full transition-shadow group-hover:shadow-md"
+                >
+                  <CardHeader>
+                    <div className="mb-3 inline-flex size-10 items-center justify-center rounded-md bg-[var(--accent)] text-[var(--accent-foreground)]">
+                      <Icon className="size-5" />
+                    </div>
+                    <CardTitle>{p.title[lang]}</CardTitle>
+                    <CardDescription>{p.tagline[lang]}</CardDescription>
+                    <div className="flex flex-wrap gap-2 pt-2">
+                      {p.tags.map((tag) => (
+                        <Badge
+                          key={tag}
+                          variant="secondary"
+                          className="text-xs"
+                        >
+                          {tag}
+                        </Badge>
+                      ))}
+                    </div>
+                  </CardHeader>
+                </Card>
               );
             })}
           </div>
@@ -465,7 +468,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
                         {item.educationSlug ? (
                           <Link
                             href={`/${lang}/education/${item.educationSlug}`}
-                            className="flex-1 rounded-lg border border-[var(--border)] bg-[var(--background)] p-5 transition-shadow hover:shadow-md hover:border-[var(--primary)]"
+                            className="flex-1 rounded-lg border border-[var(--border)] bg-[var(--background)] p-5 transition-shadow hover:border-[var(--primary)] hover:shadow-md"
                           >
                             {cardContent}
                             <p className="mt-2 text-sm text-[var(--muted-foreground)]">
