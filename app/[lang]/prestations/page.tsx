@@ -13,12 +13,7 @@ import { notFound } from "next/navigation";
 
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { prestations } from "@/data/prestations";
 import { buildAlternates } from "@/lib/seo";
 
@@ -73,32 +68,35 @@ export default async function PrestationsPage({
             {prestations.map((p) => {
               const Icon = ICON_MAP[p.icon] ?? Sparkles;
               return (
-                <Link
-                  key={p.id}
-                  href={`/${lang}/prestations/${p.id}`}
-                  className="group"
-                >
-                  <Card className="h-full transition-shadow group-hover:shadow-md">
-                    <CardHeader>
-                      <div className="mb-3 inline-flex size-10 items-center justify-center rounded-md bg-[var(--accent)] text-[var(--accent-foreground)]">
-                        <Icon className="size-5" />
-                      </div>
-                      <CardTitle>{p.title[lang]}</CardTitle>
-                      <CardDescription>{p.tagline[lang]}</CardDescription>
-                      <div className="flex flex-wrap gap-2 pt-2">
-                        {p.tags.map((tag) => (
-                          <Badge
-                            key={tag}
-                            variant="secondary"
-                            className="text-xs"
-                          >
-                            {tag}
-                          </Badge>
-                        ))}
-                      </div>
-                    </CardHeader>
-                  </Card>
-                </Link>
+                <Card key={p.id} className="h-full">
+                  <CardHeader>
+                    <div className="mb-3 inline-flex size-10 items-center justify-center rounded-md bg-[var(--accent)] text-[var(--accent-foreground)]">
+                      <Icon className="size-5" />
+                    </div>
+                    <CardTitle>{p.title[lang]}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <ul className="space-y-1.5">
+                      {p.bullets[lang].map((item, i) => (
+                        <li key={i} className="flex items-start gap-2 text-sm">
+                          <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-[var(--primary)]" />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    <div className="flex flex-wrap gap-2 pt-4">
+                      {p.tags.map((tag) => (
+                        <Badge
+                          key={tag}
+                          variant="secondary"
+                          className="text-xs"
+                        >
+                          {tag}
+                        </Badge>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
               );
             })}
           </div>
