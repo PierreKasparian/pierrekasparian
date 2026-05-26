@@ -129,9 +129,9 @@
     "introBody": "Étudiant en 4e année d'ingénierie informatique à l'UTT (Université de Technologie de Troyes) et freelance en intégration IA et ingénierie des données. Je transforme des données brutes en pipelines exploitables (SQL, DBT) et déploie des solutions IA sur mesure pour les PME et startups, avec une obsession : que vos données restent en Europe et sous votre contrôle.",
     "parcourTitle": "Parcours",
     "parcourItems": [
-      { "title": "Formation Machine Learning & Data Science", "date": "Mars 2025", "body": "Fondamentaux ML : régression, classification, clustering, scikit-learn, Python. Application sur la prédiction de cours boursiers." },
-      { "title": "Formation LLM Engineering", "date": "Janvier 2025", "body": "Programme intensif : RAG, fine-tuning QLoRA, agents autonomes, déploiement de modèles open source." },
-      { "title": "UTT - Informatique et Systèmes d'Information", "date": "2022 – 2027", "body": "4e année. Formation ingénieur orientée systèmes d'information et développement logiciel avec spécialisation data." }
+      { "title": "Formation Machine Learning & Data Science", "date": "Mars 2025", "body": "Fondamentaux ML : régression, classification, clustering, scikit-learn, Python. Application sur la prédiction de cours boursiers.", "educationSlug": "machine-learning-course" },
+      { "title": "Formation LLM Engineering", "date": "Janvier 2025", "body": "Programme intensif : RAG, fine-tuning QLoRA, agents autonomes, déploiement de modèles open source.", "educationSlug": "LLM-course" },
+      { "title": "UTT - Informatique et Systèmes d'Information", "date": "2022 – 2027", "body": "4e année. Formation ingénieur orientée systèmes d'information et développement logiciel avec spécialisation data.", "educationSlug": "" }
     ],
     "experienceItems": [
       {
@@ -142,7 +142,7 @@
           { "subtitle": "Freelance IA & Data", "body": "Trois mois de freelance suite au stage, poursuite des sujets." }
         ]
       },
-      { "title": "Freelance IA & Data", "date": "2024 – maintenant", "body": "Création de chatbots, machine learning, RAG, automatisations IA et développement web. Ingénierie des données (SQL, DBT).", "cta": "Voir toutes mes prestations" },
+      { "title": "Freelance IA & Data", "date": "2024 – maintenant", "body": "Création de chatbots, machine learning, RAG, automatisations IA et développement web. Ingénierie des données (SQL, DBT).", "cta": "Voir toutes mes réalisations" },
       {
         "title": "Junior Conseil UTT",
         "date": "2023 – 2025",
@@ -162,6 +162,14 @@
     "ctaProjects": "Voir mes projets",
     "linkedinLabel": "LinkedIn",
     "githubLabel": "GitHub"
+  },
+  "education": {
+    "metaTitle": "Formations",
+    "metaDescription": "Mes formations en IA, machine learning et ingénierie logicielle.",
+    "heading": "Mes formations",
+    "subtitle": "Certifications et programmes intensifs pour rester à la pointe.",
+    "viewCourse": "Voir la formation",
+    "back": "← Retour aux formations"
   },
   "tools": {
     "metaTitle": "Outils",

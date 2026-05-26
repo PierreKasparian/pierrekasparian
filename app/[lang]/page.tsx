@@ -441,31 +441,48 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
                   className="absolute top-3 bottom-3 left-[0.5625rem] w-px bg-[var(--border)]"
                 />
                 <ul className="flex flex-col gap-6">
-                  {dict.about.parcourItems.map((item) => (
-                    <li key={item.title} className="relative flex gap-4">
-                      {/* Dot */}
-                      <div className="flex shrink-0">
-                        <span
-                          aria-hidden="true"
-                          className="relative z-10 block size-[1.125rem] shrink-0 rounded-full border-2 border-[var(--primary)] bg-[var(--background)]"
-                        />
-                      </div>
-                      {/* Card */}
-                      <div className="flex-1 rounded-lg border border-[var(--border)] bg-[var(--background)] p-5">
-                        <div className="flex items-start justify-between gap-2">
-                          <p className="text-base leading-snug font-semibold">
-                            {item.title}
-                          </p>
-                          <span className="shrink-0 text-xs text-[var(--muted-foreground)]">
-                            {item.date}
-                          </span>
-                        </div>
-                        <p className="mt-2 text-sm text-[var(--muted-foreground)]">
-                          {item.body}
+                  {dict.about.parcourItems.map((item) => {
+                    const cardContent = (
+                      <div className="flex items-start justify-between gap-2">
+                        <p className="text-base leading-snug font-semibold">
+                          {item.title}
                         </p>
+                        <span className="shrink-0 text-xs text-[var(--muted-foreground)]">
+                          {item.date}
+                        </span>
                       </div>
-                    </li>
-                  ))}
+                    );
+                    return (
+                      <li key={item.title} className="relative flex gap-4">
+                        {/* Dot */}
+                        <div className="flex shrink-0">
+                          <span
+                            aria-hidden="true"
+                            className="relative z-10 block size-[1.125rem] shrink-0 rounded-full border-2 border-[var(--primary)] bg-[var(--background)]"
+                          />
+                        </div>
+                        {/* Card */}
+                        {item.educationSlug ? (
+                          <Link
+                            href={`/${lang}/education/${item.educationSlug}`}
+                            className="flex-1 rounded-lg border border-[var(--border)] bg-[var(--background)] p-5 transition-shadow hover:shadow-md hover:border-[var(--primary)]"
+                          >
+                            {cardContent}
+                            <p className="mt-2 text-sm text-[var(--muted-foreground)]">
+                              {item.body}
+                            </p>
+                          </Link>
+                        ) : (
+                          <div className="flex-1 rounded-lg border border-[var(--border)] bg-[var(--background)] p-5">
+                            {cardContent}
+                            <p className="mt-2 text-sm text-[var(--muted-foreground)]">
+                              {item.body}
+                            </p>
+                          </div>
+                        )}
+                      </li>
+                    );
+                  })}
                 </ul>
               </div>
             </div>

@@ -2,6 +2,7 @@ import { ShieldCheck, BookOpen, Zap } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ArrowRight } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
@@ -112,7 +113,17 @@ export default async function AboutPage({
               {dict.about.parcourItems.map((item) => (
                 <div key={item.title} className="relative">
                   <div className="absolute top-1 -left-[25px] size-3 rounded-full border-2 border-[var(--primary)] bg-[var(--background)]" />
-                  <h3 className="font-semibold">{item.title}</h3>
+                  {item.educationSlug ? (
+                    <Link
+                      href={`/${lang}/education/${item.educationSlug}`}
+                      className="group inline-flex items-center gap-1 font-semibold hover:text-[var(--primary)] transition-colors"
+                    >
+                      {item.title}
+                      <ArrowRight className="size-3.5 opacity-0 -translate-x-1 transition-all group-hover:opacity-100 group-hover:translate-x-0" />
+                    </Link>
+                  ) : (
+                    <h3 className="font-semibold">{item.title}</h3>
+                  )}
                   <p className="mt-1 text-sm text-[var(--muted-foreground)]">
                     {item.body}
                   </p>

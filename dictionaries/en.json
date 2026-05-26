@@ -129,9 +129,9 @@
     "introBody": "4th year computer engineering student at UTT (Université de Technologie de Troyes) and AI integration & data engineering freelancer. I transform raw data into usable pipelines (SQL, DBT) and deploy custom AI solutions for SMEs and startups, with one obsession: keeping your data in Europe and under your control.",
     "parcourTitle": "Background",
     "parcourItems": [
-      { "title": "Machine Learning & Data Science Training", "date": "March 2025", "body": "ML fundamentals: regression, classification, clustering, scikit-learn, Python. Applied to stock price prediction." },
-      { "title": "LLM Engineering Training", "date": "January 2025", "body": "Intensive programme : RAG, QLoRA fine-tuning, autonomous agents, deploying open-source models." },
-      { "title": "UTT - Computer Science & Information Systems", "date": "2022 – 2027", "body": "4th year. Engineering programme, oriented towards information systems and software development and specialised in data." }
+      { "title": "Machine Learning & Data Science Training", "date": "March 2025", "body": "ML fundamentals: regression, classification, clustering, scikit-learn, Python. Applied to stock price prediction.", "educationSlug": "machine-learning-course" },
+      { "title": "LLM Engineering Training", "date": "January 2025", "body": "Intensive programme : RAG, QLoRA fine-tuning, autonomous agents, deploying open-source models.", "educationSlug": "LLM-course" },
+      { "title": "UTT - Computer Science & Information Systems", "date": "2022 – 2027", "body": "4th year. Engineering programme, oriented towards information systems and software development and specialised in data.", "educationSlug": "" }
     ],
     "experienceItems": [
       {
@@ -142,7 +142,7 @@
           { "subtitle": "AI & Data Freelance", "body": "Three months of freelance following the internship, continuing data and AI projects." }
         ]
       },
-      { "title": "AI & Data Freelancer", "date": "2024 – present", "body": "Chatbot creation, machine learning, RAG, AI automation and web development. Data engineering (SQL, DBT).", "cta": "See all my services" },
+      { "title": "AI & Data Freelancer", "date": "2024 – present", "body": "Chatbot creation, machine learning, RAG, AI automation and web development. Data engineering (SQL, DBT).", "cta": "See all my works" },
       {
         "title": "Junior Conseil UTT",
         "date": "2023 – 2025",
@@ -162,6 +162,14 @@
     "ctaProjects": "See my projects",
     "linkedinLabel": "LinkedIn",
     "githubLabel": "GitHub"
+  },
+  "education": {
+    "metaTitle": "Training",
+    "metaDescription": "My training in AI, machine learning and software engineering.",
+    "heading": "My training",
+    "subtitle": "Certifications and intensive programmes to stay at the cutting edge.",
+    "viewCourse": "View course",
+    "back": "← Back to training"
   },
   "tools": {
     "metaTitle": "Tools",
