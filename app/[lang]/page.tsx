@@ -193,11 +193,6 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
             {featuredPrestations.map((p) => {
               const Icon = PRESTATION_ICONS[p.icon] ?? Sparkles;
               return (
-                <Link
-                  key={p.id}
-                  href={`/${lang}/prestations/${p.id}`}
-                  className="group"
-                >
                   <Card className="h-full transition-shadow group-hover:shadow-md">
                     <CardHeader>
                       <div className="mb-3 inline-flex size-10 items-center justify-center rounded-md bg-[var(--accent)] text-[var(--accent-foreground)]">
@@ -218,7 +213,6 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
                       </div>
                     </CardHeader>
                   </Card>
-                </Link>
               );
             })}
           </div>

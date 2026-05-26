@@ -32,7 +32,7 @@ export const prestations: Prestation[] = [
         "Mémoire du contexte de chaque échange, réponses basées exclusivement sur vos données",
         "Chaque réponse est traçable jusqu'à sa source",
         "Idéal pour le support client, l'assistance interne ou la gestion documentaire",
-        "Hébergement en Europe disponible",
+        "Hébergement en Europe ou sur site disponible",
       ],
       en: [
         "Custom assistants that understand your internal documents (PDFs, emails, knowledge bases)",
@@ -86,7 +86,7 @@ export const prestations: Prestation[] = [
       fr: [
         "Classification de documents, rédaction de réponses types, extraction d'informations, résumés automatiques",
         "Agents qui orchestrent plusieurs modèles IA et s'intègrent à vos outils (CRM, APIs, bases de données)",
-        "Maîtrise des coûts : tous les fournisseurs IA ne se valent pas selon les tâches",
+        "Maîtrise des coûts : Utilisation du modèle adapté selon les tâches",
       ],
       en: [
         "Document classification, drafting standard replies, information extraction, automatic summaries",
