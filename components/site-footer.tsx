@@ -1,3 +1,4 @@
+import { FileText } from "lucide-react";
 import Link from "next/link";
 
 import type { Dictionary, Locale } from "@/app/[lang]/dictionaries";
@@ -30,6 +31,15 @@ export function SiteFooter({ lang, dict }: { lang: Locale; dict: Dictionary }) {
           >
             {dict.nav.contact}
           </Link>
+          <a
+            href="/cv%20pierre%20kasparian.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 hover:text-[var(--foreground)]"
+          >
+            <FileText className="size-3.5" />
+            {dict.home.ctaCV}
+          </a>
         </div>
       </div>
     </footer>

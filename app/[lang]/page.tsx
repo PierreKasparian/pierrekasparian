@@ -5,6 +5,7 @@ import {
   Compass,
   Cpu,
   Database,
+  FileText,
   GraduationCap,
   Mail,
   Quote,
@@ -176,6 +177,56 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
         </div>
       </section>
 
+      {/* SERVICES PREVIEW */}
+      <section className="border-b border-[var(--border)]">
+        <div className="mx-auto max-w-6xl px-6 py-20">
+          <div className="mb-10 flex items-end justify-between">
+            <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+              {dict.home.servicesTitle}
+            </h2>
+            <Link
+              href={`/${lang}/prestations`}
+              className="text-sm font-medium text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
+            >
+              {dict.home.servicesCta} →
+            </Link>
+          </div>
+          <div className="grid gap-6 md:grid-cols-3">
+            {featuredPrestations.map((p) => {
+              const Icon = PRESTATION_ICONS[p.icon] ?? Sparkles;
+              return (
+                <Link
+                  key={p.id}
+                  href={`/${lang}/prestations/${p.id}`}
+                  className="group"
+                >
+                  <Card className="h-full transition-shadow group-hover:shadow-md">
+                    <CardHeader>
+                      <div className="mb-3 inline-flex size-10 items-center justify-center rounded-md bg-[var(--accent)] text-[var(--accent-foreground)]">
+                        <Icon className="size-5" />
+                      </div>
+                      <CardTitle>{p.title[lang]}</CardTitle>
+                      <CardDescription>{p.tagline[lang]}</CardDescription>
+                      <div className="flex flex-wrap gap-2 pt-2">
+                        {p.tags.map((tag) => (
+                          <Badge
+                            key={tag}
+                            variant="secondary"
+                            className="text-xs"
+                          >
+                            {tag}
+                          </Badge>
+                        ))}
+                      </div>
+                    </CardHeader>
+                  </Card>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
       {/* FEATURED PROJECTS */}
       <section
         id="featured-projects"
@@ -285,56 +336,6 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
                 </CardContent>
               </Card>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* SERVICES PREVIEW */}
-      <section className="border-b border-[var(--border)]">
-        <div className="mx-auto max-w-6xl px-6 py-20">
-          <div className="mb-10 flex items-end justify-between">
-            <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
-              {dict.home.servicesTitle}
-            </h2>
-            <Link
-              href={`/${lang}/prestations`}
-              className="text-sm font-medium text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
-            >
-              {dict.home.servicesCta} →
-            </Link>
-          </div>
-          <div className="grid gap-6 md:grid-cols-3">
-            {featuredPrestations.map((p) => {
-              const Icon = PRESTATION_ICONS[p.icon] ?? Sparkles;
-              return (
-                <Link
-                  key={p.id}
-                  href={`/${lang}/prestations/${p.id}`}
-                  className="group"
-                >
-                  <Card className="h-full transition-shadow group-hover:shadow-md">
-                    <CardHeader>
-                      <div className="mb-3 inline-flex size-10 items-center justify-center rounded-md bg-[var(--accent)] text-[var(--accent-foreground)]">
-                        <Icon className="size-5" />
-                      </div>
-                      <CardTitle>{p.title[lang]}</CardTitle>
-                      <CardDescription>{p.tagline[lang]}</CardDescription>
-                      <div className="flex flex-wrap gap-2 pt-2">
-                        {p.tags.map((tag) => (
-                          <Badge
-                            key={tag}
-                            variant="secondary"
-                            className="text-xs"
-                          >
-                            {tag}
-                          </Badge>
-                        ))}
-                      </div>
-                    </CardHeader>
-                  </Card>
-                </Link>
-              );
-            })}
           </div>
         </div>
       </section>
