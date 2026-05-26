@@ -1,11 +1,15 @@
 import {
   ArrowRight,
   Brain,
+  Code2,
+  Compass,
   Cpu,
   Database,
   GraduationCap,
   Mail,
   Quote,
+  Rocket,
+  Search,
   ShieldCheck,
   Sparkles,
   Star,
@@ -435,6 +439,53 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* PROCESS / METHODOLOGY */}
+      <section className="relative overflow-hidden border-b border-[var(--border)]">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -bottom-24 left-[10%] size-[380px] rounded-full bg-[var(--accent-strong)] opacity-[0.06] blur-3xl"
+        />
+        <div className="mx-auto max-w-6xl px-6 py-20">
+          <div className="mb-14 text-center">
+            <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+              {dict.home.processTitle}
+            </h2>
+            <p className="mt-3 text-[var(--muted-foreground)]">
+              {dict.home.processSubtitle}
+            </p>
+          </div>
+
+          <ol className="relative grid gap-8 md:grid-cols-4 md:gap-6">
+            {/* Horizontal connector line (desktop only) */}
+            <div
+              aria-hidden="true"
+              className="absolute top-6 right-[12.5%] left-[12.5%] hidden h-px bg-[var(--border)] md:block"
+            />
+
+            {dict.home.processSteps.map((step, i) => {
+              const Icon = [Search, Compass, Code2, Rocket][i] ?? Sparkles;
+              return (
+                <li
+                  key={step.title}
+                  className="relative flex flex-col items-center text-center"
+                >
+                  <div className="relative z-10 mb-4 flex size-12 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--background)] text-[var(--primary)] shadow-sm">
+                    <Icon className="size-5" />
+                  </div>
+                  <span className="mb-2 text-xs font-semibold tracking-widest text-[var(--muted-foreground)] uppercase">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <h3 className="text-base font-semibold">{step.title}</h3>
+                  <p className="mt-2 text-sm text-[var(--muted-foreground)]">
+                    {step.body}
+                  </p>
+                </li>
+              );
+            })}
+          </ol>
         </div>
       </section>
 

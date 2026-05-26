@@ -53,6 +53,26 @@
     "resumeExperienceTitle": "Experience",
     "projectsTitle": "Selected work",
     "projectsCta": "See all projects",
+    "processTitle": "My methodology",
+    "processSubtitle": "A clear process with client validation at every step.",
+    "processSteps": [
+      {
+        "title": "Audit",
+        "body": "Analysis of needs and constraints."
+      },
+      {
+        "title": "Design",
+        "body": "Review of audit findings and definition of the technical solution."
+      },
+      {
+        "title": "Development",
+        "body": "Frequent client feedback for validation at every step."
+      },
+      {
+        "title": "Deployment",
+        "body": "Client sign-off and adjustments where needed."
+      }
+    ],
     "testimonialsTitle": "What clients say",
     "testimonialsCta": "See all recommendations",
     "contactTitle": "Let's work together",

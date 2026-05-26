@@ -53,6 +53,26 @@
     "resumeExperienceTitle": "Expérience",
     "projectsTitle": "Réalisations sélectionnées",
     "projectsCta": "Voir tous les projets",
+    "processTitle": "Ma méthodologie",
+    "processSubtitle": "Un processus clair, jalonné de validations client à chaque étape.",
+    "processSteps": [
+      {
+        "title": "Audit",
+        "body": "Analyse des besoins et contraintes."
+      },
+      {
+        "title": "Conception",
+        "body": "Analyse des résultats de l'audit et définition de la solution technique."
+      },
+      {
+        "title": "Développement",
+        "body": "Retours fréquents du client pour validation à chaque étape."
+      },
+      {
+        "title": "Déploiement",
+        "body": "Validation client et ajustements si nécessaire."
+      }
+    ],
     "testimonialsTitle": "Ce que disent mes clients",
     "testimonialsCta": "Voir toutes les recommandations",
     "contactTitle": "Travaillons ensemble",
