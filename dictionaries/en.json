@@ -3,7 +3,7 @@
     "home": "Home",
     "about": "About",
     "prestations": "Services",
-    "projects": "Projects",
+    "projects": "Work",
     "blog": "Blog",
     "tools": "Tools",
     "contact": "Contact"
@@ -49,7 +49,7 @@
     "resumeTitle": "Resume",
     "resumeEducationTitle": "Education",
     "resumeExperienceTitle": "Experience",
-    "projectsTitle": "Selected projects",
+    "projectsTitle": "Selected work",
     "projectsCta": "See all projects",
     "testimonialsTitle": "What clients say",
     "testimonialsCta": "See all recommendations",

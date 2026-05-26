@@ -56,5 +56,6 @@ Toutes les routes vivent sous `app/[lang]/` :
 - **Pas de contenu textuel à peaufiner pour l'instant** : on met des placeholders propres et on itère la copie plus tard. La priorité c'est la structure, le routing, le design system.
 - **Accessibilité et SEO** : balises sémantiques, `<h1>` unique par page, metadata par route (`generateMetadata`), `alt` sur les images, `hreflang` pour i18n.
 - Do not use "—" it is to obvious that it is AI generated
+- Toutes les modifs faites dans une langue doivent etre traduits dans l'autre langue (fr.json et en.json)
 
 After a code edit, check if lint is alright 
