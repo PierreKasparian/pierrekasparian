@@ -36,7 +36,7 @@ export const projects: Project[] = [
     imagePrincipale: "",
     images: [],
     date: "2025-08-01",
-    featured: true,
+    featured: false,
   },
   {
     slug: "pretto-prompt-pipeline",
@@ -55,6 +55,7 @@ export const projects: Project[] = [
     imagePrincipale: "",
     images: [],
     date: "2025-09-01",
+    featured: false,
     relatedProjectSlug: "pretto-langfuse",
   },
   {
@@ -74,7 +75,7 @@ export const projects: Project[] = [
     imagePrincipale: "",
     images: [],
     date: "2025-12-01",
-    featured: true,
+    featured: false,
   },
   {
     slug: "pretto-email-pipeline",
@@ -83,8 +84,8 @@ export const projects: Project[] = [
       en: "Email Processing Pipeline - Pretto",
     },
     description: {
-      fr: "Pipeline IA de traitement automatisé des emails courtiers-banquiers pour extraire les évolutions de taux immobiliers via LLM.",
-      en: "AI pipeline for automated broker-banker email processing to extract mortgage rate changes via LLM.",
+      fr: "Pipeline ETL de traitement automatisé des emails courtiers-banquiers pour extraire les évolutions de taux immobiliers via LLM.",
+      en: "ETL pipeline for automated broker-banker email processing to extract mortgage rate changes via LLM.",
     },
     descriptionLong: {
       fr: "Développement d'un pipeline de traitement automatique des emails échangés entre les courtiers immobiliers et les banquiers.\n\nObjectif final : extraire automatiquement des informations métiers clés (notamment les évolutions de taux) à partir de ces emails, en utilisant un LLM comme moteur d'analyse.\n\nLe pipeline se décompose en plusieurs étapes :\n1. Formatage de l'entrée LLM : nettoyage et structuration du contenu brut des emails.\n2. Filtrage des images : détection et exclusion automatique des logos envoyés en pièce jointe, inutiles pour l'analyse.\n3. Enrichissement : agrégation avec des données internes existantes dans l'entreprise avant l'envoi au LLM.\n4. Inférence : utilisation du service de batch développé précédemment pour traiter les volumes en production.",
@@ -94,6 +95,7 @@ export const projects: Project[] = [
     images: [],
     date: "2026-01-01",
     relatedProjectSlug: "pretto-batch-inference",
+    featured: true,
   },
   {
     slug: "pretto-llm-platform",
@@ -205,6 +207,7 @@ export const projects: Project[] = [
     },
     imagePrincipale: "",
     images: [],
+    featured: true,
     date: "2024-09-01",
   },
   {
@@ -226,7 +229,6 @@ export const projects: Project[] = [
     date: "2026-01-01",
     link: "https://podcastify.io/",
     mrrLink: "https://trustmrr.com/startup/podcastify",
-    featured: true,
   },
   {
     slug: "site-de-reportages-photos",
@@ -265,7 +267,7 @@ export const projects: Project[] = [
     images: ["/min_max.png"],
     date: "2023-02-01",
     link: "https://github.com/Pierre918/IAchess",
-    featured: true,
+    featured: false,
   },
   {
     slug: "appli-aide-devoirs",
@@ -290,7 +292,7 @@ export const projects: Project[] = [
     link: "https://www.linkedin.com/posts/pierre-kasparian-486101259_et-si-on-appliquait-lia-%C3%A0-l%C3%A9ducation-activity-7202609841444401152-v__9",
     awardLink:
       "https://www.utt.fr/actualites/defi-etudiants-entrepreneurs-prix-coup-de-coeur-pour-pierre-kasparian",
-    featured: true,
+    featured: false,
   },
   {
     slug: "java-pocket-imperium",
