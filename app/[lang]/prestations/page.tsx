@@ -1,10 +1,10 @@
 import {
-  ShieldCheck,
-  Cpu,
-  Database,
+  Bot,
   Brain,
-  GraduationCap,
+  Database,
+  Rocket,
   Sparkles,
+  Zap,
   type LucideIcon,
 } from "lucide-react";
 import type { Metadata } from "next";
@@ -25,12 +25,12 @@ import { buildAlternates } from "@/lib/seo";
 import { getDictionary, hasLocale, type Locale } from "../dictionaries";
 
 const ICON_MAP: Record<string, LucideIcon> = {
-  ShieldCheck,
-  Cpu,
-  Database,
+  Bot,
   Brain,
-  GraduationCap,
+  Database,
+  Rocket,
   Sparkles,
+  Zap,
 };
 
 export async function generateMetadata({

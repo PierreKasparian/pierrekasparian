@@ -105,9 +105,9 @@
   },
   "prestations": {
     "metaTitle": "Services",
-    "metaDescription": "AI audit, LLM integration, RAG, fine-tuning, SQL/DBT data engineering and team training - GDPR-compliant services.",
+    "metaDescription": "AI agents, chatbots, data engineering, process automation, SaaS development and machine learning - data & AI services.",
     "heading": "My services",
-    "subtitle": "Custom AI integration and data transformation (SQL, DBT), with EU hosting and GDPR compliance by design.",
+    "subtitle": "From intelligent chatbots to data infrastructure and process automation.",
     "contactCta": "Let's discuss your project",
     "back": "← Back to services",
     "askFor": "Get in touch about this service"

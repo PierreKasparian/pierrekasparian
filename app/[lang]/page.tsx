@@ -1,18 +1,17 @@
 import {
   ArrowRight,
+  Bot,
   Brain,
   Code2,
   Compass,
-  Cpu,
   Database,
-  GraduationCap,
   Mail,
   Quote,
   Rocket,
   Search,
-  ShieldCheck,
   Sparkles,
   Star,
+  Zap,
   type LucideIcon,
 } from "lucide-react";
 import Image from "next/image";
@@ -35,12 +34,12 @@ import { testimonials } from "@/data/testimonials";
 import { getDictionary, hasLocale } from "./dictionaries";
 
 const PRESTATION_ICONS: Record<string, LucideIcon> = {
-  ShieldCheck,
-  Cpu,
-  Database,
+  Bot,
   Brain,
-  GraduationCap,
+  Database,
+  Rocket,
   Sparkles,
+  Zap,
 };
 
 const LINKEDIN_RECOMMENDATIONS_URL =
