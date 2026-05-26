@@ -54,17 +54,19 @@ export default async function ProjectDetailPage({
       </Link>
 
       {/* HERO IMAGE */}
-      <div className="mt-8 w-full overflow-hidden rounded-xl bg-[var(--muted)]">
-        <Image
-          src={project.imagePrincipale}
-          alt={project.title[lang]}
-          width={0}
-          height={0}
-          sizes="(max-width: 768px) 100vw, 896px"
-          priority
-          className="h-auto w-full"
-        />
-      </div>
+      {project.imagePrincipale && (
+        <div className="mt-8 w-full overflow-hidden rounded-xl bg-[var(--muted)]">
+          <Image
+            src={project.imagePrincipale}
+            alt={project.title[lang]}
+            width={0}
+            height={0}
+            sizes="(max-width: 768px) 100vw, 896px"
+            priority
+            className="h-auto w-full"
+          />
+        </div>
+      )}
 
       {/* TITLE */}
       <div className="mt-8">
@@ -82,7 +84,11 @@ export default async function ProjectDetailPage({
       </div>
 
       {/* BODY */}
-      <p className="mt-8 leading-relaxed">{project.descriptionLong[lang]}</p>
+      <div className="mt-8 space-y-4 leading-relaxed">
+        {project.descriptionLong[lang].split("\n\n").map((para, i) => (
+          <p key={i}>{para}</p>
+        ))}
+      </div>
 
       {/* EXTRA IMAGES */}
       {project.images.length > 0 && (

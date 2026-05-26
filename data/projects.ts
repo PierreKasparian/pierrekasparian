@@ -19,6 +19,103 @@ export interface Project {
 
 export const projects: Project[] = [
   {
+    slug: "pretto-ia",
+    title: {
+      fr: "Ingénieur IA & Data - Pretto",
+      en: "AI & Data Engineer - Pretto",
+    },
+    description: {
+      fr: "Pipeline d'évaluation de prompts, inférences par batch et auto-amélioration LLM pour une fintech du crédit immobilier.",
+      en: "Prompt evaluation pipeline, batch inference service and LLM auto-improvement for a mortgage fintech.",
+    },
+    descriptionLong: {
+      fr: "Stage puis mission freelance chez Pretto, fintech spécialisée dans le crédit immobilier.\n\nStage (août 2025 - février 2026) : création d'une pipeline d'auto-amélioration de prompt, développement d'une pipeline de suggestion automatique d'ajout d'éléments à un dataset, développement backend orienté architecture IA (Airflow, Google BigQuery).\n\nFreelance (février 2026 - avril 2026) : fiabilisation de la pipeline d'évaluation de prompt et amélioration de l'UX pour les équipes métier, création et mise en production d'un service d'inférences par batch.",
+      en: "Internship then freelance at Pretto, a mortgage fintech.\n\nInternship (Aug 2025 - Feb 2026): built a prompt auto-improvement pipeline, a dataset auto-augmentation suggestion pipeline, backend development with an AI-oriented architecture (Airflow, Google BigQuery).\n\nFreelance (Feb 2026 - Apr 2026): hardened the prompt evaluation pipeline and improved UX for business teams, built and deployed a batch inference service.",
+    },
+    imagePrincipale: "",
+    images: [],
+    date: "2025-08-01",
+    link: "https://www.pretto.fr/",
+    featured: true,
+  },
+  {
+    slug: "ailog-rag",
+    title: {
+      fr: "Chatbot RAG multi-clients - Ailog",
+      en: "Multi-tenant RAG chatbot - Ailog",
+    },
+    description: {
+      fr: "Solution RAG multi-clients en production : isolation des données, 95 % de pertinence, réponses en moins de 5 secondes.",
+      en: "Multi-tenant RAG solution in production: data isolation, 95% relevance, responses in under 5 seconds.",
+    },
+    descriptionLong: {
+      fr: "Développement et mise en production d'une solution RAG (Retrieval-Augmented Generation) multi-clients pour Ailog.\n\nChaque client peut indexer ses propres documents (PDF, Word, TXT, y compris OCR sur PDF image) et interroger son corpus via un chatbot dédié, créer et gérer plusieurs chatbots par organisation avec héritage des documents existants, et bénéficier d'une isolation stricte des données entre clients et entre sessions.\n\nFonctionnalités clés : API centralisée pour la gestion des utilisateurs, documents et chatbots. Optimisation des requêtes : reformulation automatique et sélection dynamique du modèle LLM (Mistral Small/Medium/Large) selon la complexité et la charge. Gestion fine des ressources : dépassement des rate limits, budgets par utilisateur/avatar, monitoring des coûts et alertes via webhooks. Snapshots journaliers des bases vectorielles, plan de reprise, conformité RGPD. Mise en cache des requêtes, architecture asynchrone.\n\nMise en production avec tests unitaires et stress tests (700 utilisateurs virtuels simultanés), monitoring Grafana, alerting.\n\nRésultats : réponses en moins de 5 secondes en moyenne, 95 % de pertinence sur les recherches internes, 0 fuite de données entre clients en production, solution déployée sur VPS OVH (conformité RGPD).",
+      en: "Development and production deployment of a multi-tenant RAG (Retrieval-Augmented Generation) solution for Ailog.\n\nEach client can index their own documents (PDF, Word, TXT, including OCR on image PDFs) and query their corpus via a dedicated chatbot, create and manage multiple chatbots per organisation with document inheritance, and benefit from strict data isolation between clients and sessions.\n\nKey features: centralised API for managing users, documents and chatbots. Query optimisation: automatic reformulation and dynamic LLM model selection (Mistral Small/Medium/Large) based on complexity and load. Fine-grained resource management: rate limit handling, per-user/avatar budgets, cost monitoring and webhook alerts. Daily vector database snapshots, recovery plan, GDPR compliance. Query caching, async architecture.\n\nLaunched with unit tests and stress tests (700 concurrent virtual users), Grafana monitoring, alerting.\n\nResults: responses in under 5 seconds on average, 95% relevance on internal searches, 0 data leaks between clients in production, deployed on OVH VPS (GDPR compliant).",
+    },
+    imagePrincipale: "",
+    images: [],
+    date: "2025-07-01",
+    link: "https://www.linkedin.com/in/pierre-kasparian-486101259/",
+    featured: true,
+  },
+  {
+    slug: "securite-solaire",
+    title: {
+      fr: "Application web - Sécurité solaire",
+      en: "Web app - Solar Safety",
+    },
+    description: {
+      fr: "Application web pour une association de prévention solaire : espace de formation pour les membres licenciés.",
+      en: "Web app for a sun safety association: training space for licensed members.",
+    },
+    descriptionLong: {
+      fr: "Conception et développement d'une application web pour une association oeuvrant pour la prévention des risques liés à l'exposition au soleil, dans le cadre d'une mission via Junior Conseil UTT.\n\nAprès plusieurs entretiens de cadrage avec le client, réalisation de maquettes interactives sous Figma, validées avant la phase de développement. L'application permet aux membres licenciés d'accéder, après achat d'une licence, à une bibliothèque de contenus de formation autour des bonnes pratiques de protection solaire. Une interface administrateur permet à l'association de gérer ses contenus (ajout, modification, suppression). L'accès est sécurisé par un code unique envoyé par email.\n\nStack : Next.js, Tailwind CSS (frontend), Supabase (authentification, base de données, stockage).",
+      en: "Design and development of a web application for a sun exposure risk prevention association, as part of a Junior Conseil UTT mission.\n\nAfter several client briefing sessions, interactive Figma mockups were validated before development. The app lets licensed members access, after purchasing a licence, a training content library focused on sun protection best practices. An admin interface lets the association manage their content (add, edit, delete). Access is secured by a unique email-sent code.\n\nStack: Next.js, Tailwind CSS (frontend), Supabase (authentication, database, storage).",
+    },
+    imagePrincipale: "",
+    images: [],
+    date: "2025-05-01",
+    link: "https://www.linkedin.com/in/pierre-kasparian-486101259/",
+  },
+  {
+    slug: "medee-doddee",
+    title: {
+      fr: "Développement web - Doddee",
+      en: "Web development - Doddee",
+    },
+    description: {
+      fr: "Refonte UX, arborescence et contrôle des accès du site Doddee, en équipe chez Médée.",
+      en: "UX overhaul, information architecture and access control for Doddee, as part of a team at Médée.",
+    },
+    descriptionLong: {
+      fr: "Participation au développement en équipe du site Doddee pour Médée, avec un focus sur l'amélioration de l'expérience utilisateur et la structure fonctionnelle du site.\n\nObjectifs : optimisation de l'UI/UX pour rendre la navigation plus intuitive et cohérente, refonte partielle de l'arborescence pour mieux organiser les contenus et guider l'utilisateur, renforcement du contrôle des accès utilisateurs.\n\nMéthodologie : entretiens réguliers avec la fondatrice pour comprendre les besoins, collaboration en équipe pour optimiser les délais de livraison.",
+      en: "Team development work on the Doddee website for Médée, with a focus on improving user experience and the site's functional structure.\n\nObjectives: UI/UX optimisation for more intuitive, consistent navigation; partial information architecture rework to better organise content and guide users; strengthened user access controls.\n\nMethodology: regular interviews with the founder to understand requirements; team collaboration to meet delivery deadlines.",
+    },
+    imagePrincipale: "",
+    images: [],
+    date: "2025-03-01",
+    link: "https://www.linkedin.com/in/pierre-kasparian-486101259/",
+  },
+  {
+    slug: "medee-ml",
+    title: {
+      fr: "Classification ML d'entreprises - Médée",
+      en: "ML business classification - Médée",
+    },
+    description: {
+      fr: "Modèle de classification d'entreprises (photographie / cuisine) avec plus de 90 % de précision, pour une multinationale.",
+      en: "Business classification model (photography / food) with 90%+ accuracy, for a multinational client.",
+    },
+    descriptionLong: {
+      fr: "Mission de machine learning pour Médée : concevoir un modèle de classification automatique d'entreprises dans deux secteurs (photographie ou cuisine) pour une multinationale. L'objectif était ensuite d'exploiter ce modèle pour identifier des zones géographiques dépourvues de points de vente dans ces catégories, dans le cadre d'études de marché.\n\n1. Collecte des données : enrichissement des données d'entreprises via les métadonnées de leurs sites web (contenu textuel, titres, descriptions), APIs tierces (Google Maps, avis utilisateurs), et analyse d'images via des modèles de langage pour générer des descriptions contextuelles.\n\n2. Préparation des données : nettoyage, suppression des entreprises avec un volume d'information insuffisant, vectorisation des données textuelles via des embeddings Mistral.\n\n3. Modélisation : test de plusieurs classifieurs supervisés (SVM, Random Forest) sur les embeddings, avec des performances dépassant 90 % de précision et un faible taux de faux positifs.",
+      en: "Machine learning mission for Médée: design an automatic business classification model for two sectors (photography or food) for a multinational client. The model was then used to identify geographic areas lacking relevant points of sale, supporting market analysis.\n\n1. Data collection: business data enrichment via website metadata (text content, titles, descriptions), third-party APIs (Google Maps, user reviews), and image analysis via LLMs to generate contextual descriptions.\n\n2. Data preparation: cleaning, filtering out entries with insufficient information, vectorisation of text data using Mistral embeddings.\n\n3. Modelling: testing multiple supervised classifiers (SVM, Random Forest) on embeddings, achieving 90%+ accuracy with a low false-positive rate.",
+    },
+    imagePrincipale: "",
+    images: [],
+    date: "2024-09-01",
+    link: "https://www.linkedin.com/in/pierre-kasparian-486101259/",
+  },
+  {
     slug: "podcastify",
     title: {
       fr: "Podcastify - Générateur de podcasts IA",

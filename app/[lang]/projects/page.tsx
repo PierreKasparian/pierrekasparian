@@ -59,13 +59,19 @@ export default async function ProjectsPage({
               >
                 <Card className="h-full overflow-hidden transition-shadow group-hover:shadow-md">
                   <div className="relative aspect-[16/10] w-full overflow-hidden bg-[var(--muted)]">
-                    <Image
-                      src={project.imagePrincipale}
-                      alt={project.title[lang]}
-                      fill
-                      className="object-cover transition-transform duration-300 group-hover:scale-105"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    />
+                    {project.imagePrincipale ? (
+                      <Image
+                        src={project.imagePrincipale}
+                        alt={project.title[lang]}
+                        fill
+                        className="object-cover transition-transform duration-300 group-hover:scale-105"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center text-2xl font-semibold text-[var(--muted-foreground)] select-none">
+                        {project.title[lang].charAt(0)}
+                      </div>
+                    )}
                   </div>
                   <CardContent className="pt-6">
                     <CardTitle className="mb-2 text-base">
