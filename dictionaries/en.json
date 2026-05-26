@@ -49,7 +49,7 @@
     "projectsTitle": "Selected projects",
     "projectsCta": "See all projects",
     "testimonialsTitle": "What clients say",
-    "testimonialsCta": "See recommendations source",
+    "testimonialsCta": "See all recommendations",
     "contactTitle": "Let's work together",
     "contactSubtitle": "A project, a question, an idea? I'm available.",
     "contactLinkedinTitle": "Connect on LinkedIn",
@@ -60,10 +60,10 @@
     "contactEmailCta": "Write an email",
     "statsItems": [
       { "value": "+9", "label": "projects completed" },
-      { "value": "+2 years", "label": "of experience" },
+      { "value": "+4 years", "label": "of experience" },
       { "value": "1 prize", "label": "entrepreneurship" },
       { "value": "1 SaaS", "label": "profitable" },
-      { "value": "3", "label": "customer recommendations" }
+      { "value": "5", "label": "recommendations" }
     ]
   },
   "projects": {

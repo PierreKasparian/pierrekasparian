@@ -10,14 +10,14 @@
   },
   "home": {
     "badge": "Freelance IA & Data · Étudiant ingénieur",
-    "title": "Intégration IA et data engineering, conforme RGPD.",
+    "title": "Intégration IA et ingénierie des données, conforme RGPD.",
     "subtitle": "J'aide les PME et startups à transformer leurs données brutes et à déployer des LLM, RAG et agents IA, sans envoyer leurs données hors d'Europe.",
     "ctaPrimary": "Voir mes prestations",
     "ctaSecondary": "Me contacter",
     "trustTitle": "Pourquoi travailler avec moi",
     "trustItems": [
       { "title": "Conformité RGPD by design", "body": "Hébergement EU, anonymisation, audit du flux de données. Vos données restent chez vous." },
-      { "title": "Data engineering inclus", "body": "SQL, DBT, pipelines de transformation. Je pars des données brutes et les rends exploitables avant même d'introduire l'IA." },
+      { "title": "Ingénierie des données incluse", "body": "SQL, DBT, pipelines de transformation. Je pars des données brutes et les rends exploitables avant même d'introduire l'IA." },
       { "title": "Stack IA à jour", "body": "LLM frontier & open source, RAG, fine-tuning, agents. Je suis en veille active." },
       { "title": "Livraison pragmatique", "body": "POC en quelques jours, mise en production cadrée, transfert de compétences inclus." }
     ],
@@ -26,7 +26,7 @@
       { "text": "Je suis Pierre Kasparian, ", "bold": false },
       { "text": "étudiant en 4e année d'ingénierie informatique à l'UTT", "bold": true },
       { "text": " (Université de Technologie de Troyes) et ", "bold": false },
-      { "text": "freelance en intégration IA et data engineering", "bold": true },
+      { "text": "freelance en intégration IA et ingénierie des données", "bold": true },
       { "text": ". Je transforme des données brutes en pipelines exploitables (SQL, DBT) et déploie des solutions IA sur mesure, avec une obsession : que vos ", "bold": false },
       { "text": "données restent en Europe", "bold": true },
       { "text": " et sous votre contrôle.", "bold": false }
@@ -49,7 +49,7 @@
     "projectsTitle": "Projets sélectionnés",
     "projectsCta": "Voir tous les projets",
     "testimonialsTitle": "Ce que disent mes clients",
-    "testimonialsCta": "Voir la source des recommandations",
+    "testimonialsCta": "Voir toutes les recommandations",
     "contactTitle": "Travaillons ensemble",
     "contactSubtitle": "Un projet, une question, une idée ? Je suis disponible.",
     "contactLinkedinTitle": "Se connecter sur LinkedIn",
@@ -60,10 +60,10 @@
     "contactEmailCta": "Écrire un email",
     "statsItems": [
       { "value": "+9", "label": "projets réalisés" },
-      { "value": "+2 ans", "label": "d'expérience" },
+      { "value": "+4 ans", "label": "d'expérience" },
       { "value": "1 prix", "label": "entrepreneurial" },
       { "value": "1 SaaS", "label": "profitable" },
-      { "value": "3", "label": "recommandations client" }
+      { "value": "5", "label": "recommandations" }
     ]
   },
   "projects": {
@@ -79,7 +79,7 @@
   },
   "prestations": {
     "metaTitle": "Prestations",
-    "metaDescription": "Audit IA, intégration LLM, RAG, fine-tuning, data engineering SQL/DBT et formation équipe - prestations conformes RGPD.",
+    "metaDescription": "Audit IA, intégration LLM, RAG, fine-tuning, ingénierie des données SQL/DBT et formation équipe - prestations conformes RGPD.",
     "heading": "Mes prestations",
     "subtitle": "Intégration IA sur mesure et transformation de données (SQL, DBT), avec hébergement EU et conformité RGPD by design.",
     "contactCta": "Discutons de votre projet",
@@ -98,11 +98,11 @@
   },
   "about": {
     "metaTitle": "À propos",
-    "metaDescription": "Étudiant ingénieur UTT 4e année, freelance en intégration IA et data engineering (SQL, DBT), Pierre Kasparian.",
+    "metaDescription": "Étudiant ingénieur UTT 4e année, freelance en intégration IA et ingénierie des données (SQL, DBT), Pierre Kasparian.",
     "heading": "À propos",
-    "role": "Freelance IA & Data Engineering · Étudiant ingénieur",
+    "role": "Freelance IA & Ingénieur Données · Étudiant ingénieur",
     "introTitle": "Qui suis-je",
-    "introBody": "Je suis Pierre Kasparian, étudiant en 4e année d'ingénierie informatique à l'UTT (Université de Technologie de Troyes) et freelance en intégration IA et data engineering. Je transforme des données brutes en pipelines exploitables (SQL, DBT) et déploie des solutions IA sur mesure pour les PME et startups, avec une obsession : que vos données restent en Europe et sous votre contrôle.",
+    "introBody": "Je suis Pierre Kasparian, étudiant en 4e année d'ingénierie informatique à l'UTT (Université de Technologie de Troyes) et freelance en intégration IA et ingénierie des données. Je transforme des données brutes en pipelines exploitables (SQL, DBT) et déploie des solutions IA sur mesure pour les PME et startups, avec une obsession : que vos données restent en Europe et sous votre contrôle.",
     "parcourTitle": "Parcours",
     "parcourItems": [
       { "title": "UTT - Informatique et Systèmes d'Information", "date": "2022 – 2027", "body": "4e année. Formation ingénieur généraliste avec spécialisation systèmes d'information et développement logiciel." },
