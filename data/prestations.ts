@@ -14,8 +14,8 @@ export const prestations: Prestation[] = [
   {
     id: "agents-ia",
     title: {
-      fr: "Agents IA & chatbots intelligents",
-      en: "AI agents & intelligent chatbots",
+      fr: "Chatbots RAG intelligents",
+      en: "RAG intelligent chatbots",
     },
     tagline: {
       fr: "Un assistant capable de répondre à vos clients ou collaborateurs en s'appuyant sur vos propres documents.",
@@ -54,8 +54,8 @@ export const prestations: Prestation[] = [
       en: "AI automation",
     },
     tagline: {
-      fr: "Réduisez les tâches répétitives en connectant l'IA à vos outils et processus existants.",
-      en: "Cut repetitive tasks by connecting AI to your existing tools and processes.",
+      fr: "Réduisez les tâches répétitives en connectant des agents IA à vos outils et processus existants.",
+      en: "Cut repetitive tasks by connecting AI agents to your existing tools and processes.",
     },
     descriptionLong: {
       fr: "Certaines tâches mobilisent du temps sans réelle valeur ajoutée : classification de documents, rédaction de réponses types, extraction d'informations, résumés automatiques... Je conçois des solutions qui orchestrent plusieurs modèles IA et les connectent à vos systèmes (CRM, APIs, bases de données) pour automatiser ces processus. Le tout en maîtrisant les coûts, car tous les fournisseurs IA ne se valent pas selon les tâches. Inclus : conception du pipeline, développement, tests et mise en production.",
@@ -68,8 +68,8 @@ export const prestations: Prestation[] = [
   {
     id: "saas-ai",
     title: {
-      fr: "Développement SaaS & applications IA",
-      en: "SaaS & AI-first app development",
+      fr: "Développement SaaS",
+      en: "SaaS development",
     },
     tagline: {
       fr: "De l'idée au produit fonctionnel : je développe des applications web intégrant l'IA dès la conception.",
@@ -86,8 +86,8 @@ export const prestations: Prestation[] = [
   {
     id: "machine-learning",
     title: {
-      fr: "Machine learning sur mesure",
-      en: "Custom machine learning",
+      fr: "Machine learning",
+      en: "Machine learning",
     },
     tagline: {
       fr: "Des modèles entraînés sur vos données pour classifier, prédire ou enrichir vos informations métier.",
