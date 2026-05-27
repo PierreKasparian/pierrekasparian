@@ -24,7 +24,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import { prestations } from "@/data/prestations";
@@ -39,6 +38,20 @@ const PRESTATION_ICONS: Record<string, LucideIcon> = {
   Database,
   Rocket,
   Sparkles,
+  Zap,
+};
+
+const PROJECT_ICONS: Record<string, LucideIcon> = {
+  Bot,
+  Brain,
+  Code2,
+  Compass,
+  Sparkles,
+  Mail,
+  Rocket,
+  Search,
+  Sparkles,
+  Star,
   Zap,
 };
 
@@ -189,21 +202,30 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
               {dict.home.servicesCta} →
             </Link>
           </div>
-          <div className="grid gap-6 md:grid-cols-3">
+          <ul className="border-t border-[var(--border)]">
             {featuredPrestations.map((p) => {
               const Icon = PRESTATION_ICONS[p.icon] ?? Sparkles;
               return (
-                <Card
-                  key={p.id}
-                  className="h-full transition-shadow group-hover:shadow-md"
-                >
-                  <CardHeader>
-                    <div className="mb-3 inline-flex size-10 items-center justify-center rounded-md bg-[var(--accent)] text-[var(--accent-foreground)]">
-                      <Icon className="size-5" />
+                <li key={p.id}>
+                  <Link
+                    href={`/${lang}/prestations`}
+                    className="group flex flex-col gap-3 border-b border-[var(--border)] py-6 transition-colors hover:bg-[var(--secondary)]/40 sm:flex-row sm:items-center sm:gap-6"
+                  >
+                    <div className="flex flex-1 items-start gap-5">
+                      <div className="inline-flex size-10 shrink-0 items-center justify-center rounded-md bg-[var(--accent)] text-[var(--accent-foreground)]">
+                        <Icon className="size-5" />
+                      </div>
+                      <div className="min-w-0">
+                        <h3 className="flex items-center gap-1.5 text-base font-semibold">
+                          {p.title[lang]}
+                          <ArrowRight className="size-4 -translate-x-1 text-[var(--muted-foreground)] opacity-0 transition-all group-hover:translate-x-0 group-hover:opacity-100" />
+                        </h3>
+                        <p className="mt-1 text-sm text-[var(--muted-foreground)]">
+                          {p.tagline[lang]}
+                        </p>
+                      </div>
                     </div>
-                    <CardTitle>{p.title[lang]}</CardTitle>
-                    <CardDescription>{p.tagline[lang]}</CardDescription>
-                    <div className="flex flex-wrap gap-2 pt-2">
+                    <div className="flex flex-wrap gap-1.5 pl-15 sm:max-w-[42%] sm:shrink-0 sm:justify-end sm:pl-0">
                       {p.tags.map((tag) => (
                         <Badge
                           key={tag}
@@ -214,11 +236,11 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
                         </Badge>
                       ))}
                     </div>
-                  </CardHeader>
-                </Card>
+                  </Link>
+                </li>
               );
             })}
-          </div>
+          </ul>
         </div>
       </section>
 
@@ -240,33 +262,57 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
             </Link>
           </div>
           <div className="grid gap-6 md:grid-cols-3">
-            {featured.map((project) => (
-              <Link
-                key={project.slug}
-                href={`/${lang}/projects/${project.slug}`}
-                className="group"
-              >
-                <Card className="h-full overflow-hidden transition-shadow group-hover:shadow-md">
-                  <div className="relative aspect-[16/10] w-full overflow-hidden bg-[var(--muted)]">
-                    <Image
-                      src={project.imagePrincipale}
-                      alt={project.title[lang]}
-                      fill
-                      className="object-cover transition-transform duration-300 group-hover:scale-105"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    />
-                  </div>
-                  <CardContent className="pt-6">
-                    <CardTitle className="mb-2 text-base">
-                      {project.title[lang]}
-                    </CardTitle>
-                    <CardDescription>
-                      {project.description[lang]}
-                    </CardDescription>
-                  </CardContent>
-                </Card>
-              </Link>
-            ))}
+            {featured.map((project) => {
+              const Icon =
+                (project.icon ? PROJECT_ICONS[project.icon] : null) ?? Sparkles;
+              return (
+                <Link
+                  key={project.slug}
+                  href={`/${lang}/projects/${project.slug}`}
+                  className="group"
+                >
+                  <Card className="h-full overflow-hidden transition-shadow group-hover:shadow-md">
+                    {project.imagePrincipale && (
+                      <div className="relative aspect-[16/10] w-full overflow-hidden bg-[var(--muted)]">
+                        <Image
+                          src={project.imagePrincipale}
+                          alt={project.title[lang]}
+                          fill
+                          className="object-cover transition-transform duration-300 group-hover:scale-105"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        />
+                      </div>
+                    )}
+                    <CardContent
+                      className={project.imagePrincipale ? "pt-6" : "pt-8"}
+                    >
+                      <div className="mb-3 inline-flex size-10 items-center justify-center rounded-md bg-[var(--primary)] text-[var(--primary-foreground)]">
+                        <Icon className="size-5" />
+                      </div>
+                      <CardTitle className="mb-2 text-base">
+                        {project.title[lang]}
+                      </CardTitle>
+                      <CardDescription>
+                        {project.description[lang]}
+                      </CardDescription>
+                      {project.tags && project.tags.length > 0 && (
+                        <div className="mt-4 flex flex-wrap gap-1.5">
+                          {project.tags.map((tag) => (
+                            <Badge
+                              key={tag}
+                              variant="secondary"
+                              className="text-xs"
+                            >
+                              {tag}
+                            </Badge>
+                          ))}
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                </Link>
+              );
+            })}
           </div>
         </div>
       </section>

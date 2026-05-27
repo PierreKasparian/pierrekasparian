@@ -91,7 +91,7 @@ export default async function ProjectDetailPage({
       </div>
 
       {/* EXTRA IMAGES */}
-      {project.images.length > 0 && (
+      {project.images && project.images.length > 0 && (
         <div className="mt-10 grid gap-4 sm:grid-cols-2">
           {project.images.map((img) => (
             <div
