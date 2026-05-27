@@ -1,4 +1,5 @@
 import {
+  ArrowRight,
   Bot,
   Brain,
   Database,
@@ -15,6 +16,7 @@ import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { prestations } from "@/data/prestations";
+import { projects } from "@/data/projects";
 import { buildAlternates } from "@/lib/seo";
 
 import { getDictionary, hasLocale, type Locale } from "../dictionaries";
@@ -67,15 +69,18 @@ export default async function PrestationsPage({
           <div className="grid gap-6 md:grid-cols-2">
             {prestations.map((p) => {
               const Icon = ICON_MAP[p.icon] ?? Sparkles;
+              const relatedProjects = (p.relatedProjectSlugs ?? [])
+                .map((slug) => projects.find((proj) => proj.slug === slug))
+                .filter(Boolean) as (typeof projects)[number][];
               return (
-                <Card key={p.id} className="h-full">
+                <Card key={p.id} className="flex h-full flex-col">
                   <CardHeader>
                     <div className="mb-3 inline-flex size-10 items-center justify-center rounded-md bg-[var(--accent)] text-[var(--accent-foreground)]">
                       <Icon className="size-5" />
                     </div>
                     <CardTitle>{p.title[lang]}</CardTitle>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="flex flex-1 flex-col">
                     <ul className="space-y-1.5">
                       {p.bullets[lang].map((item, i) => (
                         <li key={i} className="flex items-start gap-2 text-sm">
@@ -95,6 +100,26 @@ export default async function PrestationsPage({
                         </Badge>
                       ))}
                     </div>
+                    {relatedProjects.length > 0 && (
+                      <div className="mt-4 border-t border-[var(--border)] pt-4">
+                        <p className="mb-2 text-xs font-medium tracking-wide text-[var(--muted-foreground)] uppercase">
+                          {dict.prestations.relatedProjects}
+                        </p>
+                        <ul className="space-y-1">
+                          {relatedProjects.map((proj) => (
+                            <li key={proj.slug}>
+                              <Link
+                                href={`/${lang}/projects/${proj.slug}`}
+                                className="group inline-flex items-center gap-1 text-sm text-[var(--muted-foreground)] transition-colors hover:text-[var(--foreground)]"
+                              >
+                                <ArrowRight className="size-3 transition-transform group-hover:translate-x-0.5" />
+                                {proj.title[lang]}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
                   </CardContent>
                 </Card>
               );

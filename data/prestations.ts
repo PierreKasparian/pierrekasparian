@@ -13,6 +13,7 @@ export interface Prestation {
   tags: string[];
   icon: string; // lucide-react icon name
   featured?: boolean;
+  relatedProjectSlugs?: string[];
 }
 
 export const prestations: Prestation[] = [
@@ -45,6 +46,7 @@ export const prestations: Prestation[] = [
     tags: ["LangChain", "Python", "Web fullstack", "Infrastructure", "Qdrant"],
     icon: "Bot",
     featured: true,
+    relatedProjectSlugs: ["ailog-rag", "livesession-formation"],
   },
   {
     id: "data-engineering",
@@ -71,6 +73,7 @@ export const prestations: Prestation[] = [
     tags: ["Python", "DBT", "SQL", "Airflow"],
     icon: "Database",
     featured: true,
+    relatedProjectSlugs: ["pretto-email-pipeline"],
   },
   {
     id: "automatisation-ia",
@@ -97,6 +100,11 @@ export const prestations: Prestation[] = [
     tags: ["n8n", "APIs", "Qdrant"],
     icon: "Zap",
     featured: true,
+    relatedProjectSlugs: [
+      "pretto-batch-inference",
+      "pretto-llm-platform",
+      "pretto-prompt-pipeline",
+    ],
   },
   {
     id: "saas-ai",
@@ -123,6 +131,7 @@ export const prestations: Prestation[] = [
     tags: ["Web", "MVP", "Docker"],
     icon: "Rocket",
     featured: false,
+    relatedProjectSlugs: ["appli-aide-devoirs", "podcastify"],
   },
   {
     id: "machine-learning",
@@ -151,5 +160,6 @@ export const prestations: Prestation[] = [
     tags: ["ML", "Classification", "Prédiction", "Data Science"],
     icon: "Brain",
     featured: false,
+    relatedProjectSlugs: ["medee-ml"],
   },
 ];

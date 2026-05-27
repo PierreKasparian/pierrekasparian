@@ -19,20 +19,53 @@
     "servicesCta": "Voir toutes les prestations",
     "trustTitle": "Pourquoi travailler avec moi",
     "trustItems": [
-      { "title": "Conformité RGPD by design", "body": "Hébergement EU, anonymisation, audit du flux de données. Vos données restent chez vous." },
-      { "title": "Ingénierie des données incluse", "body": "SQL, DBT, pipelines de transformation. Je pars des données brutes et les rends exploitables avant même d'introduire l'IA." },
-      { "title": "Stack IA à jour", "body": "LLM frontier & open source, RAG, fine-tuning, agents. Je suis en veille active." },
-      { "title": "Livraison pragmatique", "body": "POC en quelques jours, mise en production cadrée, transfert de compétences inclus." }
+      {
+        "title": "Conformité RGPD by design",
+        "body": "Hébergement EU, anonymisation, audit du flux de données. Vos données restent chez vous."
+      },
+      {
+        "title": "Ingénierie des données incluse",
+        "body": "SQL, DBT, pipelines de transformation. Je pars des données brutes et les rends exploitables avant même d'introduire l'IA."
+      },
+      {
+        "title": "Stack IA à jour",
+        "body": "LLM frontier & open source, RAG, fine-tuning, agents. Je suis en veille active."
+      },
+      {
+        "title": "Livraison pragmatique",
+        "body": "POC en quelques jours, mise en production cadrée, transfert de compétences inclus."
+      }
     ],
     "aboutTitle": "À propos de moi",
     "aboutBody": [
-      { "text": "Je suis ", "bold": false },
-      { "text": "étudiant en 4e année d'ingénierie informatique à l'UTT", "bold": true },
-      { "text": " (Université de Technologie de Troyes) et ", "bold": false },
-      { "text": "freelance en intégration IA et ingénierie des données", "bold": true },
-      { "text": ". Je transforme des données brutes en pipelines exploitables (SQL, DBT) et déploie des solutions IA sur mesure, avec l'objectif de ", "bold": false },
-      { "text": "conserver vos données en Europe", "bold": true },
-      { "text": " et sous votre contrôle.", "bold": false }
+      {
+        "text": "Je suis ",
+        "bold": false
+      },
+      {
+        "text": "étudiant en 4e année d'ingénierie informatique à l'UTT",
+        "bold": true
+      },
+      {
+        "text": " (Université de Technologie de Troyes) et ",
+        "bold": false
+      },
+      {
+        "text": "freelance en intégration IA et ingénierie des données",
+        "bold": true
+      },
+      {
+        "text": ". Je transforme des données brutes en pipelines exploitables (SQL, DBT) et déploie des solutions IA sur mesure, avec l'objectif de ",
+        "bold": false
+      },
+      {
+        "text": "conserver vos données en Europe",
+        "bold": true
+      },
+      {
+        "text": " et sous votre contrôle.",
+        "bold": false
+      }
     ],
     "aboutSkillsLabel": "Compétences",
     "aboutSkills": [
@@ -85,11 +118,26 @@
     "contactEmailBody": "Décrivez votre projet ou posez vos questions directement par email. Réponse sous 48 h.",
     "contactEmailCta": "Écrire un email",
     "statsItems": [
-      { "value": "+9", "label": "projets réalisés" },
-      { "value": "+4 ans", "label": "d'expérience" },
-      { "value": "1 prix", "label": "entrepreneurial" },
-      { "value": "1 SaaS", "label": "profitable" },
-      { "value": "5", "label": "recommandations" }
+      {
+        "value": "+9",
+        "label": "projets réalisés"
+      },
+      {
+        "value": "+4 ans",
+        "label": "d'expérience"
+      },
+      {
+        "value": "1 prix",
+        "label": "entrepreneurial"
+      },
+      {
+        "value": "1 SaaS",
+        "label": "profitable"
+      },
+      {
+        "value": "5",
+        "label": "recommandations"
+      }
     ]
   },
   "projects": {
@@ -108,7 +156,8 @@
     "metaDescription": "Agents IA, chatbots, ingénierie des données, automatisation de processus, développement SaaS et machine learning - prestations data & IA.",
     "heading": "Mes prestations",
     "subtitle": "Du chatbot intelligent à l'infrastructure data, en passant par l'automatisation de vos processus.",
-    "contactCta": "Discutons de votre projet"
+    "contactCta": "Discutons de votre projet",
+    "relatedProjects": "Projets associés"
   },
   "blog": {
     "metaTitle": "Blog",
@@ -129,34 +178,75 @@
     "introBody": "Étudiant en 4e année d'ingénierie informatique à l'UTT (Université de Technologie de Troyes) et freelance en intégration IA et ingénierie des données. Je transforme des données brutes en pipelines exploitables (SQL, DBT) et déploie des solutions IA sur mesure pour les PME et startups, avec une obsession : que vos données restent en Europe et sous votre contrôle.",
     "parcourTitle": "Parcours",
     "parcourItems": [
-      { "title": "Formation Machine Learning & Data Science", "date": "Mars 2025", "body": "Fondamentaux ML : régression, classification, clustering, scikit-learn, Python. Application sur la prédiction de cours boursiers.", "educationSlug": "machine-learning-course" },
-      { "title": "Formation LLM Engineering", "date": "Janvier 2025", "body": "Programme intensif : RAG, fine-tuning QLoRA, agents autonomes, déploiement de modèles open source.", "educationSlug": "LLM-course" },
-      { "title": "UTT - Informatique et Systèmes d'Information", "date": "2022 – 2027", "body": "4e année. Formation ingénieur orientée systèmes d'information et développement logiciel avec spécialisation data.", "educationSlug": "" }
+      {
+        "title": "Formation Machine Learning & Data Science",
+        "date": "Mars 2025",
+        "body": "Fondamentaux ML : régression, classification, clustering, scikit-learn, Python. Application sur la prédiction de cours boursiers.",
+        "educationSlug": "machine-learning-course"
+      },
+      {
+        "title": "Formation LLM Engineering",
+        "date": "Janvier 2025",
+        "body": "Programme intensif : RAG, fine-tuning QLoRA, agents autonomes, déploiement de modèles open source.",
+        "educationSlug": "LLM-course"
+      },
+      {
+        "title": "UTT - Informatique et Systèmes d'Information",
+        "date": "2022 – 2027",
+        "body": "4e année. Formation ingénieur orientée systèmes d'information et développement logiciel avec spécialisation data.",
+        "educationSlug": ""
+      }
     ],
     "experienceItems": [
       {
         "title": "Pretto",
         "date": "Août 2025 – Fév 2026",
         "roles": [
-          { "subtitle": "Stage IA & Data", "body": "Développement de pipelines données et implémentations d'IA générative au sein de la fintech Pretto." },
-          { "subtitle": "Freelance IA & Data", "body": "Trois mois de freelance suite au stage, poursuite des sujets." }
+          {
+            "subtitle": "Stage IA & Data",
+            "body": "Développement de pipelines données et implémentations d'IA générative au sein de la fintech Pretto."
+          },
+          {
+            "subtitle": "Freelance IA & Data",
+            "body": "Trois mois de freelance suite au stage, poursuite des sujets."
+          }
         ]
       },
-      { "title": "Freelance IA & Data", "date": "2024 – maintenant", "body": "Création de chatbots, machine learning, RAG, automatisations IA et développement web. Ingénierie des données (SQL, DBT).", "cta": "Voir toutes mes réalisations" },
+      {
+        "title": "Freelance IA & Data",
+        "date": "2024 – maintenant",
+        "body": "Création de chatbots, machine learning, RAG, automatisations IA et développement web. Ingénierie des données (SQL, DBT).",
+        "cta": "Voir toutes mes réalisations"
+      },
       {
         "title": "Junior Conseil UTT",
         "date": "2023 – 2025",
         "roles": [
-          { "subtitle": "Directeur Technique et Chef de Projet", "body": "Pilotage de missions client, encadrement des équipes projet et coordination des livrables techniques." },
-          { "subtitle": "Responsable Communication & Événementiel", "body": "Gestion des réseaux sociaux, communication externe et organisation des événements de l'association." }
+          {
+            "subtitle": "Directeur Technique et Chef de Projet",
+            "body": "Pilotage de missions client, encadrement des équipes projet et coordination des livrables techniques."
+          },
+          {
+            "subtitle": "Responsable Communication & Événementiel",
+            "body": "Gestion des réseaux sociaux, communication externe et organisation des événements de l'association."
+          }
         ]
       }
     ],
     "valuesTitle": "Mes valeurs",
     "valuesItems": [
-      { "title": "RGPD by design", "body": "Chaque intégration est pensée pour la conformité dès le départ, pas une case à cocher en fin de projet." },
-      { "title": "Pédagogie", "body": "Je transfère les compétences. À la fin d'une mission, vous devez pouvoir maintenir et faire évoluer ce qu'on a construit." },
-      { "title": "Pragmatisme", "body": "POC rapide, feedback loop court, livraison itérative. Pas de sur-ingénierie." }
+      {
+        "title": "RGPD by design",
+        "body": "Chaque intégration est pensée pour la conformité dès le départ, pas une case à cocher en fin de projet."
+      },
+      {
+        "title": "Pédagogie",
+        "body": "Je transfère les compétences. À la fin d'une mission, vous devez pouvoir maintenir et faire évoluer ce qu'on a construit."
+      },
+      {
+        "title": "Pragmatisme",
+        "body": "POC rapide, feedback loop court, livraison itérative. Pas de sur-ingénierie."
+      }
     ],
     "ctaContact": "Me contacter",
     "ctaProjects": "Voir mes projets",
