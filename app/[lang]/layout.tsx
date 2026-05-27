@@ -9,6 +9,7 @@ import {
   buildOpenGraph,
   buildTwitterCard,
   personSchema,
+  professionalServiceSchema,
   SITE_URL,
   websiteSchema,
 } from "@/lib/seo";
@@ -79,6 +80,12 @@ export default async function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(professionalServiceSchema),
+          }}
         />
         <SiteHeader lang={lang} dict={dict} />
         <main className="flex-1">{children}</main>

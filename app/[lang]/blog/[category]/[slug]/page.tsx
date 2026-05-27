@@ -78,12 +78,27 @@ export default async function BlogPostPage({
     headline: article.meta.title,
     description: article.meta.description,
     datePublished: article.meta.date,
+    dateModified: article.meta.date,
     url: `${SITE_URL}/${lang}/blog/${category}/${slug}`,
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `${SITE_URL}/${lang}/blog/${category}/${slug}`,
+    },
     keywords: article.meta.tags.join(", "),
     author: {
       "@type": "Person",
       name: personSchema.name,
       url: personSchema.url,
+      sameAs: personSchema.sameAs,
+    },
+    publisher: {
+      "@type": "Person",
+      name: personSchema.name,
+      url: personSchema.url,
+    },
+    speakable: {
+      "@type": "SpeakableSpecification",
+      cssSelector: ["h1", "h2", ".prose p:first-of-type"],
     },
   };
 
@@ -130,6 +145,39 @@ export default async function BlogPostPage({
             {dict.blog.categories[category]}
           </Link>
         </p>
+
+        {/* AUTHOR BYLINE */}
+        <div className="mt-5 flex items-center gap-3 border-y border-[var(--border)] py-4">
+          <div>
+            <Link
+              href={`/${lang}/about`}
+              className="font-medium text-[var(--foreground)] hover:underline"
+            >
+              Pierre Kasparian
+            </Link>
+            <p className="text-xs text-[var(--muted-foreground)]">
+              {lang === "fr"
+                ? "Freelance IA et data"
+                : "AI and data freelancer"}
+            </p>
+            <div className="mt-1 flex gap-3 text-xs">
+              <Link
+                href={`/${lang}/about`}
+                className="text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
+              >
+                {lang === "fr" ? "À propos" : "About"}
+              </Link>
+              <a
+                href="https://www.linkedin.com/in/pierre-kasparian-486101259/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
+              >
+                LinkedIn
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* CONTENT */}

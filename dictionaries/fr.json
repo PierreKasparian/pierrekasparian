@@ -300,5 +300,9 @@
     "sending": "Envoi en cours…",
     "success": "Message envoyé ! Je vous réponds en quelques jours.",
     "error": "Une erreur s'est produite. Réessayez ou écrivez-moi directement."
+  },
+  "footer": {
+    "legalNotice": "Mentions légales",
+    "privacyPolicy": "Confidentialité"
   }
 }

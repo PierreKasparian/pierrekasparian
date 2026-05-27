@@ -1,11 +1,8 @@
-import fs from "fs";
-import path from "path";
-
 import type { MetadataRoute } from "next";
 
 import { educations } from "@/data/education";
-import { prestations } from "@/data/prestations";
 import { projects } from "@/data/projects";
+import { getAllArticles } from "@/lib/mdx";
 
 const BASE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://pierrekasparian.com";
@@ -23,23 +20,14 @@ const staticRoutes: {
   { path: "/services", priority: 0.9, changeFreq: "monthly" },
   { path: "/projects", priority: 0.8, changeFreq: "monthly" },
   { path: "/blog", priority: 0.7, changeFreq: "weekly" },
-  { path: "/tools", priority: 0.6, changeFreq: "monthly" },
   { path: "/contact", priority: 0.7, changeFreq: "yearly" },
+  // /tools excluded until content is ready
 ];
 
 function langAlternates(path: string): Record<Locale, string> {
   return Object.fromEntries(
     locales.map((l) => [l, `${BASE_URL}/${l}${path}`]),
   ) as Record<Locale, string>;
-}
-
-function getBlogSlugs(locale: Locale): string[] {
-  const dir = path.join(process.cwd(), "content", "blog", locale);
-  if (!fs.existsSync(dir)) return [];
-  return fs
-    .readdirSync(dir)
-    .filter((f) => f.endsWith(".mdx"))
-    .map((f) => f.slice(0, -4));
 }
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -68,18 +56,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     });
   }
 
-  // /services/[id] - same id for both locales
-  for (const prestation of prestations) {
-    const routePath = `/services/${prestation.id}`;
-    entries.push({
-      url: `${BASE_URL}/fr${routePath}`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.9,
-      alternates: { languages: langAlternates(routePath) },
-    });
-  }
-
   // /education - listing page
   entries.push({
     url: `${BASE_URL}/fr/education`,
@@ -101,12 +77,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     });
   }
 
-  // /blog/[slug] - slugs differ per locale, no cross-linking
+  // /blog/[category]/[slug] - slugs differ per locale, no cross-linking
   for (const locale of locales) {
-    for (const slug of getBlogSlugs(locale)) {
+    for (const article of getAllArticles(locale)) {
       entries.push({
-        url: `${BASE_URL}/${locale}/blog/${slug}`,
-        lastModified: new Date(),
+        url: `${BASE_URL}/${locale}/blog/${article.category}/${article.slug}`,
+        lastModified: article.date ? new Date(article.date) : new Date(),
         changeFrequency: "monthly",
         priority: 0.6,
       });

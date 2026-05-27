@@ -300,5 +300,9 @@
     "sending": "Sending…",
     "success": "Message sent! I'll reply within a few days.",
     "error": "Something went wrong. Please try again or write to me directly."
+  },
+  "footer": {
+    "legalNotice": "Legal notice",
+    "privacyPolicy": "Privacy"
   }
 }

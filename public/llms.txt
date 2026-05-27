@@ -1,0 +1,34 @@
+# Pierre Kasparian
+
+> Freelance en intégration IA conforme RGPD : chatbots RAG, agents IA, data engineering et automatisation pour PME et startups françaises et européennes.
+
+## Services
+
+- [Chatbots RAG intelligents](https://pierrekasparian.com/fr/services/agents-ia): Assistants sur mesure qui répondent en s'appuyant sur vos documents internes (PDF, mails, bases de connaissances). Hébergement européen ou sur site disponible.
+- [Ingénierie des données](https://pierrekasparian.com/fr/services/data-engineering): Pipelines ETL fiables de zéro à la production. Stack moderne : Python, dbt, Airflow. De la connexion de nouvelles sources à la préparation de datasets pour l'entraînement de modèles.
+- [Automatisation par l'IA](https://pierrekasparian.com/fr/services/automatisation-ia): Agents IA qui orchestrent plusieurs modèles et s'intègrent à vos outils (CRM, APIs, bases de données). Classification documents, extraction information, résumés automatiques.
+- [Développement SaaS](https://pierrekasparian.com/fr/services/saas-ai): De l'idée au MVP avec IA intégrée dès la conception. Stack Next.js, Python, Docker.
+- [Machine learning](https://pierrekasparian.com/fr/services/machine-learning): Modèles entraînés sur vos données métier pour classification, prédiction et enrichissement.
+
+## Blog
+
+- [Comment intégrer un LLM sans violer le RGPD](https://pierrekasparian.com/fr/blog/guide/integrer-llm-rgpd): Guide sur les architectures d'intégration LLM conformes RGPD pour les entreprises françaises. Couvre le choix du modèle, l'hébergement EU, la gestion des données personnelles.
+- [How to integrate an LLM without violating GDPR](https://pierrekasparian.com/en/blog/guide/integrate-llm-gdpr): English version of the GDPR-compliant LLM integration guide.
+- [Parser des PDFs avec PyMuPDF en Python](https://pierrekasparian.com/fr/blog/guide/parser-pdf-pymupdf): Guide pratique pour extraire et structurer le contenu de PDFs avec PyMuPDF.
+- [RAG multi-agent LiveSession - étude de cas](https://pierrekasparian.com/fr/blog/case-study/rag-multiagent-livesession): Retour d'expérience sur le déploiement d'un chatbot RAG multi-agent pour la SaaS LiveSession.
+
+## About
+
+- [À propos](https://pierrekasparian.com/fr/about): Étudiant ingénieur en 4e année à l'UTT (Université de Technologie de Troyes), freelance IA depuis 2024, 9+ projets livrés. Expertise forte en conformité RGPD et hébergement européen.
+- [Projets](https://pierrekasparian.com/fr/projects): Portfolio complet des réalisations clients.
+
+## Contact
+
+- [Contact](https://pierrekasparian.com/fr/contact): Demandes de projets et consultations.
+- [LinkedIn](https://www.linkedin.com/in/pierre-kasparian-486101259/): Profil professionnel avec recommandations de clients (Pretto, LiveSession, mc2i).
+- [GitHub](https://github.com/PierreKasparian/): Projets open source et exemples de code.
+
+## Legal
+
+- [Mentions légales](https://pierrekasparian.com/fr/legal/mentions-legales): Informations légales du site.
+- [Politique de confidentialité](https://pierrekasparian.com/fr/legal/politique-de-confidentialite): Traitement des données personnelles conforme au RGPD.

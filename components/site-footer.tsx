@@ -6,9 +6,9 @@ import type { Dictionary, Locale } from "@/app/[lang]/dictionaries";
 export function SiteFooter({ lang, dict }: { lang: Locale; dict: Dictionary }) {
   return (
     <footer className="border-t border-[var(--border)] py-10">
-      <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-4 px-6 text-sm text-[var(--muted-foreground)] sm:flex-row sm:items-center">
+      <div className="mx-auto flex max-w-6xl flex-col gap-4 px-6 text-sm text-[var(--muted-foreground)] sm:flex-row sm:items-center sm:justify-between">
         <p>© {new Date().getFullYear()} Pierre Kasparian</p>
-        <div className="flex gap-4">
+        <div className="flex flex-wrap gap-4">
           <Link
             href="https://github.com/PierreKasparian/"
             className="hover:text-[var(--foreground)]"
@@ -40,6 +40,18 @@ export function SiteFooter({ lang, dict }: { lang: Locale; dict: Dictionary }) {
             <FileText className="size-3.5" />
             {dict.home.ctaCV}
           </a>
+          <Link
+            href={`/${lang}/legal/mentions-legales`}
+            className="hover:text-[var(--foreground)]"
+          >
+            {dict.footer.legalNotice}
+          </Link>
+          <Link
+            href={`/${lang}/legal/politique-de-confidentialite`}
+            className="hover:text-[var(--foreground)]"
+          >
+            {dict.footer.privacyPolicy}
+          </Link>
         </div>
       </div>
     </footer>

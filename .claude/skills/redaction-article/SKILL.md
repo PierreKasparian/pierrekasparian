@@ -104,3 +104,4 @@ Le rendu utilise `remark-gfm` + `rehype-pretty-code` (cf. page article). Donc :
 - [ ] Maillage interne + 1-2 liens autoritaires
 - [ ] Aucun `—` dans le texte
 - [ ] `npm run lint` OK
+- mets à jour le sitemap.ts et llm.txt
