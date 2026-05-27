@@ -55,15 +55,14 @@ export default async function ProjectDetailPage({
 
       {/* HERO IMAGE */}
       {project.imagePrincipale && (
-        <div className="mt-8 w-full overflow-hidden rounded-xl bg-[var(--muted)]">
+        <div className="relative mt-8 aspect-video w-full overflow-hidden rounded-xl bg-[var(--muted)]">
           <Image
             src={project.imagePrincipale}
             alt={project.title[lang]}
-            width={0}
-            height={0}
+            fill
             sizes="(max-width: 768px) 100vw, 896px"
             priority
-            className="h-auto w-full"
+            className="object-contain"
           />
         </div>
       )}
