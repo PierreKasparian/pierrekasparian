@@ -117,7 +117,7 @@
     "contactLinkedinBody": "Retrouvez mon parcours, mes recommandations et mes expériences professionnelles.",
     "contactLinkedinCta": "Voir le profil",
     "contactEmailTitle": "Envoyer un message",
-    "contactEmailBody": "Décrivez votre projet ou posez vos questions via le formulaire de contact. Réponse sous en quelques jours.",
+    "contactEmailBody": "Décrivez votre projet ou posez vos questions via le formulaire de contact. Réponse en quelques jours.",
     "contactEmailCta": "Me contacter",
     "statsItems": [
       {
@@ -177,7 +177,7 @@
     "heading": "À propos",
     "role": "Freelance IA & Ingénieur Données · Étudiant ingénieur",
     "introTitle": "Qui suis-je",
-    "introBody": "Étudiant en 4e année d'ingénierie informatique à l'UTT (Université de Technologie de Troyes) et freelance en intégration IA et ingénierie des données. Je transforme des données brutes en pipelines exploitables (SQL, DBT) et déploie des solutions IA sur mesure pour les PME et startups, avec une obsession : que vos données restent en Europe et sous votre contrôle.",
+    "introBody": "Je suis étudiant en 4e année d'ingénierie informatique à l'UTT (Université de Technologie de Troyes) et freelance en intégration IA et ingénierie des données. Je transforme des données brutes en pipelines exploitables (SQL, DBT) et déploie des solutions IA sur mesure pour les PME et startups, avec l'objectif de garder vos données en Europe et sous votre contrôle.",
     "parcourTitle": "Parcours",
     "parcourItems": [
       {
