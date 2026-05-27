@@ -46,7 +46,6 @@ const PROJECT_ICONS: Record<string, LucideIcon> = {
   Brain,
   Code2,
   Compass,
-  Sparkles,
   Mail,
   Rocket,
   Search,
