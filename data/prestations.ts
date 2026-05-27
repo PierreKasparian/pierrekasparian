@@ -61,12 +61,12 @@ export const prestations: Prestation[] = [
     bullets: {
       fr: [
         "Pipelines de collecte et de transformation fiables, de zéro à la production",
-        "Stack moderne : Python, dbt, Airflow - automatisés pour une base toujours propre",
+        "Stack moderne : Python, dbt, Airflow",
         "De la connexion de nouvelles sources à la préparation de jeux de données pour l'entraînement de modèles",
       ],
       en: [
         "Reliable data collection and transformation pipelines, from zero to production",
-        "Modern tooling: Python, dbt, Airflow - automated for a consistently clean foundation",
+        "Modern tooling: Python, dbt, Airflow",
         "From connecting new sources to preparing datasets for model training",
       ],
     },
@@ -120,12 +120,12 @@ export const prestations: Prestation[] = [
       fr: [
         "De l'idée au MVP : architecture backend, interfaces web, intégration IA, APIs et déploiement",
         "Approche itérative pour valider le concept avant d'investir davantage",
-        "Stack moderne (Next.js, Python, Docker), livraison d'un produit que vous pouvez faire évoluer",
+        "Stack moderne (Next.js, Python, Docker, ...), livraison d'un produit que vous pouvez faire évoluer",
       ],
       en: [
         "From idea to MVP: backend architecture, web interfaces, AI integration, APIs and deployment",
         "Iterative approach to validate your concept before scaling investment",
-        "Modern stack (Next.js, Python, Docker), delivered as something you can grow",
+        "Modern stack (Next.js, Python, Docker, ...), delivered as something you can grow",
       ],
     },
     tags: ["Web", "MVP", "Docker"],
