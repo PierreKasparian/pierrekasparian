@@ -5,7 +5,12 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 
 import { Badge } from "@/components/ui/badge";
 import { getAllArticles, getArticle } from "@/lib/mdx";
-import { buildAlternates } from "@/lib/seo";
+import {
+  buildOpenGraph,
+  buildTwitterCard,
+  personSchema,
+  SITE_URL,
+} from "@/lib/seo";
 
 import { getDictionary, hasLocale, locales } from "../../dictionaries";
 
@@ -21,10 +26,25 @@ export async function generateMetadata({
   const { lang, slug } = await params;
   const article = getArticle(lang, slug);
   if (!article) return {};
+
+  const canonical = `${SITE_URL}/${lang}/blog/${slug}`;
+
   return {
     title: article.meta.title,
     description: article.meta.description,
-    alternates: { languages: buildAlternates(`/blog/${slug}`) },
+    // Blog slugs differ per locale - no cross-language alternates to avoid broken hreflang
+    alternates: { canonical },
+    openGraph: {
+      ...buildOpenGraph(
+        article.meta.title,
+        article.meta.description,
+        lang,
+        "article",
+      ),
+      publishedTime: article.meta.date,
+      tags: article.meta.tags,
+    },
+    twitter: buildTwitterCard(article.meta.title, article.meta.description),
   };
 }
 
@@ -37,8 +57,28 @@ export default async function BlogPostPage({
   if (!article) notFound();
   const dict = await getDictionary(lang);
 
+  const blogPostingSchema = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: article.meta.title,
+    description: article.meta.description,
+    datePublished: article.meta.date,
+    url: `${SITE_URL}/${lang}/blog/${slug}`,
+    keywords: article.meta.tags.join(", "),
+    author: {
+      "@type": "Person",
+      name: personSchema.name,
+      url: personSchema.url,
+    },
+  };
+
   return (
     <article className="mx-auto max-w-4xl px-6 py-16">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostingSchema) }}
+      />
+
       {/* BACK */}
       <Link
         href={`/${lang}/blog`}

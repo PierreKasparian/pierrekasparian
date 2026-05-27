@@ -9,6 +9,8 @@
     "contact": "Contact"
   },
   "home": {
+    "metaTitle": "Pierre Kasparian - AI Integration Freelancer, GDPR-compliant",
+    "metaDescription": "AI integration and data engineering freelancer. I deploy LLMs, RAG and AI agents for SMEs and startups, without sending your data outside Europe.",
     "badge": "AI & Data freelancer · Engineering student",
     "title": "AI integration and data engineering, GDPR-compliant.",
     "subtitle": "I help SMEs and startups transform raw data and deploy LLMs, RAG and AI agents, without sending their data outside Europe.",

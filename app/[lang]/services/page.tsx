@@ -38,7 +38,7 @@ export async function generateMetadata({
   return {
     title: dict.prestations.metaTitle,
     description: dict.prestations.metaDescription,
-    alternates: { languages: buildAlternates("/prestations") },
+    alternates: { languages: buildAlternates("/services") },
   };
 }
 

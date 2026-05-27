@@ -14,6 +14,7 @@ import {
   Zap,
   type LucideIcon,
 } from "lucide-react";
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -29,8 +30,29 @@ import {
 import { prestations } from "@/data/prestations";
 import { projects } from "@/data/projects";
 import { testimonials } from "@/data/testimonials";
+import { buildAlternates, buildOpenGraph, buildTwitterCard } from "@/lib/seo";
 
 import { getDictionary, hasLocale } from "./dictionaries";
+
+export async function generateMetadata({
+  params,
+}: PageProps<"/[lang]">): Promise<Metadata> {
+  const { lang } = await params;
+  if (!hasLocale(lang)) return {};
+  const dict = await getDictionary(lang);
+  const title = dict.home.metaTitle;
+  const description = dict.home.metaDescription;
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: buildAlternates("")[lang],
+      languages: buildAlternates(""),
+    },
+    openGraph: buildOpenGraph(title, description, lang),
+    twitter: buildTwitterCard(title, description),
+  };
+}
 
 const PRESTATION_ICONS: Record<string, LucideIcon> = {
   Bot,

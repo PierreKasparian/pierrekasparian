@@ -3,6 +3,7 @@ import path from "path";
 
 import type { MetadataRoute } from "next";
 
+import { educations } from "@/data/education";
 import { prestations } from "@/data/prestations";
 import { projects } from "@/data/projects";
 
@@ -75,6 +76,27 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.9,
+      alternates: { languages: langAlternates(routePath) },
+    });
+  }
+
+  // /education - listing page
+  entries.push({
+    url: `${BASE_URL}/fr/education`,
+    lastModified: new Date(),
+    changeFrequency: "monthly",
+    priority: 0.5,
+    alternates: { languages: langAlternates("/education") },
+  });
+
+  // /education/[slug] - same slug for both locales
+  for (const education of educations) {
+    const routePath = `/education/${education.slug}`;
+    entries.push({
+      url: `${BASE_URL}/fr${routePath}`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.5,
       alternates: { languages: langAlternates(routePath) },
     });
   }
