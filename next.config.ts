@@ -2,8 +2,8 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   output: "standalone",
-  async redirects() {
-    return [
+  redirects() {
+    return Promise.resolve([
       {
         source: "/:lang/prestations",
         destination: "/:lang/services",
@@ -14,7 +14,7 @@ const nextConfig: NextConfig = {
         destination: "/:lang/services/:path*",
         permanent: true,
       },
-    ];
+    ]);
   },
 };
 
