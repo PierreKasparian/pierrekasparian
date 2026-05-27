@@ -1,4 +1,5 @@
 @AGENTS.md
+@SEO_KEYWORDS.md
 
 # Pierre Kasparian — Portfolio & Site Consulting IA
 
