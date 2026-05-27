@@ -196,7 +196,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
               {dict.home.servicesTitle}
             </h2>
             <Link
-              href={`/${lang}/prestations`}
+              href={`/${lang}/services`}
               className="text-sm font-medium text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
             >
               {dict.home.servicesCta} →
@@ -208,7 +208,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
               return (
                 <li key={p.id}>
                   <Link
-                    href={`/${lang}/prestations`}
+                    href={`/${lang}/services`}
                     className="group flex flex-col gap-3 border-b border-[var(--border)] py-6 transition-colors hover:bg-[var(--secondary)]/40 sm:flex-row sm:items-center sm:gap-6"
                   >
                     <div className="flex flex-1 items-start gap-5">
@@ -592,7 +592,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
                               </p>
                               {"cta" in item && (
                                 <Link
-                                  href={`/${lang}/prestations`}
+                                  href={`/${lang}/services`}
                                   className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-[var(--muted-foreground)] hover:underline"
                                 >
                                   {(item as { cta: string }).cta}

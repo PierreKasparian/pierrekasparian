@@ -12,7 +12,7 @@ export function SiteHeader({ lang, dict }: Props) {
   const otherLang: Locale = lang === "fr" ? "en" : "fr";
   const nav = [
     { href: `/${lang}`, label: dict.nav.home },
-    { href: `/${lang}/prestations`, label: dict.nav.prestations },
+    { href: `/${lang}/services`, label: dict.nav.prestations },
     { href: `/${lang}/projects`, label: dict.nav.projects },
     { href: `/${lang}/blog`, label: dict.nav.blog },
     { href: `/${lang}/tools`, label: dict.nav.tools },

@@ -19,7 +19,7 @@ const staticRoutes: {
 }[] = [
   { path: "", priority: 1.0, changeFreq: "weekly" },
   { path: "/about", priority: 0.8, changeFreq: "monthly" },
-  { path: "/prestations", priority: 0.9, changeFreq: "monthly" },
+  { path: "/services", priority: 0.9, changeFreq: "monthly" },
   { path: "/projects", priority: 0.8, changeFreq: "monthly" },
   { path: "/blog", priority: 0.7, changeFreq: "weekly" },
   { path: "/tools", priority: 0.6, changeFreq: "monthly" },
@@ -67,9 +67,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     });
   }
 
-  // /prestations/[id] - same id for both locales
+  // /services/[id] - same id for both locales
   for (const prestation of prestations) {
-    const routePath = `/prestations/${prestation.id}`;
+    const routePath = `/services/${prestation.id}`;
     entries.push({
       url: `${BASE_URL}/fr${routePath}`,
       lastModified: new Date(),
