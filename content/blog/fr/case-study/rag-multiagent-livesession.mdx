@@ -1,0 +1,130 @@
+---
+title: "Comment j'ai construit un RAG multi-agents en production pour LiveSession"
+description: "Étude de cas détaillée : architecture, isolation RGPD, résultats chiffrés et enseignements d'un déploiement RAG multi-agents en production sur OVH VPS pour LiveSession via Ailog."
+date: "2025-07-15"
+tags: ["RAG", "RGPD", "Mistral", "Production", "Case Study"]
+readingTime: 8
+---
+
+En juillet 2025, Ailog m'a missionné pour concevoir et déployer un système RAG (Retrieval-Augmented Generation) en production pour LiveSession. L'enjeu : permettre à chaque client de LiveSession d'interroger sa propre base documentaire via un chatbot dédié, avec une isolation stricte des données et une conformité RGPD non négociable.
+
+Voilà ce que j'ai construit, pourquoi, et ce que ça donne en production.
+
+## Le contexte : pourquoi un RAG custom et pas ChatGPT ?
+
+LiveSession est une plateforme d'analytics comportemental. Leurs clients accumulent des documents internes : rapports, procédures, bases de connaissances. L'idée était simple : permettre à chaque organisation d'interroger ses propres documents via un chatbot, comme on interrogerait un collègue qui a tout lu.
+
+La première question posée était : "pourquoi ne pas juste passer par l'API ChatGPT ?"
+
+Trois raisons ont écarté cette option d'emblée.
+
+**Premièrement, l'isolation des données.** Une solution SaaS multi-clients ne peut pas se permettre qu'un client A accède, même accidentellement, aux documents du client B. Les solutions génériques ne garantissent pas cette isolation au niveau applicatif.
+
+**Deuxièmement, le RGPD.** Les clients de LiveSession sont majoritairement européens. Envoyer leurs documents vers des serveurs américains soumis au Cloud Act, sans Data Processing Agreement solide, expose l'entreprise à des risques juridiques réels. Il fallait un hébergement EU, avec des modèles EU.
+
+**Troisièmement, le contrôle des coûts.** Avec un modèle SaaS, les coûts d'inférence sont directement liés au chiffre d'affaires. Il fallait pouvoir moduler la puissance du modèle selon la complexité de la requête, pas appliquer le même tarif à toutes les questions.
+
+Ces trois contraintes ont orienté toute l'architecture.
+
+## L'architecture : ce qui a été construit
+
+### Infrastructure et conformité RGPD
+
+Tout tourne sur un **VPS OVHcloud**, hébergé en France. Mistral AI, société française, fournit les modèles de langage via son API. Aucune donnée ne quitte le territoire européen. Le registre de traitement a été documenté dès le début, pas ajouté après coup.
+
+C'est ce que j'appelle "RGPD by design" : la conformité est une contrainte d'architecture, pas un patch final.
+
+### Ingestion documentaire
+
+Chaque client peut uploader ses documents en **PDF, Word ou TXT**. Le pipeline d'ingestion gère automatiquement trois cas particuliers qui posent habituellement problème :
+
+- Les **PDFs natifs** : extraction directe du texte via parsing
+- Les **PDFs image** : OCR automatique pour les documents scannés
+- Les **tableaux** : traitement spécifique pour préserver la structure des données tabulaires, souvent perdues par les chunkers naifs
+
+Les documents sont ensuite découpés en chunks, vectorisés, et stockés dans une base vectorielle dédiée par client. L'isolation est physique : chaque organisation a sa propre collection, inaccessible aux autres.
+
+### Architecture multi-chatbots
+
+Une organisation peut créer **plusieurs chatbots** distincts, chacun avec son propre sous-ensemble de documents. Un chatbot "support client" ne répond qu'aux questions couvertes par la base de connaissances support. Un chatbot "RH" n'accède qu'aux documents RH.
+
+Les chatbots héritent des documents existants de l'organisation, mais l'administrateur peut affiner quels documents chaque bot peut consulter. Cela permet des niveaux de permission documentaires sans complexifier l'expérience utilisateur.
+
+### Sélection dynamique du modèle
+
+L'une des décisions les plus structurantes : **ne pas utiliser le même modèle pour toutes les requêtes**.
+
+J'ai implémenté une sélection dynamique entre Mistral Small, Medium et Large selon deux critères :
+
+1. **La complexité estimée de la requête** : une question factuelle simple (date, nom, chiffre) ne nécessite pas Mistral Large
+2. **La charge système en temps réel** : en période de forte utilisation, le système bascule automatiquement vers des modèles plus légers pour maintenir les temps de réponse
+
+Combinée à une **reformulation automatique des questions** (réécriture des requêtes ambiguës avant vectorisation), cette stratégie a permis d'atteindre 95 % de pertinence sur les recherches internes.
+
+### Gestion des ressources et monitoring
+
+En production SaaS, la gestion des ressources n'est pas optionnelle. Le système inclut :
+
+- **Budgets par utilisateur et par avatar** : chaque compte a un plafond de tokens configurable, avec alertes webhooks
+- **Gestion des rate limits** : file d'attente et retry intelligents pour ne pas saturer l'API Mistral
+- **Cache des requêtes** : les questions identiques ou très proches retournent la réponse mise en cache, sans appel LLM
+- **Architecture asynchrone** : les longues ingestions documentaires ne bloquent pas les requêtes utilisateurs
+- **Snapshots journaliers** de la base vectorielle, avec plan de reprise documenté
+
+Le monitoring tourne sur **Grafana**, avec des dashboards configurés pour surveiller les latences, les coûts, et les taux d'erreur. Des alertes sont configurées sur les anomalies.
+
+## Les défis techniques : ce qui n'était pas prévu
+
+### Le problème des PDFs scannés
+
+Environ 30 % des documents uploadés en production étaient des PDFs image, non traçables par un parser texte classique. Sans OCR, une partie significative du corpus était silencieusement ignorée, ce que les utilisateurs constataient via des réponses incomplètes.
+
+J'ai intégré un pipeline OCR automatique qui détecte si un PDF contient du texte natif ou de l'image, et bascule vers la reconnaissance optique si nécessaire. Cette détection se fait à l'ingestion, de manière transparente pour l'utilisateur.
+
+### Les tableaux : l'angle mort du RAG classique
+
+Les tableaux posent un problème spécifique au chunking. Un chunk "naif" coupe souvent un tableau en deux, détruisant la relation entre les en-têtes et les valeurs. Les réponses sur des données tabulaires étaient donc systématiquement incorrectes.
+
+La solution : un prétraitement spécifique qui détecte les blocs tabulaires et les préserve comme unités atomiques dans l'index vectoriel. Résultat : les questions sur des tableaux (tarifs, données chiffrées, comparatifs) sont désormais traitées correctement.
+
+### La scalabilité : 700 utilisateurs virtuels simultanés
+
+Avant la mise en production, j'ai réalisé des **stress tests à 700 utilisateurs virtuels simultanés**. Le premier run a révélé trois goulots d'étranglement :
+
+1. La connexion à la base vectorielle n'était pas correctement poolée
+2. L'ingestion synchrone bloquait les workers en cas d'upload massif
+3. Les appels LLM sans timeout explicite provoquaient des blocages cascade
+
+Ces trois points ont été adressés avant le go-live. En production, les temps de réponse restent **sous 5 secondes en moyenne**, même en charge.
+
+## Les résultats
+
+Après plusieurs mois en production :
+
+- **95 % de pertinence** sur les recherches internes (mesuré sur un corpus de test annoté)
+- **Temps de réponse moyen inférieur à 5 secondes**, pics inclus
+- **0 fuite de données** entre clients depuis le déploiement
+- **700 utilisateurs virtuels simultanés** validés en stress test
+- Solution entièrement conforme RGPD, hébergée sur OVH en France
+
+Au-delà des chiffres, LiveSession a pu embarquer ses clients sur le produit sans incident de sécurité. L'isolation multi-tenant a tenu.
+
+## La suite : former l'équipe à l'autonomie
+
+Un RAG en production, c'est bien. Une équipe capable de le maintenir et de le faire évoluer sans intervention externe, c'est mieux.
+
+J'ai conçu et animé une **formation en 4 parties** pour l'équipe LiveSession : fondamentaux du RAG, maîtrise de leur implémentation custom, gestion des cas limites, et atelier pratique sur la restauration de base vectorielle et le scaling prévisionnel.
+
+Aujourd'hui, l'équipe gère la majorité des opérations courantes de manière autonome.
+
+## Ce que j'en retiens
+
+**L'isolation multi-tenant n'est pas une fonctionnalité, c'est une contrainte d'architecture.** La concevoir après coup coûte beaucoup plus cher que de la prévoir dès le début. Collections séparées par client, pas de partage de contexte entre organisations : ces décisions doivent être prises avant la première ligne de code.
+
+**La sélection dynamique de modèle change l'équation économique.** Un LLM "large" pour toutes les requêtes, c'est un budget qui explose dès que le volume monte. Catégoriser les requêtes et router vers le modèle approprié permet de rester dans un rapport performance/coût acceptable en production.
+
+**Le RGPD n'est pas un frein à l'IA.** C'est une contrainte qui oblige à des choix architecturaux plus rigoureux. Mistral + OVH + isolation physique des données : on obtient un système plus robuste, pas seulement plus conforme.
+
+---
+
+Si vous construisez un système RAG pour un usage SaaS multi-clients, ou si vous cherchez à déployer une solution d'IA documentaire conforme RGPD pour votre organisation, [contactez-moi](/fr/contact). J'ai traversé la plupart des problèmes que vous allez rencontrer.

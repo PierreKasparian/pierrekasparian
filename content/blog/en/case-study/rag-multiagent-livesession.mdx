@@ -1,0 +1,130 @@
+---
+title: "How I built a multi-agent RAG system in production for LiveSession"
+description: "A detailed case study: architecture, GDPR isolation, real production numbers, and lessons learned deploying a multi-agent RAG system on OVH VPS for LiveSession via Ailog."
+date: "2025-07-15"
+tags: ["RAG", "GDPR", "Mistral", "Production", "Case Study"]
+readingTime: 8
+---
+
+In July 2025, Ailog brought me on to design and deploy a production-grade RAG (Retrieval-Augmented Generation) system for LiveSession. The challenge: let each LiveSession customer query their own document corpus through a dedicated chatbot, with strict data isolation and non-negotiable GDPR compliance.
+
+Here is what I built, why I built it that way, and what it looks like in production.
+
+## The context: why a custom RAG and not ChatGPT?
+
+LiveSession is a behavioural analytics platform. Their customers accumulate internal documents: reports, procedures, knowledge bases. The idea was simple: let each organisation query its own documents through a chatbot, the way you would ask a colleague who has read everything.
+
+The first question on the table was: "why not just use the ChatGPT API?"
+
+Three reasons ruled that option out immediately.
+
+**First, data isolation.** A multi-tenant SaaS cannot afford client A accessing, even accidentally, the documents belonging to client B. Generic solutions do not guarantee that isolation at the application layer.
+
+**Second, GDPR.** LiveSession's customers are predominantly European. Sending their documents to US servers subject to the Cloud Act, without a solid Data Processing Agreement, creates real legal exposure. EU hosting with EU models was a hard requirement.
+
+**Third, cost control.** In a SaaS model, inference costs scale directly with usage. We needed to modulate model power based on query complexity, not apply the same compute budget to every question regardless of difficulty.
+
+These three constraints shaped the entire architecture.
+
+## The architecture
+
+### Infrastructure and GDPR compliance
+
+Everything runs on an **OVHcloud VPS**, hosted in France. Mistral AI, a French company, provides the language models through its API. No data leaves European territory. The processing registry was documented from day one, not bolted on at the end.
+
+This is what I call "GDPR by design": compliance is an architectural constraint, not a final patch.
+
+### Document ingestion
+
+Each client can upload documents in **PDF, Word or TXT** format. The ingestion pipeline handles three edge cases that typically cause problems:
+
+- **Native PDFs**: direct text extraction via parsing
+- **Image PDFs**: automatic OCR for scanned documents
+- **Tables**: dedicated processing to preserve tabular structure, which naive chunkers routinely destroy
+
+Documents are then split into chunks, vectorised, and stored in a client-specific vector database collection. The isolation is physical: each organisation has its own collection, inaccessible to all others.
+
+### Multi-chatbot architecture
+
+An organisation can create **multiple distinct chatbots**, each with its own document subset. A "customer support" bot only answers questions covered by the support knowledge base. An "HR" bot only accesses HR documents.
+
+Chatbots inherit the organisation's existing documents, but administrators can refine which documents each bot can consult. This enables document-level permission tiers without complicating the end-user experience.
+
+### Dynamic model selection
+
+One of the most consequential architectural decisions: **not using the same model for every request**.
+
+I implemented dynamic routing between Mistral Small, Medium, and Large based on two criteria:
+
+1. **Estimated query complexity**: a simple factual question (a date, a name, a figure) does not require Mistral Large
+2. **Real-time system load**: during peak usage, the system automatically falls back to lighter models to maintain response times
+
+Combined with **automatic query reformulation** (ambiguous requests are rewritten before vectorisation), this strategy drove 95% relevance on internal searches.
+
+### Resource management and monitoring
+
+In a SaaS production environment, resource management is not optional. The system includes:
+
+- **Per-user and per-avatar budgets**: each account has a configurable token ceiling with webhook alerts
+- **Rate limit handling**: intelligent queuing and retries to avoid saturating the Mistral API
+- **Query caching**: identical or near-identical questions return cached responses without an LLM call
+- **Async architecture**: long document ingestion jobs do not block user-facing requests
+- **Daily vector database snapshots** with a documented recovery plan
+
+Monitoring runs on **Grafana**, with dashboards covering latency, costs, and error rates. Anomaly alerts are configured and tested.
+
+## Technical challenges: what was not in the plan
+
+### Scanned PDFs at scale
+
+Around 30% of documents uploaded in production were image PDFs, invisible to a standard text parser. Without OCR, a significant portion of each corpus was silently ignored, which users noticed through incomplete or irrelevant answers.
+
+I integrated an automatic OCR pipeline that detects whether a PDF contains native text or rasterised images, and switches to optical character recognition transparently at ingestion. The user uploads a file; the system figures out how to read it.
+
+### Tables: the blind spot of standard RAG
+
+Tables present a specific problem for chunking. A naive chunker often splits a table across two chunks, destroying the relationship between headers and values. Answers to table-based questions were systematically wrong.
+
+The fix: a preprocessing step that detects tabular blocks and preserves them as atomic units in the vector index. Questions about structured data, pricing tables, comparative figures now return accurate answers.
+
+### Scalability: 700 concurrent virtual users
+
+Before go-live, I ran **stress tests at 700 concurrent virtual users**. The first run exposed three bottlenecks:
+
+1. Vector database connections were not properly pooled
+2. Synchronous ingestion was blocking workers during bulk uploads
+3. LLM calls without explicit timeouts triggered cascading stalls
+
+All three were fixed before production deployment. In production, response times consistently stay **below 5 seconds on average**, including under load.
+
+## Results
+
+After several months in production:
+
+- **95% relevance** on internal searches (measured against an annotated test corpus)
+- **Average response time under 5 seconds**, peaks included
+- **Zero data leaks** between clients since deployment
+- **700 concurrent virtual users** validated under stress testing
+- Fully GDPR-compliant solution, hosted on OVH in France
+
+Beyond the numbers: LiveSession was able to onboard its customers onto the product without a single security incident. The multi-tenant isolation held.
+
+## What came next: training the team to full autonomy
+
+A RAG system in production is one thing. A team capable of maintaining and evolving it without external help is something else.
+
+I designed and delivered a **4-part training programme** for the LiveSession team: RAG fundamentals, mastering their custom implementation, handling edge cases, and a hands-on workshop covering vector database restoration and predictive scaling.
+
+Today, the team handles the majority of day-to-day operations independently.
+
+## Key lessons
+
+**Multi-tenant isolation is not a feature, it is an architectural constraint.** Retrofitting it after the fact costs far more than designing for it from the start. Separate collections per client, no cross-organisation context sharing: these decisions must be made before the first line of code.
+
+**Dynamic model selection changes the economics.** Using a "large" LLM for every request blows the budget once volume scales up. Categorising queries and routing to the appropriate model is what keeps a production system within an acceptable cost-to-performance ratio.
+
+**GDPR is not a barrier to AI.** It is a constraint that forces more rigorous architectural choices. Mistral + OVH + physical data isolation: the result is a more robust system, not just a more compliant one.
+
+---
+
+If you are building a RAG system for a multi-tenant SaaS, or deploying a GDPR-compliant document AI solution for your organisation, [get in touch](/en/contact). I have worked through most of the problems you are about to encounter.

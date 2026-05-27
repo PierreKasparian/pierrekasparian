@@ -19,6 +19,12 @@ import { buildAlternates } from "@/lib/seo";
 
 import { getDictionary, hasLocale, locales, type Locale } from "../../dictionaries";
 
+const CATEGORY_COLORS: Record<BlogCategory, string> = {
+  article: "oklch(0.60 0.16 264)",
+  guide: "oklch(0.68 0.13 180)",
+  "case-study": "oklch(0.72 0.13 60)",
+};
+
 export async function generateStaticParams() {
   return locales.flatMap((lang) =>
     BLOG_CATEGORIES.map((category) => ({ lang, category })),
@@ -62,6 +68,10 @@ export default async function BlogCategoryPage({
           >
             {dict.blog.back}
           </Link>
+          <span
+            className="mb-4 block h-1 w-10 rounded-full"
+            style={{ backgroundColor: CATEGORY_COLORS[category] }}
+          />
           <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
             {categoryLabel}
           </h1>
@@ -84,7 +94,10 @@ export default async function BlogCategoryPage({
                   href={`/${lang}/blog/${category}/${article.slug}`}
                   className="group"
                 >
-                  <Card className="transition-shadow group-hover:shadow-md">
+                  <Card
+                    className="transition-shadow group-hover:shadow-md border-l-4"
+                    style={{ borderLeftColor: CATEGORY_COLORS[category] }}
+                  >
                     <CardContent className="pt-6">
                       <div className="mb-3 flex flex-wrap gap-2">
                         {article.tags.map((tag) => (

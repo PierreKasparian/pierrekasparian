@@ -14,6 +14,12 @@ import { buildAlternates } from "@/lib/seo";
 
 import { getDictionary, hasLocale, type Locale } from "../dictionaries";
 
+const CATEGORY_COLORS: Record<BlogCategory, string> = {
+  article: "oklch(0.60 0.16 264)",
+  guide: "oklch(0.68 0.13 180)",
+  "case-study": "oklch(0.72 0.13 60)",
+};
+
 export async function generateMetadata({
   params,
 }: PageProps<"/[lang]/blog">): Promise<Metadata> {
@@ -72,7 +78,11 @@ export default async function BlogPage({ params }: PageProps<"/[lang]/blog">) {
                 <div key={category}>
                   {/* Category heading */}
                   <div className="mb-6 flex items-baseline justify-between">
-                    <h2 className="text-2xl font-semibold">
+                    <h2 className="flex items-center gap-2 text-2xl font-semibold">
+                      <span
+                        className="inline-block size-2 rounded-full"
+                        style={{ backgroundColor: CATEGORY_COLORS[category] }}
+                      />
                       {dict.blog.categories[category]}
                     </h2>
                     <Link
@@ -91,7 +101,10 @@ export default async function BlogPage({ params }: PageProps<"/[lang]/blog">) {
                         href={`/${lang}/blog/${category}/${article.slug}`}
                         className="group"
                       >
-                        <Card className="transition-shadow group-hover:shadow-md">
+                        <Card
+                          className="transition-shadow group-hover:shadow-md border-l-4"
+                          style={{ borderLeftColor: CATEGORY_COLORS[category] }}
+                        >
                           <CardContent className="pt-6">
                             <div className="mb-3 flex flex-wrap gap-2">
                               {article.tags.map((tag) => (
