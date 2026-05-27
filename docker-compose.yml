@@ -17,6 +17,10 @@ services:
       context: .
     container_name: pierrekasparian-app
     restart: unless-stopped
+    # Secrets runtime (CONTACT_EMAIL_*). Compose lit .env pour la substitution
+    # dans ce fichier, mais n'injecte rien dans le conteneur sans env_file.
+    env_file:
+      - .env
     environment:
       - NODE_ENV=production
       - PORT=3000
