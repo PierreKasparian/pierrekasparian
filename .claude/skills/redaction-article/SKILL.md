@@ -1,7 +1,7 @@
 ---
 name: redaction-article
 description: Rédige ou révise un article de blog MDX optimisé SEO + GEO (visibilité moteurs IA) pour pierrekasparian.fr. À utiliser quand on demande d'écrire, traduire ou améliorer un article de blog, ou d'en optimiser le référencement.
-version: 1.0.0
+version: 1.1.0
 author: pierrekasparian
 tags: [seo, geo, blog, mdx, content, rgpd, i18n]
 allowed-tools: Read, Grep, Glob, Write, Edit, Bash
@@ -64,6 +64,16 @@ Les moteurs IA extraient des **passages auto-suffisants** et privilégient les c
 7. **TL;DR ou conclusion synthétique** : résumé en fin d'article que les IA peuvent reprendre.
 8. **Expertise / E-E-A-T** : montrer l'expérience réelle (prestations réalisées, choix d'architecture vécus), pas du générique. Première personne assumée quand pertinent.
 
+### 3a. Citabilité légale/réglementaire (critique pour les articles RGPD)
+
+Les IA ne citent **pas** les affirmations légales sans ancrage précis. Un article qui dit "le RGPD oblige les entreprises à..." ne sera jamais cité comme référence. Pour être citable sur un sujet réglementaire :
+
+- **Citer les articles RGPD par numéro** : "l'Article 44 du RGPD interdit les transferts hors UE sans garanties adéquates", "l'Article 28 impose un DPA (Data Processing Agreement) avec tout sous-traitant".
+- **Références CNIL quand applicable** : recommandations CNIL, guides publiés (ex. guide IA de la CNIL, recommandations sur les transferts de données). Lier vers `cnil.fr` directement.
+- **Cloud Act** : nommer la loi précisément (Foreign Intelligence Surveillance Act / CLOUD Act, 2018) et son implication concrète (autorités US peuvent exiger l'accès aux données hébergées par des entreprises US, même en Europe).
+- **Longueur minimale pour les articles réglementaires** : 1 200 mots. En-dessous, le contenu est trop superficiel pour être cité comme source sur un sujet légal.
+- **Format "définition extractible"** : un bloc de 40-70 mots qui définit le concept clé de manière autonome. Ex. un bloc "Qu'est-ce que l'Article 44 RGPD ?" que l'IA peut reprendre mot pour mot.
+
 ## 4. Structure SEO (Google)
 
 - **Un seul `<h1>`** = le `title`. Le rendu MDX n'ajoute PAS de H1 automatique pour le contenu (le H1 vient du frontmatter `title`), donc **commencer le corps MDX au niveau `##` (H2)**. Ne pas remettre de `#` en haut du MDX.
@@ -71,7 +81,7 @@ Les moteurs IA extraient des **passages auto-suffisants** et privilégient les c
 - Intro qui pose le problème + promet la réponse (capte le clic et réduit le rebond).
 - Maillage interne : lier vers `/prestations`, `/contact`, ou d'autres articles pertinents (liens markdown relatifs `/{lang}/...`).
 - Liens sortants vers sources autoritaires (doc officielle, CNIL, etc.) → renforce la confiance.
-- Longueur : guide/case-study 1000-1800 mots ; article 600-1200. Privilégier la complétude sur la longueur artificielle.
+- Longueur : guide/case-study 1000-1800 mots ; article 600-1200 ; **article réglementaire (RGPD, conformité, légal) : 1200 mots minimum**. Privilégier la complétude sur la longueur artificielle.
 - CTA discret en conclusion (contact / discuter du projet), sans être commercial agressif.
 
 ## 5. Syntaxe MDX disponible
@@ -105,5 +115,6 @@ Le rendu utilise `remark-gfm` + `rehype-pretty-code` (cf. page article). Donc :
 - [ ] Données concrètes, listes/tableaux, phrases courtes
 - [ ] Maillage interne + 1-2 liens autoritaires
 - [ ] Aucun `—` dans le texte
+- [ ] Si article réglementaire/RGPD : numéros d'articles cités (Art. 28, Art. 44...), lien CNIL, Cloud Act nommé précisément, 1200+ mots
 - [ ] `npm run lint` OK
-- mets à jour le sitemap.ts et llm.txt
+- [ ] Mettre à jour `sitemap.ts` et `llms.txt`
