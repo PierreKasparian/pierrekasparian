@@ -18,6 +18,7 @@ Territoire sémantique à occuper : jonction entre "freelance IA" et "conformit�
 Ces mots clés sont notre niche : peu de freelances IA sont positionnés dessus.
 
 ### Français
+
 - `intégration LLM RGPD conforme`
 - `IA conforme RGPD France`
 - `chatbot RGPD PME`
@@ -28,6 +29,7 @@ Ces mots clés sont notre niche : peu de freelances IA sont positionnés dessus.
 - `chatbot entreprise hébergement France`
 
 ### Anglais
+
 - `GDPR-compliant AI integration`
 - `GDPR-compliant LLM deployment`
 - `AI GDPR SMB Europe`
@@ -39,6 +41,7 @@ Ces mots clés sont notre niche : peu de freelances IA sont positionnés dessus.
 ## 🟡 Mots clés solutions spécifiques (longue traîne, conversion élevée)
 
 ### RAG et chatbots
+
 - `chatbot documents internes entreprise`
 - `assistant IA base de connaissances`
 - `RAG sur mesure Python`
@@ -47,6 +50,7 @@ Ces mots clés sont notre niche : peu de freelances IA sont positionnés dessus.
 - `retrieval augmented generation PME`
 
 ### Automatisation IA
+
 - `extraction information PDF LLM Python`
 - `automatisation emails IA`
 - `classification automatique documents`
@@ -54,17 +58,20 @@ Ces mots clés sont notre niche : peu de freelances IA sont positionnés dessus.
 - `orchestration LLM agents Python`
 
 ### Data engineering
+
 - `pipeline ETL Python`
 - `ingénierie données IA`
 - `pipeline données LLM`
 - `dbt Airflow freelance`
 
 ### Machine learning
+
 - `classification automatique machine learning`
 - `ML sur données métier`
 - `modèle prédictif Python scikit-learn`
 
 ### Anglais
+
 - `RAG chatbot custom documents`
 - `GDPR-compliant RAG production`
 - `AI document assistant enterprise`
@@ -77,6 +84,7 @@ Ces mots clés sont notre niche : peu de freelances IA sont positionnés dessus.
 Ces mots clés alimentent des articles de blog et génèrent du trafic qualifié à moindre compétition.
 
 ### Sujets traités / à traiter
+
 - `comment intégrer un LLM sans violer le RGPD` → article existant
 - `RAG vs fine-tuning différence`
 - `Mistral vs OpenAI pour entreprise française`
@@ -91,6 +99,7 @@ Ces mots clés alimentent des articles de blog et génèrent du trafic qualifié
 - `mistral.ai entreprise française`
 
 ### Anglais
+
 - `how to integrate LLM without GDPR violation`
 - `RAG vs fine-tuning when to use`
 - `self-hosted LLM GDPR compliance`

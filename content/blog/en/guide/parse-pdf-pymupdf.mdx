@@ -16,12 +16,12 @@ This tutorial covers everything from installation to building an extraction pipe
 
 Several Python libraries exist for reading PDFs:
 
-| Library | Speed | Layout | Images | Tables |
-|---|---|---|---|---|
-| `PyMuPDF` | Very fast | Excellent | Yes | Via blocks |
-| `pdfplumber` | Medium | Good | No | Yes |
-| `pypdf` | Fast | Basic | No | No |
-| `pdfminer.six` | Slow | Good | No | No |
+| Library        | Speed     | Layout    | Images | Tables     |
+| -------------- | --------- | --------- | ------ | ---------- |
+| `PyMuPDF`      | Very fast | Excellent | Yes    | Via blocks |
+| `pdfplumber`   | Medium    | Good      | No     | Yes        |
+| `pypdf`        | Fast      | Basic     | No     | No         |
+| `pdfminer.six` | Slow      | Good      | No     | No         |
 
 PyMuPDF stands out for its speed (C-based MuPDF engine) and the richness of the metadata it exposes: coordinates for each word, fonts, colors, and page structure.
 
@@ -329,6 +329,7 @@ else:
 ```
 
 For OCR on scanned PDFs, the best production options are:
+
 - **pytesseract** + **pdf2image** for self-hosted setups
 - **Google Document AI** or **AWS Textract** for managed (watch out for GDPR if dealing with sensitive data)
 - **Mistral OCR** (API, EU hosting available)

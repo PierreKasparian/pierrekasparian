@@ -16,12 +16,12 @@ Ce tutoriel couvre tout, de l'installation à la construction d'un pipeline d'ex
 
 Il existe plusieurs bibliothèques pour lire des PDFs en Python :
 
-| Bibliothèque | Vitesse | Mise en page | Images | Tables |
-|---|---|---|---|---|
-| `PyMuPDF` | Très rapide | Excellente | Oui | Via blocs |
-| `pdfplumber` | Moyenne | Bonne | Non | Oui |
-| `pypdf` | Rapide | Basique | Non | Non |
-| `pdfminer.six` | Lente | Bonne | Non | Non |
+| Bibliothèque   | Vitesse     | Mise en page | Images | Tables    |
+| -------------- | ----------- | ------------ | ------ | --------- |
+| `PyMuPDF`      | Très rapide | Excellente   | Oui    | Via blocs |
+| `pdfplumber`   | Moyenne     | Bonne        | Non    | Oui       |
+| `pypdf`        | Rapide      | Basique      | Non    | Non       |
+| `pdfminer.six` | Lente       | Bonne        | Non    | Non       |
 
 PyMuPDF se distingue par sa vitesse (moteur C MuPDF) et par la richesse des métadonnées qu'il expose : coordonnées de chaque mot, polices, couleurs, structure de la page.
 
@@ -330,6 +330,7 @@ else:
 ```
 
 Pour l'OCR sur des PDFs scannés, les meilleures options en production sont :
+
 - **pytesseract** + **pdf2image** pour du self-hosted
 - **Google Document AI** ou **AWS Textract** pour du managed (attention RGPD si données sensibles)
 - **Mistral OCR** (API, hébergement EU disponible)

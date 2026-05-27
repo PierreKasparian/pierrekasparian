@@ -6,12 +6,7 @@ import { rehypePrettyCode } from "rehype-pretty-code";
 import remarkGfm from "remark-gfm";
 
 import { Badge } from "@/components/ui/badge";
-import {
-  getAllArticles,
-  getArticle,
-  isBlogCategory,
-  type BlogCategory,
-} from "@/lib/mdx";
+import { getAllArticles, getArticle, isBlogCategory } from "@/lib/mdx";
 import {
   buildOpenGraph,
   buildTwitterCard,
@@ -37,7 +32,7 @@ export async function generateMetadata({
   const { lang, category, slug } = await params;
   if (!isBlogCategory(category)) return {};
 
-  const article = getArticle(lang, category as BlogCategory, slug);
+  const article = getArticle(lang, category, slug);
   if (!article) return {};
 
   const canonical = `${SITE_URL}/${lang}/blog/${category}/${slug}`;
@@ -67,7 +62,7 @@ export default async function BlogPostPage({
   if (!hasLocale(lang)) notFound();
   if (!isBlogCategory(category)) notFound();
 
-  const article = getArticle(lang, category as BlogCategory, slug);
+  const article = getArticle(lang, category, slug);
   if (!article) notFound();
 
   const dict = await getDictionary(lang);

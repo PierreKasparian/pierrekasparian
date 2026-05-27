@@ -46,9 +46,7 @@ export default async function LegalNoticePage({
             Kasparian
           </li>
           <li>
-            <strong>
-              {lang === "fr" ? "Qualité :" : "Capacity:"}
-            </strong>{" "}
+            <strong>{lang === "fr" ? "Qualité :" : "Capacity:"}</strong>{" "}
             {lang === "fr"
               ? "Particulier - Étudiant ingénieur et freelance en intégration IA"
               : "Individual - Engineering student and AI integration freelancer"}
@@ -63,9 +61,7 @@ export default async function LegalNoticePage({
           </li>
         </ul>
 
-        <h2>
-          {lang === "fr" ? "2. Hébergement" : "2. Hosting"}
-        </h2>
+        <h2>{lang === "fr" ? "2. Hébergement" : "2. Hosting"}</h2>
         <p>
           {lang === "fr"
             ? "Le site est hébergé par un prestataire d'hébergement européen. Pour connaître les coordonnées précises de l'hébergeur, veuillez nous contacter à l'adresse indiquée ci-dessus."
@@ -84,9 +80,7 @@ export default async function LegalNoticePage({
         </p>
 
         <h2>
-          {lang === "fr"
-            ? "4. Données personnelles"
-            : "4. Personal data"}
+          {lang === "fr" ? "4. Données personnelles" : "4. Personal data"}
         </h2>
         <p>
           {lang === "fr" ? (
@@ -110,20 +104,14 @@ export default async function LegalNoticePage({
           )}
         </p>
 
-        <h2>
-          {lang === "fr"
-            ? "5. Responsabilité"
-            : "5. Liability"}
-        </h2>
+        <h2>{lang === "fr" ? "5. Responsabilité" : "5. Liability"}</h2>
         <p>
           {lang === "fr"
             ? "Pierre Kasparian s'efforce de maintenir les informations publiées sur ce site à jour et exactes, mais ne garantit pas l'exhaustivité ou l'exactitude de ces informations. Pierre Kasparian ne saurait être tenu responsable des dommages directs ou indirects résultant de l'utilisation de ce site."
             : "Pierre Kasparian endeavours to keep the information published on this site up to date and accurate, but does not guarantee the completeness or accuracy of this information. Pierre Kasparian cannot be held liable for direct or indirect damages resulting from the use of this site."}
         </p>
 
-        <h2>
-          {lang === "fr" ? "6. Droit applicable" : "6. Applicable law"}
-        </h2>
+        <h2>{lang === "fr" ? "6. Droit applicable" : "6. Applicable law"}</h2>
         <p>
           {lang === "fr"
             ? "Le présent site et ses mentions légales sont soumis au droit français. En cas de litige, les tribunaux français sont seuls compétents."

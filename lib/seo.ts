@@ -92,8 +92,7 @@ export const personSchema = {
     "@type": "Occupation",
     name: "Ingénieur IA freelance",
     occupationLocation: { "@type": "Country", name: "France" },
-    skills:
-      "LLM, RAG, RGPD, Python, LangChain, Mistral, OpenAI, dbt, Airflow",
+    skills: "LLM, RAG, RGPD, Python, LangChain, Mistral, OpenAI, dbt, Airflow",
   },
   sameAs: [
     "https://www.linkedin.com/in/pierre-kasparian-486101259/",

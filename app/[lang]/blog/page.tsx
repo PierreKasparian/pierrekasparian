@@ -102,7 +102,7 @@ export default async function BlogPage({ params }: PageProps<"/[lang]/blog">) {
                         className="group"
                       >
                         <Card
-                          className="transition-shadow group-hover:shadow-md border-l-4"
+                          className="border-l-4 transition-shadow group-hover:shadow-md"
                           style={{ borderLeftColor: CATEGORY_COLORS[category] }}
                         >
                           <CardContent className="pt-6">

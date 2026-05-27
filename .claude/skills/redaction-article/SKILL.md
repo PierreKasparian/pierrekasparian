@@ -29,15 +29,16 @@ Le frontmatter alimente directement `generateMetadata`, l'OpenGraph, le Twitter 
 
 ```yaml
 ---
-title: "..."          # H1 + <title> + headline schema. ≤ 60 caractères. Mot clé principal en tête.
-description: "..."    # meta description + og:description. 120-155 caractères. Inclut le mot clé + bénéfice.
-date: "AAAA-MM-JJ"    # ISO. Sert datePublished. Trie les articles (récent d'abord).
-tags: ["...", "..."]  # 3-5 tags. Servent keywords schema + badges. Reprendre des termes de SEO_KEYWORDS.md.
-readingTime: 6        # entier (minutes). Estimer ~200 mots/min.
+title: "..." # H1 + <title> + headline schema. ≤ 60 caractères. Mot clé principal en tête.
+description: "..." # meta description + og:description. 120-155 caractères. Inclut le mot clé + bénéfice.
+date: "AAAA-MM-JJ" # ISO. Sert datePublished. Trie les articles (récent d'abord).
+tags: ["...", "..."] # 3-5 tags. Servent keywords schema + badges. Reprendre des termes de SEO_KEYWORDS.md.
+readingTime: 6 # entier (minutes). Estimer ~200 mots/min.
 ---
 ```
 
 Règles :
+
 - `title` et `description` doivent **différer** (pas de doublon) et contenir le mot clé principal naturellement.
 - `description` = promesse claire + audience (ex. "pour les PME françaises"). C'est elle qui s'affiche dans Google et dans les réponses IA.
 - `tags` cohérents entre fr/en (versions traduites des mêmes concepts).
@@ -76,6 +77,7 @@ Les moteurs IA extraient des **passages auto-suffisants** et privilégient les c
 ## 5. Syntaxe MDX disponible
 
 Le rendu utilise `remark-gfm` + `rehype-pretty-code` (cf. page article). Donc :
+
 - **GFM** : tableaux, listes de tâches, ~~barré~~, autolinks.
 - **Blocs de code** avec coloration : préciser le langage (` ```python `, ` ```bash `, ` ```ts `).
 - Gras `**...**` pour les termes clés (aide scan + extraction IA).
@@ -85,11 +87,11 @@ Le rendu utilise `remark-gfm` + `rehype-pretty-code` (cf. page article). Donc :
 
 1. Lire `SEO_KEYWORDS.md` + 1 article existant de la même catégorie.
 2. Choix du sujet : Lire data/projects.ts pour avoir des idées éventuelles de case study. Pour les guides, cibler des articles assez niché (exemple différentes stratégies de chunking pour le rag, améliorer la précisions grâce aux rerankers cross encoders),. Pour les articles faire des choses plus TOFU style meilleurs reranker 2026, le RAG dans le domaine juridique,..
-2. Choisir mot clé principal + catégorie + slug. 
-3. Rédiger la version **fr** (frontmatter + corps en `##`).
-4. Rédiger la version **en** (traduction, slug + tags cohérents).
-5. Relire : pas de `—`, mot clé bien placé, réponse directe en tête, sections auto-suffisantes.
-6. `npm run lint`.
+3. Choisir mot clé principal + catégorie + slug.
+4. Rédiger la version **fr** (frontmatter + corps en `##`).
+5. Rédiger la version **en** (traduction, slug + tags cohérents).
+6. Relire : pas de `—`, mot clé bien placé, réponse directe en tête, sections auto-suffisantes.
+7. `npm run lint`.
 
 ## Checklist finale
 

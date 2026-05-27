@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -100,8 +101,8 @@ export default async function PrivacyPage({
 
             <h2>4. Destinataires des données</h2>
             <p>
-              Vos données sont traitées exclusivement par Pierre Kasparian et
-              ne sont pas transmises à des tiers, sauf obligation légale.
+              Vos données sont traitées exclusivement par Pierre Kasparian et ne
+              sont pas transmises à des tiers, sauf obligation légale.
             </p>
             <p>
               Le formulaire de contact est traité via une API hébergée en
@@ -111,9 +112,9 @@ export default async function PrivacyPage({
 
             <h2>5. Durée de conservation</h2>
             <p>
-              Les données issues du formulaire de contact sont conservées pendant
-              une durée maximale de <strong>3 ans</strong> à compter de la
-              dernière interaction, puis supprimées.
+              Les données issues du formulaire de contact sont conservées
+              pendant une durée maximale de <strong>3 ans</strong> à compter de
+              la dernière interaction, puis supprimées.
             </p>
 
             <h2>6. Vos droits</h2>
@@ -202,12 +203,12 @@ export default async function PrivacyPage({
             </p>
             <h2>Summary</h2>
             <p>
-              Personal data collected via the contact form (name, email, subject,
-              message) is processed solely to respond to your inquiry. It is
-              stored for a maximum of 3 years, hosted in the EU, and not shared
-              with third parties. You can exercise your GDPR rights (access,
-              rectification, deletion, portability, opposition) by contacting{" "}
-              <a href={`mailto:${contactEmail}`}>{contactEmail}</a>.
+              Personal data collected via the contact form (name, email,
+              subject, message) is processed solely to respond to your inquiry.
+              It is stored for a maximum of 3 years, hosted in the EU, and not
+              shared with third parties. You can exercise your GDPR rights
+              (access, rectification, deletion, portability, opposition) by
+              contacting <a href={`mailto:${contactEmail}`}>{contactEmail}</a>.
             </p>
           </>
         )}

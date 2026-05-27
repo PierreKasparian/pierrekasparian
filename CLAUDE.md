@@ -6,6 +6,7 @@
 ## Objectif du projet
 
 Site double usage :
+
 1. **Portfolio personnel** présentant mes projets (dev, IA, data science).
 2. **Site de consulting freelance** pour des prestations d'intégration IA (LLM, RAG, agents, fine-tuning, automatisations, conformité rgpd).
 
@@ -59,4 +60,4 @@ Toutes les routes vivent sous `app/[lang]/` :
 - Do not use "—" it is to obvious that it is AI generated
 - Toutes les modifs faites dans une langue doivent etre traduits dans l'autre langue (fr.json et en.json)
 
-After a code edit, check if lint is alright 
+After a code edit, check if lint is alright

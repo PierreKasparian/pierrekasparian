@@ -17,7 +17,12 @@ import {
 } from "@/lib/mdx";
 import { buildAlternates } from "@/lib/seo";
 
-import { getDictionary, hasLocale, locales, type Locale } from "../../dictionaries";
+import {
+  getDictionary,
+  hasLocale,
+  locales,
+  type Locale,
+} from "../../dictionaries";
 
 const CATEGORY_COLORS: Record<BlogCategory, string> = {
   article: "oklch(0.60 0.16 264)",
@@ -38,10 +43,10 @@ export async function generateMetadata({
   const dict = await getDictionary(lang as Locale);
   if (!isBlogCategory(category)) return {};
 
-  const categoryLabel = dict.blog.categories[category as BlogCategory];
+  const categoryLabel = dict.blog.categories[category];
   return {
     title: `${categoryLabel} · ${dict.blog.metaTitle}`,
-    description: dict.blog.categoryDescriptions[category as BlogCategory],
+    description: dict.blog.categoryDescriptions[category],
     alternates: { languages: buildAlternates(`/blog/${category}`) },
   };
 }
@@ -95,7 +100,7 @@ export default async function BlogCategoryPage({
                   className="group"
                 >
                   <Card
-                    className="transition-shadow group-hover:shadow-md border-l-4"
+                    className="border-l-4 transition-shadow group-hover:shadow-md"
                     style={{ borderLeftColor: CATEGORY_COLORS[category] }}
                   >
                     <CardContent className="pt-6">
