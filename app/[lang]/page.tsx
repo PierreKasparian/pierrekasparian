@@ -611,7 +611,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
                               </p>
                               {"cta" in item && (
                                 <Link
-                                  href={`/${lang}/services`}
+                                  href={`/${lang}/projects`}
                                   className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-[var(--muted-foreground)] hover:underline"
                                 >
                                   {(item as { cta: string }).cta}
