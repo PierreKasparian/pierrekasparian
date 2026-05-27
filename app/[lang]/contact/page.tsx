@@ -70,7 +70,7 @@ export default async function ContactPage({
                     {lang === "fr" ? "Délai de réponse" : "Response time"}
                   </p>
                   <p className="text-sm text-[var(--muted-foreground)]">
-                    {lang === "fr" ? "Sous 48h" : "Within 48h"}
+                    {lang === "fr" ? "Quelques jours" : "Few days"}
                   </p>
                 </div>
               </div>

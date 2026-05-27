@@ -32,7 +32,7 @@ const ICON_MAP: Record<string, LucideIcon> = {
 
 export async function generateMetadata({
   params,
-}: PageProps<"/[lang]/prestations">): Promise<Metadata> {
+}: PageProps<"/[lang]/services">): Promise<Metadata> {
   const { lang } = await params;
   const dict = await getDictionary(lang as Locale);
   return {
@@ -44,7 +44,7 @@ export async function generateMetadata({
 
 export default async function PrestationsPage({
   params,
-}: PageProps<"/[lang]/prestations">) {
+}: PageProps<"/[lang]/services">) {
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
   const dict = await getDictionary(lang);

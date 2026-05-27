@@ -60,8 +60,6 @@ const LINKEDIN_RECOMMENDATIONS_URL =
 const LINKEDIN_PROFILE_URL =
   "https://www.linkedin.com/in/pierre-kasparian-486101259/";
 
-const CONTACT_EMAIL = "contact@pierrekasparian.com";
-
 const STATS_LINKS: (string | null)[] = [
   "#featured-projects",
   null,
@@ -677,7 +675,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
                   {dict.home.contactEmailBody}
                 </CardDescription>
                 <a
-                  href={`mailto:${CONTACT_EMAIL}`}
+                  href={`/${lang}/contact`}
                   className={buttonVariants({ variant: "accent", size: "sm" })}
                 >
                   {dict.home.contactEmailCta}
