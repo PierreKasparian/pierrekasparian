@@ -14,6 +14,27 @@ const nextConfig: NextConfig = {
         destination: "/:lang/services/:path*",
         permanent: true,
       },
+      // Blog: articles migrated from flat /blog/:slug to /blog/article/:slug
+      {
+        source: "/:lang/blog/integrer-llm-rgpd",
+        destination: "/:lang/blog/article/integrer-llm-rgpd",
+        permanent: true,
+      },
+      {
+        source: "/:lang/blog/parser-pdf-pymupdf",
+        destination: "/:lang/blog/article/parser-pdf-pymupdf",
+        permanent: true,
+      },
+      {
+        source: "/:lang/blog/integrate-llm-gdpr",
+        destination: "/:lang/blog/article/integrate-llm-gdpr",
+        permanent: true,
+      },
+      {
+        source: "/:lang/blog/parse-pdf-pymupdf",
+        destination: "/:lang/blog/article/parse-pdf-pymupdf",
+        permanent: true,
+      },
     ]);
   },
 };

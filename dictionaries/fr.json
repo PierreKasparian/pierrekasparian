@@ -167,9 +167,21 @@
     "heading": "Blog",
     "subtitle": "Veille, retours d'expérience et tutoriels sur l'IA générative.",
     "back": "← Retour au blog",
+    "backToCategory": "← Retour à la catégorie",
     "readMore": "Lire l'article",
     "minuteRead": "min de lecture",
-    "empty": "Aucun article pour l'instant."
+    "empty": "Aucun article pour l'instant.",
+    "allArticles": "Tous les articles",
+    "categories": {
+      "article": "Articles",
+      "guide": "Guides",
+      "case-study": "Études de cas"
+    },
+    "categoryDescriptions": {
+      "article": "Analyses, retours d'expérience et points de vue sur l'IA et le développement.",
+      "guide": "Tutoriels pas-à-pas pour implémenter des solutions IA concrètes.",
+      "case-study": "Retours détaillés sur des projets IA réels."
+    }
   },
   "about": {
     "metaTitle": "À propos",

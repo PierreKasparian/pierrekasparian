@@ -6,7 +6,12 @@ import { rehypePrettyCode } from "rehype-pretty-code";
 import remarkGfm from "remark-gfm";
 
 import { Badge } from "@/components/ui/badge";
-import { getAllArticles, getArticle } from "@/lib/mdx";
+import {
+  getAllArticles,
+  getArticle,
+  isBlogCategory,
+  type BlogCategory,
+} from "@/lib/mdx";
 import {
   buildOpenGraph,
   buildTwitterCard,
@@ -14,27 +19,32 @@ import {
   SITE_URL,
 } from "@/lib/seo";
 
-import { getDictionary, hasLocale, locales } from "../../dictionaries";
+import { getDictionary, hasLocale, locales } from "../../../dictionaries";
 
 export async function generateStaticParams() {
   return locales.flatMap((lang) =>
-    getAllArticles(lang).map((article) => ({ lang, slug: article.slug })),
+    getAllArticles(lang).map((article) => ({
+      lang,
+      category: article.category,
+      slug: article.slug,
+    })),
   );
 }
 
 export async function generateMetadata({
   params,
-}: PageProps<"/[lang]/blog/[slug]">): Promise<Metadata> {
-  const { lang, slug } = await params;
-  const article = getArticle(lang, slug);
+}: PageProps<"/[lang]/blog/[category]/[slug]">): Promise<Metadata> {
+  const { lang, category, slug } = await params;
+  if (!isBlogCategory(category)) return {};
+
+  const article = getArticle(lang, category as BlogCategory, slug);
   if (!article) return {};
 
-  const canonical = `${SITE_URL}/${lang}/blog/${slug}`;
+  const canonical = `${SITE_URL}/${lang}/blog/${category}/${slug}`;
 
   return {
     title: article.meta.title,
     description: article.meta.description,
-    // Blog slugs differ per locale - no cross-language alternates to avoid broken hreflang
     alternates: { canonical },
     openGraph: {
       ...buildOpenGraph(
@@ -52,11 +62,14 @@ export async function generateMetadata({
 
 export default async function BlogPostPage({
   params,
-}: PageProps<"/[lang]/blog/[slug]">) {
-  const { lang, slug } = await params;
+}: PageProps<"/[lang]/blog/[category]/[slug]">) {
+  const { lang, category, slug } = await params;
   if (!hasLocale(lang)) notFound();
-  const article = getArticle(lang, slug);
+  if (!isBlogCategory(category)) notFound();
+
+  const article = getArticle(lang, category as BlogCategory, slug);
   if (!article) notFound();
+
   const dict = await getDictionary(lang);
 
   const blogPostingSchema = {
@@ -65,7 +78,7 @@ export default async function BlogPostPage({
     headline: article.meta.title,
     description: article.meta.description,
     datePublished: article.meta.date,
-    url: `${SITE_URL}/${lang}/blog/${slug}`,
+    url: `${SITE_URL}/${lang}/blog/${category}/${slug}`,
     keywords: article.meta.tags.join(", "),
     author: {
       "@type": "Person",
@@ -83,10 +96,10 @@ export default async function BlogPostPage({
 
       {/* BACK */}
       <Link
-        href={`/${lang}/blog`}
+        href={`/${lang}/blog/${category}`}
         className="text-sm text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
       >
-        {dict.blog.back}
+        {dict.blog.backToCategory}
       </Link>
 
       {/* META */}
@@ -109,6 +122,13 @@ export default async function BlogPostPage({
             )}
           {" · "}
           {article.meta.readingTime} {dict.blog.minuteRead}
+          {" · "}
+          <Link
+            href={`/${lang}/blog/${category}`}
+            className="hover:text-[var(--foreground)]"
+          >
+            {dict.blog.categories[category]}
+          </Link>
         </p>
       </div>
 

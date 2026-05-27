@@ -167,9 +167,21 @@
     "heading": "Blog",
     "subtitle": "Tech watch, experience reports and tutorials on generative AI.",
     "back": "← Back to blog",
+    "backToCategory": "← Back to category",
     "readMore": "Read article",
     "minuteRead": "min read",
-    "empty": "No articles yet."
+    "empty": "No articles yet.",
+    "allArticles": "All articles",
+    "categories": {
+      "article": "Articles",
+      "guide": "Guides",
+      "case-study": "Case studies"
+    },
+    "categoryDescriptions": {
+      "article": "Analysis, experience reports and perspectives on AI and development.",
+      "guide": "Step-by-step tutorials for implementing concrete AI solutions.",
+      "case-study": "Detailed breakdowns of real AI projects."
+    }
   },
   "about": {
     "metaTitle": "About",

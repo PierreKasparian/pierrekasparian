@@ -9,7 +9,7 @@ import {
   CardDescription,
   CardTitle,
 } from "@/components/ui/card";
-import { getAllArticles } from "@/lib/mdx";
+import { getAllArticles, BLOG_CATEGORIES, type BlogCategory } from "@/lib/mdx";
 import { buildAlternates } from "@/lib/seo";
 
 import { getDictionary, hasLocale, type Locale } from "../dictionaries";
@@ -32,6 +32,21 @@ export default async function BlogPage({ params }: PageProps<"/[lang]/blog">) {
   const dict = await getDictionary(lang);
   const articles = getAllArticles(lang);
 
+  // Group articles by category, keeping only categories that have articles
+  const byCategory = BLOG_CATEGORIES.reduce<
+    Record<BlogCategory, typeof articles>
+  >(
+    (acc, cat) => {
+      acc[cat] = articles.filter((a) => a.category === cat);
+      return acc;
+    },
+    { article: [], guide: [], "case-study": [] },
+  );
+
+  const activeCategories = BLOG_CATEGORIES.filter(
+    (cat) => byCategory[cat].length > 0,
+  );
+
   return (
     <>
       {/* HEADER */}
@@ -46,52 +61,74 @@ export default async function BlogPage({ params }: PageProps<"/[lang]/blog">) {
         </div>
       </section>
 
-      {/* ARTICLES */}
+      {/* CONTENT */}
       <section>
         <div className="mx-auto max-w-4xl px-6 py-16">
           {articles.length === 0 ? (
             <p className="text-[var(--muted-foreground)]">{dict.blog.empty}</p>
           ) : (
-            <div className="flex flex-col gap-8">
-              {articles.map((article) => (
-                <Link
-                  key={article.slug}
-                  href={`/${lang}/blog/${article.slug}`}
-                  className="group"
-                >
-                  <Card className="transition-shadow group-hover:shadow-md">
-                    <CardContent className="pt-6">
-                      <div className="mb-3 flex flex-wrap gap-2">
-                        {article.tags.map((tag) => (
-                          <Badge
-                            key={tag}
-                            variant="secondary"
-                            className="text-xs"
-                          >
-                            {tag}
-                          </Badge>
-                        ))}
-                      </div>
-                      <CardTitle className="mb-2 text-xl">
-                        {article.title}
-                      </CardTitle>
-                      <CardDescription>{article.description}</CardDescription>
-                      <p className="mt-3 text-xs text-[var(--muted-foreground)]">
-                        {article.date &&
-                          new Date(article.date).toLocaleDateString(
-                            lang === "fr" ? "fr-FR" : "en-US",
-                            {
-                              year: "numeric",
-                              month: "long",
-                              day: "numeric",
-                            },
-                          )}
-                        {" · "}
-                        {article.readingTime} {dict.blog.minuteRead}
-                      </p>
-                    </CardContent>
-                  </Card>
-                </Link>
+            <div className="flex flex-col gap-16">
+              {activeCategories.map((category) => (
+                <div key={category}>
+                  {/* Category heading */}
+                  <div className="mb-6 flex items-baseline justify-between">
+                    <h2 className="text-2xl font-semibold">
+                      {dict.blog.categories[category]}
+                    </h2>
+                    <Link
+                      href={`/${lang}/blog/${category}`}
+                      className="text-sm text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
+                    >
+                      {dict.blog.allArticles} →
+                    </Link>
+                  </div>
+
+                  {/* Articles in this category */}
+                  <div className="flex flex-col gap-6">
+                    {byCategory[category].map((article) => (
+                      <Link
+                        key={article.slug}
+                        href={`/${lang}/blog/${category}/${article.slug}`}
+                        className="group"
+                      >
+                        <Card className="transition-shadow group-hover:shadow-md">
+                          <CardContent className="pt-6">
+                            <div className="mb-3 flex flex-wrap gap-2">
+                              {article.tags.map((tag) => (
+                                <Badge
+                                  key={tag}
+                                  variant="secondary"
+                                  className="text-xs"
+                                >
+                                  {tag}
+                                </Badge>
+                              ))}
+                            </div>
+                            <CardTitle className="mb-2 text-xl">
+                              {article.title}
+                            </CardTitle>
+                            <CardDescription>
+                              {article.description}
+                            </CardDescription>
+                            <p className="mt-3 text-xs text-[var(--muted-foreground)]">
+                              {article.date &&
+                                new Date(article.date).toLocaleDateString(
+                                  lang === "fr" ? "fr-FR" : "en-US",
+                                  {
+                                    year: "numeric",
+                                    month: "long",
+                                    day: "numeric",
+                                  },
+                                )}
+                              {" · "}
+                              {article.readingTime} {dict.blog.minuteRead}
+                            </p>
+                          </CardContent>
+                        </Card>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
               ))}
             </div>
           )}
