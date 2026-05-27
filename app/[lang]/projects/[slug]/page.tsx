@@ -83,11 +83,9 @@ export default async function ProjectDetailPage({
       </div>
 
       {/* BODY */}
-      <div className="mt-8 space-y-4 leading-relaxed">
-        {project.descriptionLong[lang].split("\n\n").map((para, i) => (
-          <p key={i}>{para}</p>
-        ))}
-      </div>
+      <p className="mt-8 leading-relaxed whitespace-pre-line">
+        {project.descriptionLong[lang]}
+      </p>
 
       {/* EXTRA IMAGES */}
       {project.images && project.images.length > 0 && (
