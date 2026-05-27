@@ -36,25 +36,46 @@ const nextConfig: NextConfig = {
         destination: "/:lang/services/:path*",
         permanent: true,
       },
-      // Blog: articles migrated from flat /blog/:slug to /blog/article/:slug
+      // Blog: articles migrated from flat /blog/:slug to /blog/guide/:slug
       {
         source: "/:lang/blog/integrer-llm-rgpd",
-        destination: "/:lang/blog/article/integrer-llm-rgpd",
+        destination: "/:lang/blog/guide/integrer-llm-rgpd",
         permanent: true,
       },
       {
         source: "/:lang/blog/parser-pdf-pymupdf",
-        destination: "/:lang/blog/article/parser-pdf-pymupdf",
+        destination: "/:lang/blog/guide/parser-pdf-pymupdf",
         permanent: true,
       },
       {
         source: "/:lang/blog/integrate-llm-gdpr",
-        destination: "/:lang/blog/article/integrate-llm-gdpr",
+        destination: "/:lang/blog/guide/integrate-llm-gdpr",
         permanent: true,
       },
       {
         source: "/:lang/blog/parse-pdf-pymupdf",
-        destination: "/:lang/blog/article/parse-pdf-pymupdf",
+        destination: "/:lang/blog/guide/parse-pdf-pymupdf",
+        permanent: true,
+      },
+      // Blog: articles previously at /blog/article/:slug, now at /blog/guide/:slug
+      {
+        source: "/:lang/blog/article/integrer-llm-rgpd",
+        destination: "/:lang/blog/guide/integrer-llm-rgpd",
+        permanent: true,
+      },
+      {
+        source: "/:lang/blog/article/parser-pdf-pymupdf",
+        destination: "/:lang/blog/guide/parser-pdf-pymupdf",
+        permanent: true,
+      },
+      {
+        source: "/:lang/blog/article/integrate-llm-gdpr",
+        destination: "/:lang/blog/guide/integrate-llm-gdpr",
+        permanent: true,
+      },
+      {
+        source: "/:lang/blog/article/parse-pdf-pymupdf",
+        destination: "/:lang/blog/guide/parse-pdf-pymupdf",
         permanent: true,
       },
     ]);
