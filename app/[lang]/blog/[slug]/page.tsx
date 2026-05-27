@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
+import { rehypePrettyCode } from "rehype-pretty-code";
+import remarkGfm from "remark-gfm";
 
 import { Badge } from "@/components/ui/badge";
 import { getAllArticles, getArticle } from "@/lib/mdx";
@@ -112,7 +114,25 @@ export default async function BlogPostPage({
 
       {/* CONTENT */}
       <div className="prose prose-neutral dark:prose-invert mt-10 max-w-none">
-        <MDXRemote source={article.content} />
+        <MDXRemote
+          source={article.content}
+          options={{
+            mdxOptions: {
+              remarkPlugins: [remarkGfm],
+              rehypePlugins: [
+                [
+                  rehypePrettyCode,
+                  {
+                    theme: {
+                      dark: "github-dark-dimmed",
+                      light: "github-light",
+                    },
+                  },
+                ],
+              ],
+            },
+          }}
+        />
       </div>
     </article>
   );

@@ -110,3 +110,45 @@
     color: var(--foreground);
   }
 }
+
+/* ── Syntax highlighting (rehype-pretty-code — dark theme always) ── */
+
+/* Tokens : toujours la variante dark */
+code[data-theme*=" "],
+code[data-theme*=" "] span {
+  color: var(--shiki-dark);
+  background-color: var(--shiki-dark-bg);
+}
+
+/* Inline code in prose */
+:not(pre) > code[data-theme] {
+  padding: 0.15em 0.35em;
+  border-radius: 0.25rem;
+  font-size: 0.875em;
+}
+
+/* Code block wrapper */
+[data-rehype-pretty-code-figure] {
+  margin: 1.5rem 0;
+}
+
+[data-rehype-pretty-code-figure] pre {
+  overflow-x: auto;
+  border-radius: 0.5rem;
+  padding: 1.25rem 1.5rem;
+  font-size: 0.875rem;
+  line-height: 1.75;
+  background-color: var(--shiki-dark-bg) !important;
+}
+
+/* Language badge */
+[data-rehype-pretty-code-title] {
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  padding: 0.4rem 1rem;
+  border-radius: 0.5rem 0.5rem 0 0;
+  background-color: var(--shiki-dark-bg);
+  color: var(--muted-foreground);
+  display: inline-block;
+  margin-bottom: -1px;
+}

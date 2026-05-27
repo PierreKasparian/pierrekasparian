@@ -1,0 +1,375 @@
+---
+title: "Parsing PDF documents with PyMuPDF in Python"
+description: "A complete PyMuPDF (fitz) tutorial: text extraction, metadata, images, and structured blocks from PDFs. Perfect for building a RAG pipeline."
+date: "2026-05-27"
+tags: ["Python", "PDF", "PyMuPDF", "RAG", "NLP"]
+readingTime: 10
+---
+
+Extracting information from PDFs is one of the most common problems in AI integration. Client forms, contracts, technical reports, invoices: almost every company deals with PDFs daily.
+
+**PyMuPDF** (imported as `fitz`) is the most performant Python library for the job. Fast, accurate, and capable of handling complex PDFs without breaking a sweat.
+
+This tutorial covers everything from installation to building an extraction pipeline ready for a RAG system.
+
+## Why PyMuPDF over other libraries?
+
+Several Python libraries exist for reading PDFs:
+
+| Library | Speed | Layout | Images | Tables |
+|---|---|---|---|---|
+| `PyMuPDF` | Very fast | Excellent | Yes | Via blocks |
+| `pdfplumber` | Medium | Good | No | Yes |
+| `pypdf` | Fast | Basic | No | No |
+| `pdfminer.six` | Slow | Good | No | No |
+
+PyMuPDF stands out for its speed (C-based MuPDF engine) and the richness of the metadata it exposes: coordinates for each word, fonts, colors, and page structure.
+
+## Installation
+
+```bash
+pip install pymupdf
+```
+
+That's it. PyMuPDF ships as a precompiled wheel with no system dependencies.
+
+```python
+import fitz  # pymupdf
+
+print(fitz.__version__)  # e.g. 1.24.0
+```
+
+## Opening a PDF and reading text
+
+### Basic usage
+
+```python
+import fitz
+
+doc = fitz.open("report.pdf")
+
+print(f"Number of pages: {len(doc)}")
+print(f"Metadata: {doc.metadata}")
+
+for page in doc:
+    text = page.get_text()
+    print(f"--- Page {page.number + 1} ---")
+    print(text)
+
+doc.close()
+```
+
+### With a context manager (recommended)
+
+```python
+import fitz
+
+with fitz.open("report.pdf") as doc:
+    for page in doc:
+        text = page.get_text()
+        print(text)
+```
+
+### Reading a specific page
+
+```python
+with fitz.open("contract.pdf") as doc:
+    page = doc[0]          # first page (index 0)
+    text = page.get_text()
+    print(text)
+```
+
+## Extracting metadata
+
+PDF metadata often contains useful information for indexing your documents.
+
+```python
+with fitz.open("document.pdf") as doc:
+    meta = doc.metadata
+    print(f"Title    : {meta.get('title', 'N/A')}")
+    print(f"Author   : {meta.get('author', 'N/A')}")
+    print(f"Creator  : {meta.get('creator', 'N/A')}")
+    print(f"Date     : {meta.get('creationDate', 'N/A')}")
+    print(f"Pages    : {len(doc)}")
+```
+
+## Structured extraction: blocks, lines, words
+
+The `get_text("dict")` method returns a structured dictionary with the coordinates of each element. This is the key to reconstructing the page layout.
+
+```python
+import fitz
+
+with fitz.open("document.pdf") as doc:
+    page = doc[0]
+    blocks = page.get_text("dict")["blocks"]
+
+    for block in blocks:
+        if block["type"] == 0:  # type 0 = text
+            for line in block["lines"]:
+                for span in line["spans"]:
+                    print(f"Text  : {span['text']}")
+                    print(f"Font  : {span['font']}, size {span['size']:.1f}")
+                    print(f"Bbox  : {span['bbox']}")  # (x0, y0, x1, y1)
+                    print()
+```
+
+### Detecting headings by font size
+
+```python
+def extract_with_structure(pdf_path: str) -> list[dict]:
+    """
+    Extracts text while distinguishing headings from paragraphs
+    based on font size.
+    """
+    result = []
+
+    with fitz.open(pdf_path) as doc:
+        for page_num, page in enumerate(doc):
+            blocks = page.get_text("dict")["blocks"]
+
+            for block in blocks:
+                if block["type"] != 0:
+                    continue
+
+                for line in block["lines"]:
+                    for span in line["spans"]:
+                        text = span["text"].strip()
+                        if not text:
+                            continue
+
+                        result.append({
+                            "page": page_num + 1,
+                            "text": text,
+                            "font_size": round(span["size"], 1),
+                            "is_bold": "Bold" in span["font"],
+                            "bbox": span["bbox"],
+                        })
+
+    return result
+
+
+chunks = extract_with_structure("annual_report.pdf")
+
+# Identify headings (size > 14pt or bold)
+titles = [c for c in chunks if c["font_size"] > 14 or c["is_bold"]]
+for t in titles[:5]:
+    print(f"[Page {t['page']}] {t['text']}")
+```
+
+## Extracting images
+
+```python
+import fitz
+import os
+
+def extract_images(pdf_path: str, output_dir: str = "images") -> None:
+    os.makedirs(output_dir, exist_ok=True)
+
+    with fitz.open(pdf_path) as doc:
+        for page_num, page in enumerate(doc):
+            images = page.get_images(full=True)
+
+            for img_index, img in enumerate(images):
+                xref = img[0]
+                base_image = doc.extract_image(xref)
+
+                image_bytes = base_image["image"]
+                ext = base_image["ext"]  # "png", "jpeg", etc.
+
+                filename = f"{output_dir}/page{page_num + 1}_img{img_index + 1}.{ext}"
+                with open(filename, "wb") as f:
+                    f.write(image_bytes)
+
+                print(f"Extracted: {filename} ({len(image_bytes)} bytes)")
+
+
+extract_images("catalogue.pdf", output_dir="extracted_images")
+```
+
+## Searching inside a PDF
+
+PyMuPDF lets you search for a string and retrieve the bounding boxes of all occurrences.
+
+```python
+import fitz
+
+def search_in_pdf(pdf_path: str, query: str) -> list[dict]:
+    results = []
+
+    with fitz.open(pdf_path) as doc:
+        for page_num, page in enumerate(doc):
+            hits = page.search_for(query)  # returns a list of Rect
+
+            for rect in hits:
+                results.append({
+                    "page": page_num + 1,
+                    "query": query,
+                    "rect": list(rect),  # [x0, y0, x1, y1]
+                })
+
+    return results
+
+
+occurrences = search_in_pdf("contract.pdf", "termination")
+print(f"'termination' found {len(occurrences)} time(s)")
+for occ in occurrences:
+    print(f"  Page {occ['page']}: {occ['rect']}")
+```
+
+## Real-world example: ingestion pipeline for RAG
+
+Here is a complete example that produces clean chunks from a PDF, ready to be vectorised with an embedding model.
+
+```python
+import fitz
+from dataclasses import dataclass, field
+
+
+@dataclass
+class TextChunk:
+    page: int
+    text: str
+    char_count: int = field(init=False)
+
+    def __post_init__(self):
+        self.char_count = len(self.text)
+
+
+def chunk_pdf_for_rag(
+    pdf_path: str,
+    min_chunk_size: int = 100,
+    max_chunk_size: int = 1000,
+) -> list[TextChunk]:
+    """
+    Extracts text from a PDF and splits it into chunks
+    suitable for RAG ingestion.
+
+    - Blocks that are too short are merged with the next one.
+    - Blocks that are too long are split on line breaks.
+    """
+    raw_blocks: list[tuple[int, str]] = []
+
+    with fitz.open(pdf_path) as doc:
+        for page_num, page in enumerate(doc):
+            # "blocks" returns a list of tuples
+            # (x0, y0, x1, y1, text, block_no, block_type)
+            for block in page.get_text("blocks"):
+                text = block[4].strip()
+                if text:
+                    raw_blocks.append((page_num + 1, text))
+
+    # Merge short blocks
+    merged: list[tuple[int, str]] = []
+    buffer_page, buffer_text = raw_blocks[0]
+
+    for page, text in raw_blocks[1:]:
+        if len(buffer_text) < min_chunk_size:
+            buffer_text += " " + text
+        else:
+            merged.append((buffer_page, buffer_text))
+            buffer_page, buffer_text = page, text
+
+    merged.append((buffer_page, buffer_text))
+
+    # Split oversized blocks
+    chunks: list[TextChunk] = []
+    for page, text in merged:
+        if len(text) <= max_chunk_size:
+            chunks.append(TextChunk(page=page, text=text))
+        else:
+            lines = text.split("\n")
+            current = ""
+            for line in lines:
+                if len(current) + len(line) > max_chunk_size and current:
+                    chunks.append(TextChunk(page=page, text=current.strip()))
+                    current = line
+                else:
+                    current += "\n" + line
+            if current.strip():
+                chunks.append(TextChunk(page=page, text=current.strip()))
+
+    return chunks
+
+
+# Usage
+chunks = chunk_pdf_for_rag("technical_documentation.pdf")
+print(f"{len(chunks)} chunks generated")
+for c in chunks[:3]:
+    print(f"\n[Page {c.page}] ({c.char_count} chars)")
+    print(c.text[:200] + "..." if len(c.text) > 200 else c.text)
+```
+
+Once these chunks are produced, you can pass them to an embedding model (e.g. `text-embedding-3-small` from OpenAI, or `nomic-embed-text` for local use) and store them in a vector store like Qdrant or Chroma.
+
+## Handling scanned PDFs
+
+PyMuPDF does not perform OCR natively. If `page.get_text()` returns an empty string, your PDF is likely a scan (image-only). In that case:
+
+```python
+import fitz
+
+def is_scanned_pdf(pdf_path: str, sample_pages: int = 3) -> bool:
+    """Detects whether a PDF is a scan (no text layer)."""
+    with fitz.open(pdf_path) as doc:
+        pages_to_check = min(sample_pages, len(doc))
+        total_chars = sum(
+            len(doc[i].get_text().strip())
+            for i in range(pages_to_check)
+        )
+        avg_chars = total_chars / pages_to_check
+        return avg_chars < 50  # empirical threshold
+
+
+if is_scanned_pdf("scanned_invoice.pdf"):
+    print("Scanned PDF detected: OCR required")
+    # -> Use pytesseract, easyocr, or Google Document AI
+else:
+    print("PDF with text layer: direct extraction possible")
+```
+
+For OCR on scanned PDFs, the best production options are:
+- **pytesseract** + **pdf2image** for self-hosted setups
+- **Google Document AI** or **AWS Textract** for managed (watch out for GDPR if dealing with sensitive data)
+- **Mistral OCR** (API, EU hosting available)
+
+## Performance at scale
+
+PyMuPDF is built for performance, but a few best practices help at scale:
+
+```python
+import fitz
+from concurrent.futures import ProcessPoolExecutor
+from pathlib import Path
+
+
+def process_single_pdf(pdf_path: str) -> dict:
+    """Serialisable function for multiprocessing."""
+    with fitz.open(pdf_path) as doc:
+        text = "\n".join(page.get_text() for page in doc)
+    return {"path": pdf_path, "text": text, "chars": len(text)}
+
+
+def batch_extract(pdf_dir: str, max_workers: int = 4) -> list[dict]:
+    """Parallel extraction across a folder of PDFs."""
+    pdf_files = list(Path(pdf_dir).glob("*.pdf"))
+    print(f"Processing {len(pdf_files)} PDFs...")
+
+    with ProcessPoolExecutor(max_workers=max_workers) as executor:
+        results = list(executor.map(process_single_pdf, [str(p) for p in pdf_files]))
+
+    total_chars = sum(r["chars"] for r in results)
+    print(f"Done: {total_chars:,} characters extracted")
+    return results
+
+
+results = batch_extract("./invoices_2024/")
+```
+
+## Conclusion
+
+PyMuPDF is the go-to tool for parsing PDFs in Python. Its combination of speed, layout accuracy, and metadata richness makes it the natural choice for any document extraction pipeline.
+
+The AI use cases are numerous: feeding RAG systems, entity extraction, document classification, automated accounting data entry.
+
+If you have complex PDFs to exploit (contracts, financial reports, technical documentation) and want to build a robust, GDPR-compliant pipeline, feel free to get in touch.
