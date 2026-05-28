@@ -92,6 +92,7 @@ const eslintConfig = defineConfig([
   },
   prettierPlugin,
   prettierConfig,
+  { rules: { "prettier/prettier": "warn" } },
   globalIgnores([
     ".next/**",
     "out/**",
