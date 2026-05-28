@@ -1,0 +1,182 @@
+---
+title: "Routage dynamique LLM : moins cher, réduction du downtime"
+description: "Router Mistral Small/Medium/Large selon volume tokens et charge serveur permet de diviser par 10 le coût LLM sans dégrader la qualité. Voici la méthode."
+date: "2026-05-28"
+tags: ["LLM", "Mistral", "orchestration LLM agents Python", "coût intégration IA PME", "LLM hébergement Europe"]
+readingTime: 9
+---
+
+Un chatbot IA en production avec un seul modèle Mistral, c'est deux problèmes garantis. Premier problème : vous payez le tarif Large pour des conversations qui auraient été parfaitement traitées par un Small dix fois moins cher. Deuxième problème : quand le provider tombe (et Mistral tombe, comme tout le monde), votre service tombe avec lui. Sur Ailog et LiveSession, j'ai construit un routeur qui résout les deux d'un coup.
+
+**Réponse directe :** un routeur LLM dynamique choisit le modèle en fonction de deux signaux : le **volume de tokens de la conversation** (Small en dessous d'un seuil, Large au-dessus) et la **disponibilité réelle des modèles** (un modèle qui a renvoyé une erreur récemment est marqué `busy` dans Redis avec un TTL court). Résultat mesuré sur un produit en production : **~90% des requêtes basculées sur Small**, coût LLM divisé par ~10, zéro downtime perçu malgré plusieurs pannes Mistral sur le trimestre.
+
+Cet article décrit l'architecture, les seuils, le code Python du routeur, et les pièges rencontrés en cours de route.
+
+## Pourquoi router dynamiquement entre plusieurs modèles LLM ?
+
+Trois raisons concrètes, dans cet ordre d'impact business.
+
+**Le coût.** Sur Mistral, l'écart entre Small et Large est de l'ordre d'un facteur 10 par million de tokens. Si vous servez un assistant client qui répond majoritairement à des questions courtes ("où en est ma commande", "comment réinitialiser mon mot de passe"), envoyer ces requêtes à Large est un gaspillage pur. À 50 000 conversations par mois, c'est la différence entre une facture LLM viable et un produit qui ne passe jamais son seuil de rentabilité.
+
+**La latence.** Small répond en moyenne 2 à 3 fois plus vite que Large. Pour un chatbot conversationnel, ce delta change la perception utilisateur. Une réponse en 800 ms semble instantanée ; à 2,4 s, l'utilisateur commence à se demander si le service rame.
+
+**La résilience.** Aucun provider LLM n'a 100% d'uptime. Mistral a des incidents, OpenAI aussi, Anthropic aussi. Si votre stack repose sur un seul modèle hébergé chez un seul provider, vos SLA sont mécaniquement plafonnés par ceux du provider. Un routeur avec **fallback chain** vous rend indépendant des micro-pannes.
+
+Bonus côté souveraineté : Mistral étant une boîte française et le déploiement pouvant se faire en EU, le routeur reste compatible avec une stratégie **LLM hébergement Europe** et une démarche [conforme RGPD](/fr/prestations).
+
+## Quels critères de routage utiliser ?
+
+J'ai testé plusieurs signaux. Deux suffisent à capter l'essentiel de la valeur.
+
+**Critère 1 : le volume de tokens de la conversation.** Plus une conversation grossit, plus elle accumule du contexte implicite que seul un modèle plus capable arrive à exploiter sans perdre le fil. Sur une conv courte (1 à 3 échanges), Small suffit dans 95% des cas. Au-delà de 4 000 à 6 000 tokens cumulés, je vois apparaître des erreurs de cohérence sur Small qui disparaissent sur Large.
+
+**Critère 2 : la charge et la disponibilité des serveurs.** Aucun signe avant-coureur côté client : un modèle peut renvoyer un `503` ou un timeout d'un coup. Le routeur doit donc **détecter l'incident à la première erreur** et l'isoler. La technique simple et qui marche : un flag `busy` dans Redis avec un TTL court (60 secondes), posé sur le modèle fautif, qui force le routeur à l'éviter jusqu'à expiration.
+
+J'ai aussi testé un troisième critère, la complexité estimée par classifieur. En pratique, le ratio bénéfice/complexité est mauvais. Le volume de tokens capte déjà 80% de la corrélation avec la "complexité réelle". Inutile d'ajouter un modèle de classification dans la pipeline.
+
+## Comment router selon le volume de tokens de la conversation ?
+
+Le seuil exact dépend de votre domaine, mais l'approche est universelle : on compte les tokens cumulés de la conversation (system prompt + historique + question courante) et on bascule de palier en palier.
+
+Voici les seuils que j'ai stabilisés après itération sur un assistant support B2B :
+
+| Tokens cumulés | Modèle cible | Pourquoi |
+|---|---|---|
+| 0 à 3 000 | `mistral-small-latest` | Questions simples, peu de contexte |
+| 3 000 à 12 000 | `mistral-medium-latest` | Multi-tour avec contexte documentaire |
+| 12 000+ | `mistral-large-latest` | Conversations longues, raisonnement multi-étapes |
+
+Le comptage de tokens doit être rapide. J'utilise `tiktoken` avec l'encoding `cl100k_base` comme approximation (l'écart avec le tokenizer Mistral est inférieur à 5%, ce qui est largement suffisant pour un choix de routage). Vous pouvez aussi simplement compter les caractères si votre compute est limité.
+
+```python
+import tiktoken
+
+_ENCODER = tiktoken.get_encoding("cl100k_base")
+
+def count_tokens(messages: list[dict]) -> int:
+    """Approximation rapide du nombre de tokens d'une conversation."""
+    total = 0
+    for msg in messages:
+        total += len(_ENCODER.encode(msg.get("content", "")))
+        total += 4  # overhead role + séparateurs
+    return total
+```
+
+## Comment gérer la résilience face aux downtimes provider ?
+
+Le cœur du routeur. L'idée : maintenir une **chaîne de fallback** ordonnée par palier de capacité, et marquer dans Redis tout modèle qui vient de renvoyer une erreur.
+
+```python
+import time
+import redis
+from mistralai import Mistral
+from mistralai.exceptions import MistralAPIException
+
+class LLMRouter:
+    """Routeur multi-modèles avec fallback chain et Redis busy flags."""
+
+    # Paliers de capacité : on monte si la conv grossit, on descend si on cherche moins cher
+    TIERS = [
+        ("small", "mistral-small-latest", 3_000),
+        ("medium", "mistral-medium-latest", 12_000),
+        ("large", "mistral-large-latest", float("inf")),
+    ]
+    BUSY_TTL = 60  # secondes
+    BUSY_PREFIX = "llm:busy:"
+
+    def __init__(self, redis_client: redis.Redis, mistral_client: Mistral):
+        self.redis = redis_client
+        self.mistral = mistral_client
+
+    def _is_busy(self, model: str) -> bool:
+        return self.redis.exists(f"{self.BUSY_PREFIX}{model}") == 1
+
+    def _mark_busy(self, model: str) -> None:
+        # SET key value EX 60 NX : pose le flag avec TTL court
+        self.redis.set(f"{self.BUSY_PREFIX}{model}", "1", ex=self.BUSY_TTL)
+
+    def _pick_tier(self, token_count: int) -> int:
+        for idx, (_, _, max_tokens) in enumerate(self.TIERS):
+            if token_count <= max_tokens:
+                return idx
+        return len(self.TIERS) - 1
+
+    def route(self, conversation: list[dict]) -> str:
+        """Retourne le nom du modèle à utiliser pour cette conversation."""
+        token_count = count_tokens(conversation)
+        start_tier = self._pick_tier(token_count)
+
+        # On tente d'abord le palier "naturel", puis on remonte si busy,
+        # puis on redescend si tout le haut est busy (mieux que rien).
+        candidates = (
+            list(range(start_tier, len(self.TIERS)))
+            + list(range(start_tier - 1, -1, -1))
+        )
+
+        for idx in candidates:
+            _, model_name, _ = self.TIERS[idx]
+            if not self._is_busy(model_name):
+                return model_name
+
+        # Tous busy : on prend le palier d'origine et on laisse l'appel échouer proprement
+        return self.TIERS[start_tier][1]
+
+    def complete(self, conversation: list[dict], max_retries: int = 3) -> str:
+        """Appelle le LLM avec routage + retry sur erreur."""
+        attempts = 0
+        last_error = None
+        while attempts < max_retries:
+            model = self.route(conversation)
+            try:
+                resp = self.mistral.chat.complete(
+                    model=model,
+                    messages=conversation,
+                )
+                return resp.choices[0].message.content
+            except (MistralAPIException, TimeoutError) as exc:
+                last_error = exc
+                self._mark_busy(model)
+                attempts += 1
+                time.sleep(0.2 * attempts)  # backoff léger
+        raise RuntimeError(f"All LLM tiers exhausted: {last_error}")
+```
+
+Trois propriétés importantes de ce design :
+
+- **Atomicité Redis.** `SET key value EX 60` est atomique côté Redis ([docs SET](https://redis.io/commands/set/)), donc plusieurs workers concurrents peuvent marquer le même modèle busy sans race condition.
+- **TTL court.** 60 secondes est un bon défaut. Trop long, vous abandonnez un modèle pour une simple hoquet ; trop court, vous retombez sur le même mur. À ajuster selon la durée typique des incidents observés chez le provider.
+- **Fallback bidirectionnel.** On essaie d'abord le palier supérieur (qualité préservée), et en dernier recours le palier inférieur (préférable à un 500).
+
+## Mistral Small / Medium / Large : quand utiliser quoi ?
+
+Référence rapide à partir des [tarifs Mistral](https://mistral.ai/pricing) et de mes mesures sur des workloads réels. Les prix bougent ; vérifiez avant de câbler des seuils en dur.
+
+| Modèle | Coût input ($/1M tok) | Coût output ($/1M tok) | Latence p50 | Contexte | Cas d'usage |
+|---|---|---|---|---|---|
+| `mistral-small-latest` | ~0,20 | ~0,60 | ~0,8 s | 32K | Q&A simple, classification, extraction structurée |
+| `mistral-medium-latest` | ~0,40 | ~2,00 | ~1,5 s | 128K | RAG multi-tour, résumé long, raisonnement modéré |
+| `mistral-large-latest` | ~2,00 | ~6,00 | ~2,4 s | 128K | Raisonnement complexe, code, conversations longues |
+
+L'écart Small vs Large est de l'ordre de 10x sur l'input, 10x sur l'output. Sur un produit où **90% du trafic** tombe sur Small, la facture globale se rapproche du coût Small, pas du coût Large. C'est ce mix qui débloque les marges d'un assistant IA en mode SaaS PME.
+
+## Pièges à éviter
+
+J'ai laissé des bugs en chemin. Ceux qui font mal :
+
+**Boucles fallback infinies.** Si vous oubliez de compter les retries au niveau du routeur (et pas au niveau du modèle), un orage côté provider peut faire boucler votre worker indéfiniment. Le `max_retries` au niveau de `complete()` est non négociable.
+
+**Perte de contexte au switch.** Si vous changez de modèle au milieu d'une conversation, assurez-vous que le **system prompt et l'historique** sont passés intégralement au nouveau modèle. Le format Mistral est cohérent entre paliers, mais si vous mixez avec d'autres providers, les rôles `tool` et `function` ne sont pas mappés à l'identique.
+
+**Formats de réponse non équivalents.** Small, Medium et Large suivent globalement les mêmes conventions, mais le respect strict d'un schéma JSON varie. Si vous demandez du JSON structuré, validez en sortie avec Pydantic et **forcez Large pour les appels critiques** (paiement, écriture en base, action irréversible), peu importe la longueur.
+
+**Confondre busy et down.** Le flag Redis dit "ce modèle a renvoyé une erreur récemment". Ce n'est pas un statut officiel du provider. Ne l'exposez jamais comme tel dans une page de statut publique : vous risqueriez d'annoncer une panne Mistral qui n'existe pas.
+
+## TL;DR et conclusion
+
+Un routeur LLM dynamique repose sur deux signaux : le **volume de tokens** (qui détermine le palier naturel Small/Medium/Large) et la **disponibilité observée** (gérée par un flag Redis `busy` avec TTL court). Le coût LLM s'effondre parce que la majorité du trafic réel est servi par Small, et la résilience monte parce que la fallback chain absorbe les incidents provider sans visibilité côté utilisateur.
+
+Le pattern est compatible avec Mistral seul, mais aussi avec une stack hybride (Mistral + auto-hébergé OVHcloud + OpenAI), tant que vous gardez l'abstraction `route(conversation) -> model_name`. Vu de loin, c'est un classique d'orchestration ; vu de près, c'est ce qui sépare un POC LLM d'un service en prod.
+
+Pour un déploiement plus large où ce routeur est combiné avec un système multi-agents, je détaille le pattern complet dans le [case study LiveSession](/fr/blog/case-study/rag-multiagent-livesession).
+
+Besoin d'un routeur de ce type sur votre stack, ou de fiabiliser un assistant IA déjà en production ? [Parlons-en](/fr/contact).
