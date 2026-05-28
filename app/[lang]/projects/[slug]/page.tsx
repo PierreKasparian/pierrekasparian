@@ -156,6 +156,17 @@ export default async function ProjectDetailPage({
             <ExternalLink className="ml-2 size-4" />
           </a>
         )}
+        {project.partnerLink && project.partnerLabel && (
+          <a
+            href={project.partnerLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={buttonVariants({ variant: "outline" })}
+          >
+            {project.partnerLabel}
+            <ExternalLink className="ml-2 size-4" />
+          </a>
+        )}
       </div>
     </article>
   );

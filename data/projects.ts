@@ -16,6 +16,8 @@ export interface Project {
   link?: string;
   awardLink?: string;
   mrrLink?: string;
+  partnerLink?: string;
+  partnerLabel?: string;
   relatedProjectSlug?: string;
   featured?: boolean;
 }
@@ -139,6 +141,8 @@ export const projects: Project[] = [
     icon: "Database",
     date: "2025-07-01",
     featured: true,
+    partnerLink: "https://app.ailog.fr/consulting",
+    partnerLabel: "Ailog",
   },
   {
     slug: "livesession-formation",

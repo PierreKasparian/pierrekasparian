@@ -41,6 +41,14 @@ export function SiteFooter({ lang, dict }: { lang: Locale; dict: Dictionary }) {
             {dict.home.ctaCV}
           </a>
           <Link
+            href="https://app.ailog.fr/consulting"
+            className="hover:text-[var(--foreground)]"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Ailog
+          </Link>
+          <Link
             href={`/${lang}/legal/mentions-legales`}
             className="hover:text-[var(--foreground)]"
           >
