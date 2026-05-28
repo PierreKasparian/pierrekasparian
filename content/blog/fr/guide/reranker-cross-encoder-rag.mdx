@@ -1,0 +1,163 @@
+---
+title: "Booster un RAG avec un cross-encoder reranker"
+description: "Un cross-encoder reranker améliore la précision d'un RAG sans changer votre retriever. Guide complet : Cohere Rerank, hébergement local, exemples Python et comparatif."
+date: "2026-05-28"
+tags: ["RAG", "reranker", "cross-encoder", "RAG multitenants production", "pipeline données LLM"]
+readingTime: 7
+---
+
+Votre RAG récupère 10 chunks, mais le plus pertinent arrive souvent en 4e ou 5e position. Le bi-encodeur compare les embeddings de la requête et du document séparément, ce qui n'est pas la façon la plus précise de mesurer la pertinence.
+
+**Réponse directe :** un cross-encoder reranker prend en entrée la paire (requête, chunk) et la note ensemble, plutôt que de comparer des embeddings séparés. Il s'intercale en deuxième étape : le retriever bi-encodeur récupère les top-K candidats rapidement, le cross-encoder les réordonne avec précision. Cette combinaison améliore significativement la qualité des réponses sans remettre en question votre architecture de retrieval.
+
+## Pourquoi les bi-encodeurs seuls manquent de précision
+
+Le retrieval standard repose sur des **bi-encodeurs** : la requête et chaque document sont encodés séparément en vecteurs, puis on mesure la distance cosinus entre eux.
+
+C'est rapide et scalable. Mais c'est approximatif par construction : les deux embeddings sont produits indépendamment, sans interaction entre la requête et le contenu du document.
+
+Exemple concret : si la requête est "délais de remboursement après résiliation" et qu'un chunk contient "notre politique de résiliation prévoit un délai de 14 jours ouvrés pour tout remboursement", le bi-encodeur peut rater cette correspondance si les mots exacts ne matchent pas bien dans l'espace d'embedding.
+
+Un cross-encoder analyse la paire (requête, chunk) ensemble dans un seul passage de modèle, ce qui lui permet de capturer les interactions sémantiques fines entre les deux.
+
+## Comment fonctionne un cross-encoder
+
+Au lieu de comparer des vecteurs, le cross-encoder passe la concaténation `[requête] [SEP] [chunk]` dans un transformeur classique, et sort un score de pertinence entre 0 et 1.
+
+```
+Input  : "délais de remboursement" [SEP] "notre politique prévoit 14 jours..."
+Output : 0.94  ← score de pertinence
+```
+
+L'inconvénient majeur est la scalabilité : un cross-encoder ne peut pas encoder les documents à l'avance, il doit traiter chaque paire (requête, document) au moment de la requête. Impossible de l'utiliser pour un retrieval initial sur des milliers de documents.
+
+D'où l'architecture en deux étapes :
+
+1. **Retrieval rapide (bi-encodeur)** : récupérer les top-50 ou top-100 candidats via la recherche vectorielle classique.
+2. **Reranking précis (cross-encoder)** : réordonner ces candidats par score de pertinence, garder les top-5 ou top-10 pour le LLM.
+
+## Option 1 : Cohere Rerank (cloud, RGPD conforme)
+
+[Cohere](https://cohere.com/rerank) propose une API de reranking directement utilisable en production. Cohere est conforme au RGPD, propose un hébergement EU, et ses modèles de reranking sont parmi les plus performants disponibles via API.
+
+```python
+import cohere
+import os
+
+co = cohere.Client(os.getenv("COHERE_API_KEY"))
+
+def rerank_with_cohere(query: str, chunks: list[str], top_n: int = 5) -> list[dict]:
+    response = co.rerank(
+        model="rerank-v3.5",
+        query=query,
+        documents=chunks,
+        top_n=top_n
+    )
+
+    return [
+        {
+            "chunk": chunks[result.index],
+            "score": result.relevance_score,
+            "original_rank": result.index
+        }
+        for result in response.results
+    ]
+
+def rag_with_reranker(query: str, vector_store, llm, top_k=50, top_n=5):
+    # Étape 1 : retrieval initial
+    initial_results = vector_store.similarity_search(query, k=top_k)
+    chunks = [doc.page_content for doc in initial_results]
+
+    # Étape 2 : reranking
+    reranked = rerank_with_cohere(query, chunks, top_n=top_n)
+
+    # Étape 3 : génération avec les meilleurs chunks
+    context = "\n\n".join([r["chunk"] for r in reranked])
+    return llm.invoke(f"Contexte :\n{context}\n\nQuestion : {query}")
+```
+
+**Avantages :** facile à intégrer (quelques lignes), très performant, maintenable sans infrastructure. Cohere propose une option d'hébergement EU pour les données sensibles.
+
+**Inconvénients :** API payante (facturation par token reranké), dépendance à un fournisseur externe. Si vos données sont strictement confidentielles, l'envoi vers une API cloud, même RGPD conforme, peut ne pas être acceptable selon votre politique interne ou votre DPO.
+
+## Option 2 : modèle local (open source, données souveraines)
+
+Si vous ne pouvez pas envoyer vos documents vers une API externe, vous pouvez héberger un cross-encoder localement avec la bibliothèque `sentence-transformers`.
+
+```python
+from sentence_transformers import CrossEncoder
+
+# Modèle léger, CPU suffit
+model = CrossEncoder("cross-encoder/ms-marco-MiniLM-L-6-v2")
+
+def rerank_local(query: str, chunks: list[str], top_n: int = 5) -> list[dict]:
+    pairs = [[query, chunk] for chunk in chunks]
+    scores = model.predict(pairs)
+
+    ranked = sorted(
+        zip(chunks, scores),
+        key=lambda x: x[1],
+        reverse=True
+    )
+
+    return [
+        {"chunk": chunk, "score": float(score)}
+        for chunk, score in ranked[:top_n]
+    ]
+```
+
+Les modèles disponibles dans l'écosystème `sentence-transformers` :
+
+| Modèle | Taille | Performances | Infrastructure |
+|---|---|---|---|
+| `ms-marco-MiniLM-L-6-v2` | 80 MB | Bonne | CPU suffit |
+| `ms-marco-MiniLM-L-12-v2` | 130 MB | Très bonne | CPU suffit |
+| `ms-marco-electra-base` | 430 MB | Excellente | GPU recommandé |
+| `bge-reranker-large` | 560 MB | Excellente | GPU recommandé |
+
+**Avantages :** données souveraines (rien ne sort de votre infrastructure), zéro coût marginal, pas de dépendance externe. Les modèles légers (MiniLM) tournent sur CPU standard sans infrastructure particulière.
+
+**Inconvénients :** performances inférieures aux meilleures APIs cloud, surtout pour des domaines très spécifiques. Nécessite de gérer le déploiement et la mise à jour des modèles. Latence légèrement plus élevée sur CPU pour des volumes importants.
+
+## Cloud vs local : comment choisir ?
+
+| Critère | Cohere Rerank (cloud) | Modèle local |
+|---|---|---|
+| Performances | Excellentes | Bonnes à très bonnes |
+| Données sensibles | RGPD conforme, mais API externe | 100% souverain |
+| Coût | Payant (par token) | Gratuit (infra propre) |
+| Intégration | Quelques lignes | Quelques lignes |
+| Infrastructure | Aucune | Serveur avec RAM disponible |
+
+La règle pratique : si vous pouvez envoyer vos données vers une API tierce (même RGPD conforme), Cohere est le choix le plus simple et le plus performant. Si vos données ne peuvent pas quitter votre infrastructure (données médicales, juridiques, internes sensibles), un modèle local MiniLM est suffisant dans la grande majorité des cas.
+
+## Quand utiliser un reranker ?
+
+Un reranker est particulièrement utile quand :
+- Vos requêtes sont longues ou complexes (plusieurs intentions dans une même question)
+- Votre corpus est dense et les documents se ressemblent sémantiquement
+- Les réponses de votre RAG sont correctes mais manquent parfois la meilleure source
+- Vous avez un top-K élevé (20+ chunks candidats) à réduire à 3-5
+
+Un reranker est **moins utile** si :
+- Votre corpus est petit et homogène (le bi-encodeur suffit)
+- La latence est critique et vous ne pouvez pas ajouter 100-300 ms
+- Les requêtes sont courtes et factuelles
+
+## Impact sur la latence
+
+| Solution | Latence ajoutée (top-50 reranké à 5) |
+|---|---|
+| Cohere Rerank API | 100-200 ms |
+| MiniLM local CPU | 200-500 ms |
+| Electra local GPU | 50-150 ms |
+
+Pour la plupart des cas d'usage (assistant documentaire, chatbot entreprise), cette latence est acceptable et le gain de précision justifie largement le surcoût.
+
+## TL;DR
+
+Un cross-encoder reranker est une des améliorations les plus efficaces par rapport au coût sur un RAG standard. Il s'intercale entre le retrieval et la génération sans remettre en question l'architecture existante.
+
+Pour les données non sensibles ou semi-sensibles : **Cohere Rerank** est la solution la plus simple et performante, avec une conformité RGPD solide. Pour les données strictement confidentielles : un modèle local `sentence-transformers` sur CPU est suffisant dans la majorité des cas.
+
+Vous souhaitez intégrer un reranker dans votre pipeline RAG ou améliorer la précision d'un système existant ? [Parlons-en](/fr/contact).
