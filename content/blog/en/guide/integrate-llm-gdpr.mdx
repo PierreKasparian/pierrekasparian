@@ -4,7 +4,7 @@ description: "Complete guide for EU companies: which GDPR articles apply to LLMs
 date: "2025-01-15"
 dateModified: "2026-05-27"
 tags: ["LLM", "GDPR", "Compliance", "Sovereign AI", "EU hosting"]
-readingTime: 7
+readingTime: 8
 ---
 
 The rise of LLMs raises a concrete question for European businesses: **can you use an LLM while staying GDPR-compliant?**
@@ -109,7 +109,29 @@ Limitations: this approach does not cover all cases (implicit context, identity 
 | On-premise + Llama/Mistral | Near-zero | High | Sensitive data, regulated sectors (health, HR, finance) |
 | Anonymisation pipeline + external LLM | Low | Medium-high | Cost/compliance trade-off |
 
-## What CNIL recommends in 2024-2025
+## Decision tree: which solution fits your use case?
+
+Answer these four questions before choosing an architecture:
+
+**1. Do your prompts contain personal data?**
+- No: you can use any AI provider, but still prefer a signed DPA.
+- Yes: move to the next question.
+
+**2. Is that data in a special category under Article 9 (health, religious beliefs, biometric data)?**
+- Yes: **on-premise or strict EU cloud (Mistral AI, OVHcloud) is required** + prior DPIA (Article 35).
+- No: move to the next question.
+
+**3. Is your sector regulated (healthcare, finance, law, HR)?**
+- Yes: **on-premise or EU cloud** + verify sector-specific compliance requirements.
+- No: move to the next question.
+
+**4. What is your budget and tolerance for operational complexity?**
+- Limited budget, small technical team: **Mistral AI API (EU hosting)** — GDPR-compliant, low cost, easy to integrate.
+- Medium budget, strong GDPR requirements: **OVHcloud + open-source model** — good cost/compliance balance.
+- High budget, highly sensitive data: **On-premise (Llama/Mistral)** — maximum compliance, higher infrastructure cost.
+- External provider required by contract: **Anonymisation pipeline** — risk reduction without changing provider.
+
+## What CNIL recommends
 
 The CNIL has published several positions on generative AI. Key points:
 

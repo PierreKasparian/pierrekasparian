@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 
 import { educations } from "@/data/education";
+import { prestations } from "@/data/prestations";
 import { projects } from "@/data/projects";
 import { getAllArticles } from "@/lib/mdx";
 
@@ -73,6 +74,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date("2026-05-27"),
       changeFrequency: "monthly",
       priority: 0.7,
+      alternates: { languages: langAlternates(routePath) },
+    });
+  }
+
+  // /services/[id] - service detail pages
+  for (const prestation of prestations) {
+    const routePath = `/services/${prestation.id}`;
+    entries.push({
+      url: `${BASE_URL}/fr${routePath}`,
+      lastModified: new Date("2026-05-28"),
+      changeFrequency: "monthly",
+      priority: 0.85,
       alternates: { languages: langAlternates(routePath) },
     });
   }

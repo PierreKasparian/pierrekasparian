@@ -14,12 +14,18 @@ import { notFound } from "next/navigation";
 
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
 import { prestations } from "@/data/prestations";
 import { projects } from "@/data/projects";
 import { buildAlternates, SITE_URL } from "@/lib/seo";
 
-import { getDictionary, hasLocale, type Locale } from "../dictionaries";
+import { getDictionary, hasLocale, locales, type Locale } from "../dictionaries";
 
 const ICON_MAP: Record<string, LucideIcon> = {
   Bot,
@@ -29,6 +35,10 @@ const ICON_MAP: Record<string, LucideIcon> = {
   Sparkles,
   Zap,
 };
+
+export async function generateStaticParams() {
+  return locales.map((lang) => ({ lang }));
+}
 
 export async function generateMetadata({
   params,
@@ -140,6 +150,15 @@ export default async function PrestationsPage({
                       </div>
                     )}
                   </CardContent>
+                  <CardFooter className="pt-0">
+                    <Link
+                      href={`/${lang}/services/${p.id}`}
+                      className="group inline-flex items-center gap-1 text-sm font-medium text-[var(--primary)] hover:underline"
+                    >
+                      {dict.serviceDetail.learnMore}
+                      <ArrowRight className="size-3 transition-transform group-hover:translate-x-0.5" />
+                    </Link>
+                  </CardFooter>
                 </Card>
               );
             })}

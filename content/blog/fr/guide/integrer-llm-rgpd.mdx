@@ -4,7 +4,7 @@ description: "Guide complet pour les PME françaises : quels articles du RGPD s'
 date: "2025-01-15"
 dateModified: "2026-05-27"
 tags: ["LLM", "RGPD", "Conformité", "IA souveraine", "hébergement EU"]
-readingTime: 7
+readingTime: 8
 ---
 
 L'essor des LLM soulève une question concrète pour les entreprises françaises et européennes : **peut-on utiliser un LLM en restant conforme au RGPD ?**
@@ -109,7 +109,29 @@ L'**Article 25 du RGPD** impose le principe de "protection des données dès la 
 | On-premise + Llama/Mistral | Quasi-nul | Élevé | Données sensibles, secteur régulé (santé, RH, finance) |
 | Pipeline d'anonymisation + LLM externe | Faible | Moyen-élevé | Compromis coût/conformité |
 
-## Ce que recommande la CNIL en 2024-2025
+## Arbre de décision : quelle solution pour votre cas ?
+
+Avant de choisir une architecture, répondez à ces quatre questions :
+
+**1. Vos prompts contiennent-ils des données personnelles ?**
+- Non : vous pouvez utiliser n'importe quel fournisseur IA, mais préférez quand même un DPA signé.
+- Oui : passez à la question suivante.
+
+**2. Ces données sont-elles des données sensibles au sens de l'Article 9 (santé, convictions, données biométriques) ?**
+- Oui : **déploiement on-premise ou cloud EU strict (Mistral AI, OVHcloud) obligatoire** + AIPD préalable (Article 35).
+- Non : passez à la question suivante.
+
+**3. Votre secteur est-il régulé (santé, finance, droit, RH) ?**
+- Oui : **on-premise ou cloud EU** + vérification de la conformité sectorielle spécifique.
+- Non : passez à la question suivante.
+
+**4. Quel est votre budget et votre tolérance à la complexité opérationnelle ?**
+- Budget limité, équipe technique réduite : **Mistral AI API (hébergement EU)** — conformité RGPD, coût faible, intégration simple.
+- Budget moyen, exigences RGPD fortes : **OVHcloud + modèle open source** — bon équilibre coût/conformité.
+- Budget élevé, données très sensibles : **On-premise (Llama/Mistral)** — conformité maximale, coût infra élevé.
+- Fournisseur externe imposé par contrat : **Pipeline d'anonymisation** — réduction du risque sans changer de fournisseur.
+
+## Ce que recommande la CNIL 
 
 La CNIL a publié plusieurs prises de position sur l'IA générative. Les points clés :
 

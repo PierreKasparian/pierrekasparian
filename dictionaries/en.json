@@ -324,6 +324,16 @@
     "success": "Message sent! I'll reply within a few days.",
     "error": "Something went wrong. Please try again or write to me directly."
   },
+  "serviceDetail": {
+    "whatIs": "What is it?",
+    "howItWorks": "How it works",
+    "useCases": "What it covers",
+    "faq": "Frequently asked questions",
+    "relatedProjects": "Related projects",
+    "contactCta": "Let's discuss your project",
+    "back": "← Back to services",
+    "learnMore": "Learn more"
+  },
   "footer": {
     "legalNotice": "Legal notice",
     "privacyPolicy": "Privacy"

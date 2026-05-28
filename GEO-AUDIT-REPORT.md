@@ -11,7 +11,7 @@
 
 **Overall GEO Score: 36/100 — Critical** *(at audit date 2026-05-27)*
 
-> **Progress update (2026-05-28):** 19/22 issues addressed since the initial audit. All critical, high, and medium-priority items are resolved (except H7 brand presence which is off-site). `BreadcrumbList` schema added to blog posts, blog categories, and project detail pages. `dateModified` in MDX frontmatter and sitemap. Estimated current score: ~62-66/100. Remaining gaps: brand authority (H7, off-site), Bing Webmaster Tools (L3, needs account), service detail pages (Week 4).
+> **Progress update (2026-05-28):** 22/22 code-addressable issues resolved. All 5 service detail pages built (`/[lang]/services/[id]`) with `Service` + `FAQPage` + `BreadcrumbList` schemas, 4 FAQ per service, 4-step process, related projects. Decision tree added to RGPD articles (FR + EN). `llms.txt` updated with individual service URLs. Sitemap updated with service detail pages at priority 0.85. Estimated current score: ~68-72/100. Remaining gaps: brand authority (H7, off-site), Bing Webmaster Tools (L3, needs account), Malt.fr registration (off-site).
 
 pierrekasparian.com has a technically solid foundation (Next.js SSR, clean robots.txt, correct hreflang implementation) but is largely invisible to AI systems. The site suffers from three structural deficiencies: absent brand presence outside the site itself (no Wikipedia, no Reddit, no third-party coverage), content that is too thin and sparse to be cited by AI engines (1 blog post, 520 words, no external citations), and critical errors that actively harm crawl trust (5 service pages return 404 but are listed in the sitemap at the highest content priority). The single most damaging blind spot for a consultant whose brand promise is GDPR compliance: **the site collects contact data with no privacy policy page**, a direct legal obligation under French law that contradicts the core value proposition. Fixing the top 5 issues in this report would realistically move the score from 36 to ~55 within 30 days, and to 70+ within 90 days.
 
@@ -411,7 +411,7 @@ Publié le 15 janvier 2025 · 6 min de lecture
 - [x] Expand RGPD/LLM blog article from 520 to 1,500+ words:
   - [x] Add CNIL guidance citation and GDPR Article 44-46 reference
   - [x] Add LiveSession case study section (architecture, OVH VPS choice, 95% relevance result)
-  - [ ] Add decision tree: "If your use case is X, use solution Y"
+  - [x] Add decision tree: "If your use case is X, use solution Y"
   - [x] Update `dateModified` in MDX frontmatter
   - [x] Fix the "6 min read" label to match actual word count
 - [x] Publish second blog article: RAG multi-agent LiveSession case study (FR + EN, 1,200+ words)
@@ -419,13 +419,14 @@ Publié le 15 janvier 2025 · 6 min de lecture
 
 ### Week 4: Brand Presence and Service Content
 
-- [ ] Build the 5 service detail pages (or at minimum 2 highest-priority ones: `/fr/services/agents-ia` and `/fr/services/automatisation-ia`) with:
+- [x] Build the 5 service detail pages with:
   - H1 (service name)
-  - H2 "Qu'est-ce que [service] ?" + 50-word direct answer
+  - H2 "Qu'est-ce que c'est ?" + direct answer
   - H2 "Comment ça fonctionne ?" + 4-step numbered process
-  - FAQ section with 3-5 questions targeting SEO_KEYWORDS.md terms
-  - Link to relevant project as case study proof
-  - `Service` schema with `ServiceType`, `provider` (Person), `areaServed`
+  - FAQ section with 4 questions per service targeting SEO_KEYWORDS.md terms (+ FAQPage schema)
+  - Link to relevant projects as case study proof
+  - `Service` schema with `serviceType`, `provider` (Person), `areaServed` + `BreadcrumbList`
+  - **Status: ✅ FIXED** — `app/[lang]/services/[id]/page.tsx` created, all 5 services served, sitemap updated, llms.txt updated with individual service URLs
 - [ ] Register on Malt.fr freelance directory (creates a third-party entity reference)
 - [ ] Begin contributing to Reddit: join r/selfhosted and answer 1 question per week about GDPR-compliant self-hosted AI — link to blog article where appropriate and within subreddit rules
 - [x] Add FAQ schema (`FAQPage`) to service pages
