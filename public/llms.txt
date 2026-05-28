@@ -17,6 +17,8 @@
 - [How to integrate an LLM without violating GDPR](https://pierrekasparian.com/en/blog/guide/integrate-llm-gdpr): English version of the GDPR-compliant LLM integration guide.
 - [Parser des PDFs avec PyMuPDF en Python](https://pierrekasparian.com/fr/blog/guide/parser-pdf-pymupdf): Guide pratique pour extraire et structurer le contenu de PDFs avec PyMuPDF.
 - [RAG multi-agent LiveSession - étude de cas](https://pierrekasparian.com/fr/blog/case-study/rag-multiagent-livesession): Retour d'expérience sur le déploiement d'un chatbot RAG multi-agent pour la SaaS LiveSession.
+- [7 métriques avancées pour évaluer son RAG en production](https://pierrekasparian.com/fr/blog/guide/metriques-evaluation-rag-production): Les 7 métriques d'évaluation avancées pour détecter les failles cachées d'un pipeline RAG en production : faithfulness-plus, concept drift, chain-of-evidence et plus.
+- [7 Advanced Metrics to Evaluate Your RAG in Production](https://pierrekasparian.com/en/blog/guide/rag-evaluation-metrics-production): The 7 advanced evaluation metrics to detect hidden accuracy gaps in a production RAG pipeline.
 
 ## About
 
