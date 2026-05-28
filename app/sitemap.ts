@@ -17,11 +17,31 @@ const staticRoutes: {
   lastmod: string;
 }[] = [
   { path: "", priority: 1.0, changeFreq: "weekly", lastmod: "2026-05-27" },
-  { path: "/about", priority: 0.8, changeFreq: "monthly", lastmod: "2025-06-01" },
-  { path: "/services", priority: 0.9, changeFreq: "monthly", lastmod: "2026-05-27" },
-  { path: "/projects", priority: 0.8, changeFreq: "monthly", lastmod: "2026-05-27" },
+  {
+    path: "/about",
+    priority: 0.8,
+    changeFreq: "monthly",
+    lastmod: "2025-06-01",
+  },
+  {
+    path: "/services",
+    priority: 0.9,
+    changeFreq: "monthly",
+    lastmod: "2026-05-27",
+  },
+  {
+    path: "/projects",
+    priority: 0.8,
+    changeFreq: "monthly",
+    lastmod: "2026-05-27",
+  },
   { path: "/blog", priority: 0.7, changeFreq: "weekly", lastmod: "2026-05-27" },
-  { path: "/contact", priority: 0.7, changeFreq: "yearly", lastmod: "2025-06-01" },
+  {
+    path: "/contact",
+    priority: 0.7,
+    changeFreq: "yearly",
+    lastmod: "2025-06-01",
+  },
   // /tools excluded until content is ready
 ];
 

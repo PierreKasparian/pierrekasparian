@@ -154,7 +154,7 @@ export default async function PrestationsPage({
               {dict.prestations.faq.map((item, i) => (
                 <details key={i} className="group py-5">
                   <summary className="flex cursor-pointer list-none items-start justify-between gap-4">
-                    <dt className="font-medium leading-snug">{item.q}</dt>
+                    <dt className="leading-snug font-medium">{item.q}</dt>
                     <span className="mt-0.5 shrink-0 text-[var(--muted-foreground)] transition-transform group-open:rotate-180">
                       ▾
                     </span>
