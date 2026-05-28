@@ -299,12 +299,84 @@
     "back": "← Retour aux formations"
   },
   "tools": {
-    "metaTitle": "Outils",
-    "metaDescription": "Mini-apps et outils en ligne pour accélérer certaines tâches IA et développement.",
+    "metaTitle": "Outils IA gratuits",
+    "metaDescription": "Mini-apps IA gratuites, sans inscription. Des outils en ligne pour générer du contenu, automatiser des tâches et explorer l'IA.",
     "heading": "Outils",
     "subtitle": "Des mini-apps utiles, disponibles directement dans le navigateur.",
     "comingSoon": "Outils en cours de développement, revenez bientôt.",
-    "suggest": "Vous avez besoin d'un outil spécifique ?"
+    "suggest": "Vous avez besoin d'un outil spécifique ?",
+    "toolsGrid": "Outils disponibles",
+    "blogSection": "Articles récents",
+    "aiAnswer": {
+      "metaTitle": "Générateur de réponses IA gratuit - sans inscription",
+      "metaDescription": "Générez des réponses adaptées à votre ton grâce à l'IA. 100% gratuit, sans compte requis. Professionnel, concis, pédagogique ou décontracté.",
+      "heading": "Générateur de réponses IA gratuit",
+      "description": "Entrez votre question, choisissez un ton et une langue, et obtenez une réponse en quelques secondes. 100% gratuit, sans inscription.",
+      "questionLabel": "Votre question",
+      "questionPlaceholder": "Ex : Comment expliquer le RAG à un client non-technique ?",
+      "toneLabel": "Ton",
+      "languageLabel": "Langue de réponse",
+      "tones": {
+        "professional": "Professionnel",
+        "concise": "Concis",
+        "pedagogical": "Pédagogique",
+        "casual": "Décontracté"
+      },
+      "languages": {
+        "fr": "Français",
+        "en": "Anglais",
+        "es": "Espagnol",
+        "de": "Allemand",
+        "it": "Italien"
+      },
+      "submit": "Générer",
+      "loading": "Génération en cours...",
+      "resultLabel": "Réponse générée",
+      "copy": "Copier",
+      "copied": "Copié !",
+      "disclaimer": "Les réponses sont générées par un modèle de langage. Vérifiez les informations importantes auprès de sources officielles.",
+      "errorEmpty": "Veuillez entrer une question.",
+      "errorApi": "Une erreur est survenue. Veuillez réessayer.",
+      "badge": "Gratuit · Powered by Groq",
+      "howItWorksTitle": "Comment ça fonctionne ?",
+      "howItWorksSteps": [
+        {
+          "title": "Posez votre question",
+          "body": "Décrivez ce à quoi vous souhaitez obtenir une réponse. Soyez précis pour un meilleur résultat."
+        },
+        {
+          "title": "Choisissez le ton et la langue",
+          "body": "Sélectionnez le registre parmi professionnel, concis, pédagogique ou décontracté, puis la langue de réponse."
+        },
+        {
+          "title": "Copiez la réponse",
+          "body": "La réponse s'affiche en quelques secondes. Copiez-la en un clic pour l'utiliser directement."
+        }
+      ],
+      "faqTitle": "Questions fréquentes",
+      "faq": [
+        {
+          "q": "Quelle technologie alimente cet outil ?",
+          "a": "L'outil utilise Llama 3.3 70B, un modèle open source de Meta, servi via l'API Groq pour des réponses ultra-rapides."
+        },
+        {
+          "q": "Quelle est la différence entre les tons disponibles ?",
+          "a": "Professionnel : vocabulaire soutenu et structure claire. Concis : réponse courte sans fioritures. Pédagogique : explications étape par étape avec des exemples. Décontracté : ton naturel pour les échanges informels."
+        },
+        {
+          "q": "Mes questions sont-elles confidentielles ?",
+          "a": "Les questions sont transmises à l'API Groq pour traitement, sans stockage permanent. Évitez d'y inclure des données personnelles sensibles ou confidentielles."
+        },
+        {
+          "q": "Puis-je générer des réponses en plusieurs langues ?",
+          "a": "Oui. L'outil prend en charge le français, l'anglais, l'espagnol, l'allemand et l'italien. La langue choisie détermine celle de la réponse, quelle que soit la langue de votre question."
+        },
+        {
+          "q": "L'outil est-il vraiment gratuit ?",
+          "a": "Oui, entièrement gratuit, sans compte requis. Il est mis à disposition comme ressource libre par Pierre Kasparian."
+        }
+      ]
+    }
   },
   "contact": {
     "metaTitle": "Contact",
