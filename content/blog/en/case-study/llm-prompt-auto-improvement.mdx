@@ -1,0 +1,128 @@
+---
+title: "LLM Prompt Auto-improvement Pipeline at Pretto"
+description: "How to automate the LLM prompt improvement cycle from failure cases: a real-world case study at Pretto using Langfuse and annotated datasets."
+date: "2026-05-28"
+tags: ["Prompt Engineering", "Langfuse", "LLM", "Evaluation", "Python"]
+readingTime: 7
+---
+
+Improving a prompt is usually a manual process: read the bad outputs, understand why they failed, rewrite, repeat. At Pretto, I automated this entire cycle using two LLMs in series and a solid evaluation pipeline.
+
+**Prompt auto-improvement is a system that automatically synthesises a prompt's weaknesses from its failures, then generates a corrected version, with no human intervention between the two steps.**
+
+But this only works under one condition: you need a reliable evaluation infrastructure in place first.
+
+## Prerequisite: a solid evaluation pipeline
+
+Auto-improvement cannot exist without rigorous automated evaluation. If you cannot measure whether a prompt is good or bad automatically, you cannot automate its improvement.
+
+At Pretto, I first built a prompt evaluation platform built on three elements.
+
+**Annotated datasets.** For each use case, a dataset contains real inputs and expected outputs. For a chatbot capable of calling business tools (slot booking, data queries), each dataset entry specifies which tool should have been called and with exactly which parameters.
+
+**Objectifiable metrics.** On structured outputs, verification is straightforward: does the tool called match the expected one? Are the parameters correct? You get a score that is measurable automatically, with no human judgment required.
+
+**Langfuse as the observability engine.** Langfuse stores traces, evaluation scores, and allows comparing multiple versions of the same prompt against the same dataset. It is the central tool across the entire loop.
+
+Without this infrastructure, the next step is impossible. This is the real prerequisite for the project.
+
+## Context at Pretto: a chatbot with tool calls
+
+The use case that motivated this pipeline: a customer-facing chatbot capable of calling business tools. When the user says "I'd like to book a mortgage simulation slot for next Tuesday", the LLM must produce a structured call:
+
+```json
+{
+  "tool": "book_slot",
+  "parameters": {
+    "date": "2025-08-05",
+    "type": "simulation"
+  }
+}
+```
+
+This is precisely the type of output for which auto-improvement works best: the output is structured, the evaluation criteria are clear, and errors are precisely identifiable.
+
+Typical failure patterns detected in evaluations:
+
+- Wrong tool called (booking instead of data query)
+- Missing or incorrectly formatted parameters
+- Date errors ("next Tuesday" produces an incorrect date)
+- Unnecessary tool call when the question requires no action
+
+Each failure is recorded in Langfuse with the input, the produced output, the expected output, and the score.
+
+## The two-step pipeline
+
+Once failing cases are identified, the auto-improvement pipeline takes over.
+
+### Step 1: analyse the failures
+
+A first LLM receives the current prompt and the list of annotated failure cases. Its task is not to list errors one by one, but to synthesise the **structural weaknesses** of the prompt.
+
+Not "this case failed", but "the prompt does not specify the expected date format, causing systematic errors on temporal queries" or "the instructions for tool selection are ambiguous when a request contains multiple intents".
+
+```python
+weakness_report = analyzer_llm.analyze(
+    prompt=current_prompt,
+    failed_cases=evaluation_results.failures,
+    instruction="Identify structural weaknesses, not individual errors"
+)
+```
+
+The quality of this synthesis is critical. A vague report produces a vaguely improved prompt. The more varied the failure patterns in the dataset, the more precise the analysis.
+
+### Step 2: rewrite the prompt
+
+A second LLM receives the original prompt and the weakness report. Its task: generate an improved version that addresses each identified weakness without degrading existing correct behaviour.
+
+```python
+improved_prompt = rewriter_llm.rewrite(
+    original_prompt=current_prompt,
+    weakness_report=weakness_report,
+    instruction="Fix weaknesses, preserve correct behaviors"
+)
+```
+
+The new prompt is then evaluated against the same dataset via Langfuse. Scores are compared before and after. If the new prompt performs better on the defined metrics, it becomes the candidate version for the next iteration.
+
+The pipeline was integrated directly into the Langfuse evaluation workflow: teams could trigger an automatic improvement with one click from the interface, view comparative scores, and decide whether to promote or reject the new version.
+
+## What this changes in practice
+
+Before this pipeline, one iteration looked like:
+
+1. Run an evaluation
+2. Read failure cases one by one
+3. Understand the underlying pattern
+4. Manually rewrite the prompt
+5. Re-run the evaluation to validate
+
+This cycle took between one and three hours depending on the complexity of the prompt and the volume of failures to review.
+
+With the automated pipeline, steps 2 to 4 disappear. Human effort is concentrated on validating the result: do the improvements make sense? Does the prompt regress on cases that were working before? This is judgment work, not synthesis work.
+
+## For free-form outputs: LLM-as-judge
+
+This pipeline works very well on **structured outputs**: tool calls, data extractions, classifications, formatted JSON. Verification is automatic and scores are stable.
+
+I did not apply this method to free-form outputs (conversational responses, summaries, natural language explanations). But the principle holds, under one condition: replace deterministic evaluation with **LLM-as-judge**.
+
+Instead of comparing the output against a fixed expected value, a judge LLM scores quality against defined criteria: relevance, completeness, tone, absence of hallucination. Langfuse provides [complete documentation for setting up this evaluation method](https://langfuse.com/docs/evaluation/evaluation-methods/llm-as-a-judge) and integrating it into existing pipelines.
+
+Once this judge is configured, the rest of the pipeline is identical: poorly scored cases feed the analysis LLM, which synthesises weaknesses, and the rewriting LLM generates a corrected version.
+
+The main limitation: LLM-as-judge scores are less stable than deterministic metrics. Variance between two evaluations of the same output can be significant. The judge needs careful calibration, multiple runs to average scores, and close attention to the judge model's own biases.
+
+## What I took away from this
+
+**Auto-improvement does not replace prompt engineering: it accelerates it.** The quality of the annotated dataset remains the limiting factor. A poorly representative dataset produces a weak signal, and the pipeline improves the prompt in the wrong direction. Garbage in, garbage out.
+
+**Designing for structured outputs is not a detail.** A LLM that produces JSON or tool calls is not only easier to parse. It is also automatically evaluable, which makes the entire improvement loop viable.
+
+**Langfuse is the glue.** Traceability, dataset storage, version comparison, evaluation triggering: without this tool, the loop does not scale beyond a prototype.
+
+**The real gain is not speed, it is consistency.** A tired or rushed human can miss a recurring failure pattern. The pipeline reads every single case at every iteration.
+
+---
+
+If you are working on a chatbot with tool calls, a data extraction pipeline, or another LLM use case with structured outputs and want to set up an automatic improvement loop, [let's talk](/en/contact).
