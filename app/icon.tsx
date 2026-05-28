@@ -1,4 +1,3 @@
-import { Bot } from "lucide-react";
 import { ImageResponse } from "next/og";
 
 export const size = {
@@ -24,12 +23,23 @@ export default function Icon() {
           boxShadow: "inset 0 0 0 1px rgba(255, 255, 255, 0.16)",
         }}
       >
-        <Bot
-          size={22}
-          strokeWidth={2.25}
-          color="#ffffff"
-          absoluteStrokeWidth
-        />
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#ffffff"
+          stroke-width="2.25"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M12 8V4H8" />
+          <rect width="16" height="12" x="4" y="8" rx="2" />
+          <path d="M2 14h2" />
+          <path d="M20 14h2" />
+          <path d="M15 13v2" />
+          <path d="M9 13v2" />
+        </svg>
       </div>
     ),
     {
