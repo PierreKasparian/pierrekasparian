@@ -1,0 +1,105 @@
+---
+title: "LiteParse v2.0 : extraction PDF locale sans LLM ni cloud"
+description: "LiteParse v2.0 extrait le texte et la mise en page de PDFs sans LLM et sans cloud. Idéal pour des pipelines RAG RGPD-compatibles en Python, JS ou Rust."
+date: "2026-05-28"
+tags: ["Python", "PDF", "LiteParse", "RAG", "RGPD"]
+readingTime: 7
+---
+
+Extraire du texte depuis des PDFs d'entreprise sans envoyer les données vers un service cloud externe : c'est la promesse de LiteParse v2.0, un outil open source entièrement réécrit en Rust par l'équipe LlamaIndex.
+
+**LiteParse v2.0** parse des PDFs et des documents Office en local, sans LLM, sans API distante. Le texte est extrait en respectant la mise en page originale, avec bounding boxes, de façon déterministe et sans dépendance réseau. Pour les entreprises qui manipulent des données sensibles (contrats, RH, comptabilité), c'est une brique essentielle pour un pipeline RAG conforme RGPD.
+
+## Pourquoi "sans cloud" change tout pour le RGPD
+
+Envoyer un PDF vers une API d'extraction distante (Google Document AI, AWS Textract, Adobe Extract) revient à transférer des données vers un sous-traitant. L'**Article 28 du RGPD** exige que ce transfert fasse l'objet d'un DPA (Data Processing Agreement). Si le sous-traitant est une entreprise américaine, le **CLOUD Act (2018)** permet aux autorités américaines d'exiger l'accès à ces données, même hébergées en Europe.
+
+Avec LiteParse, tout tourne en local : pas de réseau, pas de DPA à gérer, pas de risque de transfert hors UE.
+
+## Ce que LiteParse v2.0 apporte
+
+LiteParse v2.0 est une réécriture complète en Rust du projet original (Node.js). Principaux changements :
+
+- **Moteur Rust** : performances jusqu'à 100x supérieures à v1.0 sur les petits documents, 3x sur les gros
+- **Multi-langage** : packages natifs pour Python, JavaScript/TypeScript, Rust, et WASM (navigateur et edge runtimes)
+- **OCR intégré** via Tesseract-rs pour les PDFs scannés
+- **Pas de LLM** : extraction purement structurelle, déterministe, reproductible
+- **Layout préservé** : le texte est restitué selon sa position spatiale dans le document
+
+Benchmark publié : **0.777 seconde pour un document de 457 pages (100 Mo)**.
+
+## Installation
+
+### Python
+
+```bash
+pip install liteparse
+```
+
+### JavaScript / TypeScript
+
+```bash
+npm install @llamaindex/liteparse
+```
+
+### Rust
+
+```bash
+cargo install liteparse
+```
+
+### Navigateur et edge runtimes (WASM)
+
+```bash
+npm install @llamaindex/liteparse-wasm
+```
+
+Le package WASM permet de parser des PDFs directement dans le navigateur, sans serveur. Les callbacks OCR sont configurés séparément en WASM (Tesseract n'est pas embarqué par défaut dans ce mode).
+
+## Utilisation en Python
+
+```python
+from liteparse import parse_pdf
+
+result = parse_pdf("contrat.pdf")
+
+for page in result.pages:
+    print(f"--- Page {page.number} ---")
+    for block in page.blocks:
+        print(block.text)
+        print(f"  Bbox: {block.bbox}")  # (x, y, width, height)
+```
+
+L'extraction préserve l'ordre de lecture et les coordonnées spatiales de chaque bloc, ce qui facilite le découpage en chunks pour un pipeline RAG.
+
+## LiteParse ou PyMuPDF : lequel choisir ?
+
+Les deux outils parsent des PDFs localement. Voici les différences clés :
+
+| Critère             | LiteParse v2.0               | PyMuPDF (fitz)              |
+| ------------------- | ---------------------------- | --------------------------- |
+| Langage             | Python, JS, Rust, WASM       | Python uniquement            |
+| Moteur              | PDFium (fork custom)         | MuPDF (C)                   |
+| OCR intégré         | Oui (Tesseract-rs)           | Non (externe uniquement)    |
+| WASM / navigateur   | Oui                          | Non                         |
+| Écosystème          | LlamaIndex                   | Universel                   |
+| Maturité            | v2.0 (2026)                  | Très mature                 |
+
+Règle simple : pour un pipeline Python pur avec contrôle fin du parsing, [PyMuPDF](/fr/blog/guide/parser-pdf-pymupdf) reste une référence solide. Si vous avez besoin de multi-langage, de WASM, ou d'intégration native dans LlamaIndex, LiteParse est le choix naturel.
+
+## Cas d'usage en entreprise
+
+LiteParse convient particulièrement à :
+
+- **Pipelines RAG sur documents internes** : contrats, RH, documentation technique, sans exposer les PDFs vers l'extérieur
+- **Traitement de factures et reçus** : extraction locale, rapide, conforme RGPD
+- **Applications web ou edge** : parsing côté client via WASM, aucun serveur nécessaire
+- **Workflows de conformité** : audit documentaire où les données ne peuvent pas quitter l'infrastructure
+
+## Conclusion
+
+LiteParse v2.0 s'impose comme une brique sérieuse pour l'extraction documentaire locale. Réécriture Rust, support multi-langage, OCR intégré et compatibilité WASM en font une option polyvalente pour les équipes qui veulent traiter des PDFs rapidement et sans envoyer de données dans le cloud.
+
+Pour les entreprises françaises qui gèrent des données sensibles (données clients, contrats, dossiers RH), c'est exactement le type d'outil à privilégier dans une architecture IA RGPD-compatible.
+
+Si vous souhaitez construire un pipeline d'extraction documentaire adapté à vos contraintes légales, [prenez contact](/fr/contact).

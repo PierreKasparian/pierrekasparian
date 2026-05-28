@@ -1,0 +1,134 @@
+---
+title: "MCP Tunnel : connecter des agents IA à vos systèmes privés"
+description: "Le Secure MCP Tunnel d'OpenAI connecte des agents IA à vos serveurs internes sans les exposer sur internet. Architecture, déploiement et analyse RGPD."
+date: "2026-05-28"
+tags: ["MCP", "Agents IA", "Sécurité", "RGPD", "OpenAI"]
+readingTime: 6
+---
+
+Un agent IA qui lit votre CRM, interroge votre base de données interne, ou appelle vos APIs métier : c'est prometteur. Mais ça soulève une question immédiate pour toute organisation sérieuse sur la sécurité : comment donner accès à ces systèmes sans les exposer sur internet ?
+
+OpenAI a publié une réponse technique : **Secure MCP Tunnel**. C'est un mécanisme qui permet à un agent IA (ChatGPT, Codex, API OpenAI) de communiquer avec un serveur MCP hébergé dans votre réseau privé, sans ouvrir de port entrant sur votre pare-feu.
+
+## Qu'est-ce que le protocole MCP ?
+
+**MCP (Model Context Protocol)** est un standard pour brancher des outils externes aux LLMs. Lancé par Anthropic en 2024, il est devenu un standard de fait adopté par OpenAI, Google et la communauté open source.
+
+Un serveur MCP expose des "tools" que l'agent peut appeler : requêter une base de données, envoyer un email, lire un fichier, appeler une API REST. Le LLM voit ces outils comme des fonctions et décide quand les invoquer selon la tâche en cours.
+
+Sans tunnel, un serveur MCP doit être accessible sur internet pour que le service IA (hébergé en cloud) puisse le joindre. Ce qui implique d'ouvrir un port, gérer un certificat TLS, et potentiellement exposer des systèmes internes.
+
+## Comment fonctionne le Secure MCP Tunnel ?
+
+L'architecture repose sur un composant logiciel déployé dans votre réseau : le `tunnel-client`. Voici le flux :
+
+1. Le `tunnel-client` ouvre une connexion HTTPS sortante vers l'endpoint OpenAI (port 443)
+2. Il **long-poll** en permanence : il attend des requêtes entrantes
+3. Quand ChatGPT ou l'API OpenAI veut appeler un outil MCP, la requête JSON-RPC est mise en file d'attente dans l'endpoint OpenAI
+4. Le `tunnel-client` la récupère et la transmet à votre serveur MCP local (via stdio ou HTTP)
+5. La réponse remonte par le même canal
+
+Résultat : votre serveur MCP n'a aucun port ouvert vers l'extérieur. Seule une connexion sortante est nécessaire.
+
+## Architecture en trois composants
+
+```
+┌─────────────────────────────────┐
+│  Votre réseau privé             │
+│                                 │
+│  ┌──────────────┐               │
+│  │  Serveur MCP │               │
+│  │  (privé)     │ ◄──────┐      │
+│  └──────────────┘         │      │
+│                            │      │
+│  ┌──────────────────────┐  │      │
+│  │  tunnel-client        │──┘      │
+│  │  (connexion sortante) │ ◄───────┼──── api.openai.com:443
+│  └──────────────────────┘          │
+└────────────────────────────────────┘
+                                          ┌──────────────────┐
+                                          │  ChatGPT / API   │
+                                          │  OpenAI          │
+                                          └──────────────────┘
+```
+
+## Options de déploiement
+
+OpenAI documente trois patterns principaux :
+
+- **Kubernetes sidecar** : le `tunnel-client` tourne dans le même Pod que le serveur MCP
+- **Déploiement Kubernetes séparé** : quand le serveur MCP est déjà accessible via un Service privé dans le cluster
+- **VM / systemd** : pour les infrastructures on-premises traditionnelles
+
+Initialisation pour un serveur stdio :
+
+```bash
+tunnel-client init \
+  --profile local-stdio \
+  --tunnel-id tunnel_[ID] \
+  --mcp-command "python /path/to/server.py"
+```
+
+Pour un serveur HTTP existant :
+
+```bash
+tunnel-client init \
+  --profile local-http \
+  --tunnel-id tunnel_[ID] \
+  --mcp-server-url http://localhost:8080
+```
+
+## Sécurité du tunnel
+
+Côté réseau, plusieurs mécanismes de sécurité sont disponibles :
+
+- Authentification par clé API avec permissions granulaires (Read / Use / Manage)
+- mTLS optionnel sur le plan de contrôle (`mtls.api.openai.com:443`)
+- Support des proxies sortants et des CA bundles personnalisés (environnements avec inspection SSL)
+- Zéro point d'ingress public exposé
+
+L'interface d'administration du `tunnel-client` est accessible uniquement en loopback (`localhost/ui`) et expose des endpoints `/healthz`, `/readyz` et `/metrics` pour l'observabilité.
+
+## Analyse RGPD : ce qui transit réellement par l'infrastructure OpenAI
+
+C'est le point critique. Le tunnel empêche votre serveur MCP d'être exposé sur internet. Mais les **requêtes et réponses MCP transitent par l'infrastructure OpenAI**.
+
+Ce que ça implique concrètement :
+
+- Si votre agent appelle un outil `recherche_contrat(client_id=12345)`, cette requête passe par les serveurs OpenAI
+- Si la réponse contient des données personnelles (nom, email, montant d'un contrat), ces données transitent aussi
+- OpenAI est une entreprise américaine, soumise au **CLOUD Act (2018)**, qui permet aux autorités américaines d'exiger l'accès à ces données, même hébergées en Europe
+
+Ce n'est pas un argument pour rejeter le Secure MCP Tunnel, mais pour l'utiliser avec discernement :
+
+| Cas d'usage | MCP Tunnel OpenAI adapté ? |
+| --- | --- |
+| Données publiques ou non-personnelles | Oui |
+| Données internes non-sensibles avec DPA OpenAI | Oui |
+| Données personnelles (Art. 44 RGPD, transfert hors UE) | À évaluer |
+| Données de santé, RH, financières très sensibles | Non recommandé |
+
+La CNIL recommande d'évaluer systématiquement le risque de transfert avant tout déploiement IA impliquant des données personnelles. Son [guide IA publié en 2023](https://www.cnil.fr/fr/intelligence-artificielle) est une référence utile à ce sujet.
+
+## Alternative souveraine : MCP open source + modèles EU
+
+Pour les cas où les données ne peuvent pas transiter par une infrastructure américaine, la même architecture reste possible avec des composants 100% maîtrisés :
+
+- **Serveur MCP** : spec open source, implémentable en Python avec le SDK officiel
+
+```bash
+pip install mcp
+```
+
+- **LLM** : Mistral AI (hébergement France), Llama 3 self-hosted sur OVHcloud ou Scaleway
+- **Orchestration** : LangChain, LlamaIndex, ou n8n pour les workflows automatisés
+
+Vous obtenez la même logique de tunnel (agent appelle serveur MCP privé) sans qu'aucune donnée ne sorte de l'infrastructure EU. C'est le schéma que je mets en place pour les clients qui intègrent de l'IA souveraine en entreprise.
+
+## Conclusion
+
+Le Secure MCP Tunnel d'OpenAI résout un vrai problème : connecter des agents IA à des systèmes internes sans créer de faille réseau. L'architecture est bien conçue et le déploiement est accessible.
+
+Pour un déploiement RGPD-compatible sur des données sensibles, la même logique s'applique avec un LLM open source hébergé en Europe : serveur MCP privé, connexion sortante uniquement, zéro ingress public.
+
+Si vous souhaitez intégrer des agents IA à vos outils internes en respectant vos contraintes légales, [parlons de votre projet](/fr/contact).

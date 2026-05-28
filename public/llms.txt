@@ -33,6 +33,10 @@
 - [Hardening an LLM platform in production](https://pierrekasparian.com/en/blog/case-study/harden-llm-platform-production): Pretto case study: removing base64 in favour of direct URLs, centralising third-party clients behind a Factory, and 8 other degradation causes to audit.
 - [Routage dynamique LLM : -90% coût, zéro downtime](https://pierrekasparian.com/fr/blog/guide/routage-dynamique-modeles-llm): Router Mistral Small/Medium/Large selon le volume de tokens et la charge des serveurs. Fallback chain Redis, TTL busy, code Python complet. Coût LLM divisé par 10 en production.
 - [Dynamic LLM Model Routing: 10x Cheaper, Zero Downtime](https://pierrekasparian.com/en/blog/guide/dynamic-llm-model-routing): Route across Mistral Small/Medium/Large based on token volume and server availability. Redis busy flags, fallback chain, full Python code. 10x LLM cost reduction in production.
+- [LiteParse v2.0 : extraction PDF locale sans LLM ni cloud](https://pierrekasparian.com/fr/blog/guide/liteparse-extraction-pdf-local-sans-cloud): LiteParse v2.0 extrait le texte et la mise en page de PDFs sans LLM et sans cloud. Idéal pour des pipelines RAG RGPD-compatibles en Python, JS ou Rust.
+- [LiteParse v2.0: Local PDF Extraction Without LLM or Cloud](https://pierrekasparian.com/en/blog/guide/liteparse-local-pdf-extraction-no-cloud): LiteParse v2.0 parses PDFs and Office documents locally, without LLMs or cloud APIs. The go-to tool for GDPR-compliant RAG pipelines in Python, JS, or Rust.
+- [MCP Tunnel : connecter des agents IA à vos systèmes privés](https://pierrekasparian.com/fr/blog/article/mcp-tunnel-connecter-agents-ia-systemes-prives): Le Secure MCP Tunnel d'OpenAI connecte des agents IA à vos serveurs internes sans les exposer sur internet. Architecture, déploiement et analyse RGPD.
+- [Secure MCP Tunnel: Connect AI Agents to Private Systems](https://pierrekasparian.com/en/blog/article/mcp-tunnel-connect-ai-agents-private-systems): OpenAI's Secure MCP Tunnel lets AI agents access internal tools without exposing your servers to the internet. Architecture breakdown and GDPR analysis.
 
 ## About
 
