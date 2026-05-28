@@ -64,6 +64,23 @@ export default async function BlogPage({ params }: PageProps<"/[lang]/blog">) {
           <p className="mt-4 max-w-2xl text-lg text-[var(--muted-foreground)]">
             {dict.blog.subtitle}
           </p>
+          {activeCategories.length > 0 && (
+            <div className="mt-8 flex flex-wrap gap-x-6 gap-y-2">
+              {activeCategories.map((cat) => (
+                <a
+                  key={cat}
+                  href={`#${cat}`}
+                  className="flex items-center gap-2 text-sm font-medium underline underline-offset-4 decoration-[var(--border)] text-[var(--foreground)] transition-colors hover:decoration-[var(--foreground)]"
+                >
+                  <span
+                    className="inline-block size-2 rounded-full"
+                    style={{ backgroundColor: CATEGORY_COLORS[cat] }}
+                  />
+                  {dict.blog.categories[cat]}
+                </a>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
@@ -75,7 +92,7 @@ export default async function BlogPage({ params }: PageProps<"/[lang]/blog">) {
           ) : (
             <div className="flex flex-col gap-16">
               {activeCategories.map((category) => (
-                <div key={category}>
+                <div key={category} id={category}>
                   {/* Category heading */}
                   <div className="mb-6 flex items-baseline justify-between">
                     <h2 className="flex items-center gap-2 text-2xl font-semibold">
