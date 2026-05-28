@@ -1,0 +1,134 @@
+---
+title: "Multi-provider LLM batch inference service at Pretto"
+description: "Case study: a unified service for OpenAI, Anthropic, Mistral and Vertex processing 3000+ inputs per batch, with 50% cost savings and a 24h SLA."
+date: "2026-05-28"
+tags: ["LLM", "Batch", "Pipeline", "Python", "Case Study"]
+readingTime: 9
+---
+
+At Pretto, I designed a unified LLM batch inference service that processes 3000+ inputs per run across four providers (OpenAI, Anthropic, Mistral, Google Vertex), with heavy documents, cost monitoring, and a 24h SLA. The outcome: roughly 50% savings versus synchronous calls, and a reusable infrastructure layer for every other internal AI project.
+
+Here is how I built it, the trade-offs that mattered, and what really changes when you industrialise LLM batch workloads.
+
+## Why a dedicated batch service instead of synchronous calls?
+
+The question comes up at every kickoff: "why not just hit the API in real time?" Three reasons.
+
+**Cost.** OpenAI, Anthropic and Mistral price their batch APIs at around 50% off their synchronous equivalents. On 3000+ inputs per run, with prompts containing heavy documents (5k to 50k input tokens), the difference is thousands of euros per month. For an SMB or a scale-up, it is the LLM cost line cut in half without changing the model.
+
+**Rate limits.** Running 3000 documents synchronously instantly saturates provider quotas. You then need a queueing system, retries, exponential backoff: you end up reimplementing a worse version of batch. The batch APIs handle that on the provider side.
+
+**Infrastructure pressure.** Synchronous calls hold workers, tie up connections, pollute application logs. Batch is async by construction: submit, poll, consume. It is operationally simpler.
+
+The single downside: latency. The official SLA is 24h, in practice it is often much faster. For information extraction, classification, translation, or precomputed embeddings, this is exactly the right tool. For user-facing chat, obviously not.
+
+## Which providers offer a batch API and how do they differ?
+
+The four providers we use all expose a batch API, but with different conventions. Here is the comparison table I keep open daily:
+
+| Provider | Endpoint | Input format | SLA | Discount | Quirk |
+|---|---|---|---|---|---|
+| OpenAI | [Batch API](https://platform.openai.com/docs/guides/batch) | JSONL via Files API | 24h | ~50% | Upload file, then create batch |
+| Anthropic | [Message Batches](https://docs.anthropic.com/en/docs/build-with-claude/batch-processing) | Inline JSON (up to 100k requests) | 24h | 50% | No file storage, body in-request |
+| Mistral | [Batch Inference](https://docs.mistral.ai/capabilities/batch/) | JSONL via Files API | 24h | 50% | OpenAI-compatible wire format |
+| Google Vertex | Batch prediction (Gemini) | JSONL on GCS or BigQuery | 24h | 50% | GCS storage required, IAM lifecycle |
+
+Three axes drive the differences: **where inputs live** (uploaded file, inline JSON, GCS bucket), **how each request is identified inside a batch** (`custom_id` everywhere, but slightly different schemas), and **how outputs are retrieved** (direct download, signed file, GCS).
+
+That heterogeneity is exactly what justifies a unified service instead of four siloed integrations.
+
+## How do you unify heterogeneous APIs behind a single interface?
+
+The chosen pattern: one **adapter per provider** behind a shared interface, with a single job schema on the application side.
+
+```python
+from dataclasses import dataclass
+from typing import Literal, Protocol
+
+@dataclass
+class BatchJob:
+    job_id: str
+    provider: Literal["openai", "anthropic", "mistral", "vertex"]
+    model: str
+    inputs: list[dict]  # {custom_id, prompt, system, params}
+    metadata: dict      # cost tags, project, owner, run_id
+
+class BatchAdapter(Protocol):
+    def submit(self, job: BatchJob) -> str: ...
+    def poll(self, provider_job_id: str) -> Literal["pending","running","done","failed"]: ...
+    def fetch_results(self, provider_job_id: str) -> list[dict]: ...
+```
+
+Each adapter implements these three methods in the provider's dialect. From the caller's perspective (any Pretto AI project), all that exists is a `BatchJob` and a status. The service hides:
+
+- JSONL versus inline JSON serialisation
+- uploads to the Files API or to GCS
+- pagination and `custom_id` deduplication
+- translating provider error codes into a common shape
+- retries on transient errors (5xx, throttling)
+
+The consuming application has no idea which provider runs its job, nor where intermediate files live. Switching model or provider is a two-line config change, no business code touched.
+
+## How do you handle 3000+ inputs with heavy documents?
+
+Two concrete problems appear as soon as you go past a few hundred inputs with documents of several tens of thousands of tokens.
+
+**Polling and idempotence.** A batch may take 5 minutes or 23 hours. The service persists the mapping `internal job_id -> provider_job_ids` (possibly several if chunked), and a worker polls every 5 minutes. Every `custom_id` is built to be **idempotent and reproducible**: `{run_id}-{input_hash}`. If a job is replayed, already processed inputs are skipped.
+
+**Error recovery.** When a sub-batch fails, we do not rerun everything. The adapter extracts the failing `custom_id` values and reschedules them in a new batch. Successful `custom_id` values are already persisted in the results table. This is what makes the service usable for business-critical runs with no human intervention.
+
+```python
+def reconcile(job: BatchJob, partial_results: list[dict]) -> list[dict]:
+    done_ids = {r["custom_id"] for r in partial_results if r["status"] == "ok"}
+    missing = [i for i in job.inputs if i["custom_id"] not in done_ids]
+    return missing  # to reschedule in a new batch
+```
+
+## How do you monitor costs in real time?
+
+A batch service without cost monitoring is a financial time bomb. Three mechanisms are in place:
+
+**Systematic tagging.** Every `BatchJob` carries a `metadata` block (project, owner, environment, run_id). When results come back, the service computes per-job cost from input and output tokens reported by the provider, and writes it to the database with the tags.
+
+**Daily dashboard.** An internal dashboard shows cumulative cost per project, per provider, per model, over 24h / 7 days / 30 days. This is how we answer "how much did project X cost this month?" without digging into the provider invoice.
+
+For an **SMB discovering AI integration costs**, this telemetry is non-negotiable. Production LLM costs are not linear, and a poorly scoped run can be ten times the expected invoice.
+
+## What can an SMB learn when industrialising an LLM pipeline?
+
+Four typical use cases where batch is unbeatable:
+
+**Information extraction from PDFs or documents.** You have 10,000 contracts, invoices or reports to structure. This is the archetypal batch workload: not urgent, large, qualitative. A standard `Python ETL pipeline` orchestrates text extraction, submits to the batch service, ingests results into the database.
+
+**Automatic classification.** Categorising support tickets, emails, e-commerce products. A 50,000-row batch costs 50% less than synchronous and finishes in a few hours.
+
+**Catalogue translation.** Translating 20,000 product sheets into five languages. 
+
+**Precomputed embeddings.** For a RAG system, computing embeddings across an entire corpus in batch (or via dedicated embeddings APIs, some of which also offer a batch mode) is massively more efficient.
+
+These are exactly the workloads where I see companies default to synchronous and pay twice what they should. It echoes what I covered in the [multi-agent RAG case study for LiveSession](/en/blog/case-study/rag-multiagent-livesession): segmenting requests by nature changes the economics.
+
+## Pitfalls to avoid
+
+Four mistakes I have seen (and occasionally made):
+
+**No polling timeout.** A batch stuck in `running` for 48h with no alert is a project that thinks it has finished while nothing happened. Always define a business timeout (say 30h) past which you alert.
+
+**Non-idempotent `custom_id`.** If `custom_id` values contain a timestamp or random UUID, you can never reconcile results with original inputs after a crash. Always derive `custom_id` from a stable hash of the input.
+
+**Unconstrained output format.** Asking for JSON in the prompt with no code-side validation is betting the LLM will not hallucinate a comma. Use the structured JSON mode or tool calls each provider offers, and validate every output against a schema (Pydantic, JSON Schema).
+
+**No explicit reconciliation.** At the end of a job, you must be able to state: N inputs submitted, M outputs persisted, N - M failures with reason. Without that count, you discover gaps three weeks later.
+
+## Conclusion: TL;DR
+
+A unified batch inference service is not engineering luxury: it is what keeps LLM costs reasonable and the operational SLA realistic once you industrialise. At Pretto, this service is the base infrastructure for every other internal AI project.
+
+The key points:
+
+- Batch APIs from OpenAI, Anthropic, Mistral and Vertex offer ~50% off against a 24h SLA
+- One adapter per provider behind a shared interface isolates business code from API specifics
+- Idempotent `custom_id`, token-based chunking, explicit reconciliation: non-negotiable past 1000 inputs
+- Per-project cost monitoring tags are the only real defence against invoice drift
+
+If you want to industrialise an `LLM pipeline` or reduce your AI integration cost without sacrificing quality, [let's talk](/en/contact). I build this kind of infrastructure as a freelance engagement, or I can audit yours.
