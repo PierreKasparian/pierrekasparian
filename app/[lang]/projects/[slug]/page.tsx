@@ -6,7 +6,7 @@ import { notFound } from "next/navigation";
 
 import { buttonVariants } from "@/components/ui/button";
 import { projects } from "@/data/projects";
-import { buildAlternates } from "@/lib/seo";
+import { buildAlternates, buildBreadcrumbSchema, SITE_URL } from "@/lib/seo";
 
 import {
   getDictionary,
@@ -43,8 +43,21 @@ export default async function ProjectDetailPage({
   if (!project) notFound();
   const dict = await getDictionary(lang);
 
+  const breadcrumbSchema = buildBreadcrumbSchema([
+    { name: lang === "fr" ? "Accueil" : "Home", url: `${SITE_URL}/${lang}` },
+    {
+      name: lang === "fr" ? "Projets" : "Projects",
+      url: `${SITE_URL}/${lang}/projects`,
+    },
+    { name: project.title[lang] },
+  ]);
+
   return (
     <article className="mx-auto max-w-4xl px-6 py-16">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       {/* BACK */}
       <Link
         href={`/${lang}/projects`}

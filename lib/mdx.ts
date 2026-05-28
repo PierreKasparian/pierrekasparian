@@ -19,6 +19,7 @@ export interface ArticleMeta {
   title: string;
   description: string;
   date: string;
+  dateModified: string;
   tags: string[];
   readingTime: number;
   lang: string;
@@ -54,6 +55,7 @@ function buildMeta(
     title: asString(data.title, slug),
     description: asString(data.description, ""),
     date: asString(data.date, ""),
+    dateModified: asString(data.dateModified, ""),
     tags: asStringArray(data.tags),
     readingTime: asNumber(data.readingTime, 5),
     lang,

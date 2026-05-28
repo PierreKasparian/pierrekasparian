@@ -103,7 +103,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     for (const article of getAllArticles(locale)) {
       entries.push({
         url: `${BASE_URL}/${locale}/blog/${article.category}/${article.slug}`,
-        lastModified: article.date ? new Date(article.date) : new Date(),
+        lastModified: article.dateModified
+          ? new Date(article.dateModified)
+          : article.date
+            ? new Date(article.date)
+            : new Date(),
         changeFrequency: "monthly",
         priority: 0.6,
       });

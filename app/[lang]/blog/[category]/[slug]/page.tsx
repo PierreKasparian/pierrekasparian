@@ -8,6 +8,7 @@ import remarkGfm from "remark-gfm";
 import { Badge } from "@/components/ui/badge";
 import { getAllArticles, getArticle, isBlogCategory } from "@/lib/mdx";
 import {
+  buildBreadcrumbSchema,
   buildOpenGraph,
   buildTwitterCard,
   defaultOgImage,
@@ -68,6 +69,16 @@ export default async function BlogPostPage({
 
   const dict = await getDictionary(lang);
 
+  const breadcrumbSchema = buildBreadcrumbSchema([
+    { name: lang === "fr" ? "Accueil" : "Home", url: `${SITE_URL}/${lang}` },
+    { name: "Blog", url: `${SITE_URL}/${lang}/blog` },
+    {
+      name: dict.blog.categories[category],
+      url: `${SITE_URL}/${lang}/blog/${category}`,
+    },
+    { name: article.meta.title },
+  ]);
+
   const blogPostingSchema = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
@@ -75,7 +86,7 @@ export default async function BlogPostPage({
     description: article.meta.description,
     image: defaultOgImage.url,
     datePublished: article.meta.date,
-    dateModified: article.meta.date,
+    dateModified: article.meta.dateModified || article.meta.date,
     url: `${SITE_URL}/${lang}/blog/${category}/${slug}`,
     mainEntityOfPage: {
       "@type": "WebPage",
@@ -101,6 +112,10 @@ export default async function BlogPostPage({
 
   return (
     <article className="mx-auto max-w-4xl px-6 py-16">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostingSchema) }}

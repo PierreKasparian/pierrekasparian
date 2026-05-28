@@ -11,7 +11,7 @@
 
 **Overall GEO Score: 36/100 — Critical** *(at audit date 2026-05-27)*
 
-> **Progress update (2026-05-28):** 18/22 issues addressed since the initial audit. All critical and most high/medium-priority items are resolved. Estimated current score: ~58-62/100. Remaining gaps: brand authority (off-site, no code fix possible), `BreadcrumbList` schema, Bing Webmaster Tools, sitemap lastmod dates, "4+ years" stat, service detail pages.
+> **Progress update (2026-05-28):** 19/22 issues addressed since the initial audit. All critical, high, and medium-priority items are resolved (except H7 brand presence which is off-site). `BreadcrumbList` schema added to blog posts, blog categories, and project detail pages. `dateModified` in MDX frontmatter and sitemap. Estimated current score: ~62-66/100. Remaining gaps: brand authority (H7, off-site), Bing Webmaster Tools (L3, needs account), service detail pages (Week 4).
 
 pierrekasparian.com has a technically solid foundation (Next.js SSR, clean robots.txt, correct hreflang implementation) but is largely invisible to AI systems. The site suffers from three structural deficiencies: absent brand presence outside the site itself (no Wikipedia, no Reddit, no third-party coverage), content that is too thin and sparse to be cited by AI engines (1 blog post, 520 words, no external citations), and critical errors that actively harm crawl trust (5 service pages return 404 but are listed in the sitemap at the highest content priority). The single most damaging blind spot for a consultant whose brand promise is GDPR compliance: **the site collects contact data with no privacy policy page**, a direct legal obligation under French law that contradicts the core value proposition. Fixing the top 5 issues in this report would realistically move the score from 36 to ~55 within 30 days, and to 70+ within 90 days.
 
@@ -159,6 +159,8 @@ pierrekasparian.com has a technically solid foundation (Next.js SSR, clean robot
 **Impact:** Indexing a placeholder wastes crawl budget and creates a poor first impression for any user landing from search. Remove from sitemap until content is ready.
 
 ### M5 — Sitemap lastmod dates are identical build-time timestamps
+
+**Status: ✅ FIXED** — `app/sitemap.ts` now uses `article.dateModified` (from MDX frontmatter) when available, falling back to `article.date`. The RGPD/LLM articles have `dateModified: "2026-05-27"` in frontmatter since they were substantially updated. Static routes have explicit per-page `lastmod` dates.
 
 **Impact:** All 33 URLs share the exact timestamp `2026-05-27T10:14:18.858Z`. Search engines ignore uniform lastmod values as inaccurate. Real per-page modification dates help crawlers prioritize content refreshes.
 **Fix:** Track actual content modification dates per page and inject them into the sitemap generator.
@@ -399,7 +401,7 @@ Publié le 15 janvier 2025 · 6 min de lecture
 - [x] Add `ProfessionalService` JSON-LD to `lib/seo.ts` and inject via layout (see template below)
 - [x] Expand `personSchema`: add `image` (headshot URL), `description`, `knowsAbout` array, `hasOccupation`
 - [x] Fix `BlogPosting` schema: add `image`, `dateModified`, `publisher`, `mainEntityOfPage`, `speakable`
-- [ ] Add `BreadcrumbList` schema to all non-homepage routes
+- [x] Add `BreadcrumbList` schema to all non-homepage routes
 - [x] Add author byline component to all blog articles
 - [x] Remove `/fr/tools` from sitemap (placeholder page)
 - [ ] Set up Bing Webmaster Tools + submit sitemap (add `msvalidate.01` meta tag)
@@ -410,7 +412,7 @@ Publié le 15 janvier 2025 · 6 min de lecture
   - [x] Add CNIL guidance citation and GDPR Article 44-46 reference
   - [x] Add LiveSession case study section (architecture, OVH VPS choice, 95% relevance result)
   - [ ] Add decision tree: "If your use case is X, use solution Y"
-  - [ ] Update `dateModified` in MDX frontmatter
+  - [x] Update `dateModified` in MDX frontmatter
   - [x] Fix the "6 min read" label to match actual word count
 - [x] Publish second blog article: RAG multi-agent LiveSession case study (FR + EN, 1,200+ words)
 - [ ] Add an email address to the contact page and footer

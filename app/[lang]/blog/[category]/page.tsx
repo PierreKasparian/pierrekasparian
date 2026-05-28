@@ -15,7 +15,7 @@ import {
   type BlogCategory,
   BLOG_CATEGORIES,
 } from "@/lib/mdx";
-import { buildAlternates } from "@/lib/seo";
+import { buildAlternates, buildBreadcrumbSchema, SITE_URL } from "@/lib/seo";
 
 import {
   getDictionary,
@@ -62,8 +62,18 @@ export default async function BlogCategoryPage({
   const articles = getArticlesByCategory(lang, category);
   const categoryLabel = dict.blog.categories[category];
 
+  const breadcrumbSchema = buildBreadcrumbSchema([
+    { name: lang === "fr" ? "Accueil" : "Home", url: `${SITE_URL}/${lang}` },
+    { name: "Blog", url: `${SITE_URL}/${lang}/blog` },
+    { name: categoryLabel },
+  ]);
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       {/* HEADER */}
       <section className="border-b border-[var(--border)]">
         <div className="mx-auto max-w-6xl px-6 py-16 sm:py-24">
