@@ -1,0 +1,168 @@
+---
+title: "RAG Chunking: 4 Strategies to Maximize Retrieval Precision"
+description: "Fixed-size, recursive, semantic or agentic: comparing 4 RAG chunking strategies with code examples and production recommendations."
+date: "2026-05-28"
+tags: ["RAG", "chunking", "NLP", "LLM pipeline Python freelance", "LangChain"]
+readingTime: 8
+---
+
+Chunking is the most underestimated step in a RAG pipeline. You can have the best embedding model and the most optimised retriever: if your chunks are poorly constructed, your system will retrieve the wrong passages and generate imprecise or incomplete responses.
+
+**Direct answer:** chunking means splitting your documents into fragments before indexing. The strategy you choose directly determines retrieval quality. There is no universal strategy: fixed-size is simple but brutal, recursive respects structure, semantic follows meaning, agentic adapts to content.
+
+This guide compares the 4 approaches with code examples and concrete recommendations based on hands-on production RAG experience.
+
+## Why Chunking Sets the Quality Ceiling of a RAG
+
+During retrieval, your system fetches the K chunks closest to the user query. If a chunk is too large, it contains too many different ideas and its embedding is diluted: it is precise about nothing. If a chunk is too small, it lacks context: the embedding is precise but the generated answer will be incomplete.
+
+Ideal chunking produces fragments that are:
+- **semantically coherent**: one idea per chunk
+- **self-contained**: understandable without the rest of the document
+- **reasonably sized**: typically between 200 and 600 tokens
+
+The 4 strategies below represent a spectrum from simplest to most intelligent.
+
+## 1. Fixed-Size Chunking: Simple, Fast, Brutal
+
+The most basic strategy: cut every X tokens (or characters), with optional overlap to avoid losing context between chunks.
+
+```python
+from langchain.text_splitter import CharacterTextSplitter
+
+splitter = CharacterTextSplitter(
+    chunk_size=500,
+    chunk_overlap=50,
+    separator=" "
+)
+chunks = splitter.split_text(document)
+```
+
+**Advantages:** extremely simple to implement, deterministic, fast on large volumes.
+
+**Disadvantages:** cuts mid-sentence, mid-paragraph, even mid-list. Produces chunks with no semantic coherence. A chunk may start at the end of one explanation and continue with a completely unrelated one.
+
+**When to use it:** rarely in production. Useful for a quick first prototype or for very homogeneous documents (logs, raw tabular data).
+
+## 2. Recursive Character Splitting: Respecting Document Structure
+
+LangChain's `RecursiveCharacterTextSplitter` has become the standard starting point for most projects. It uses a hierarchy of separators: first double line breaks (paragraphs), then single line breaks, then sentences, then words.
+
+```python
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+
+splitter = RecursiveCharacterTextSplitter(
+    chunk_size=600,
+    chunk_overlap=80,
+    separators=["\n\n", "\n", ". ", " ", ""]
+)
+chunks = splitter.split_text(document)
+```
+
+It splits first at the paragraph level. If a paragraph exceeds the maximum size, it falls back to the next separator (line break), and so on.
+
+**Advantages:** respects the natural structure of the document. Chunks often correspond to logical units (paragraphs, sections). Easy to configure.
+
+**Disadvantages:** does not understand meaning. Two paragraphs on different topics can end up in the same chunk if one is short. A topic shift in the middle of a long paragraph goes undetected.
+
+Building the multi-tenant RAG deployed for LiveSession via Ailog, I used `RecursiveCharacterTextSplitter` with custom separators tailored to the document format. Defining your own separator list (section headers, code blocks, double line breaks) gives precise control over cut points without losing the logical structure of the content.
+
+**When to use it:** the majority of production cases. Structured documents (Markdown, HTML, Word), articles, technical documentation.
+
+## 3. Semantic Chunking: Following Meaning, Not Structure
+
+Semantic chunking uses embeddings to detect topic shifts. The idea: compare the embedding of each sentence with the embedding of the next one. When similarity drops sharply, that is a chunk boundary.
+
+```python
+from langchain_experimental.text_splitter import SemanticChunker
+from langchain_openai import OpenAIEmbeddings  # or any embedding model
+
+splitter = SemanticChunker(
+    embeddings=OpenAIEmbeddings(),
+    breakpoint_threshold_type="percentile",
+    breakpoint_threshold_amount=95
+)
+chunks = splitter.create_documents([document])
+```
+
+The combined approach outperforms pure semantic chunking: first split on obvious structural boundaries (headers, double line breaks) with a recursive splitter, then let the semantic chunker refine within each section.
+
+```python
+def hybrid_split(document: str, semantic_splitter, pre_separator="\n\n"):
+    # Step 1: pre-split on structural separators
+    rough_chunks = document.split(pre_separator)
+    rough_chunks = [c.strip() for c in rough_chunks if c.strip()]
+
+    # Step 2: semantic chunking on each rough chunk
+    final_chunks = []
+    for chunk in rough_chunks:
+        if len(chunk.split()) > 100:
+            semantic_sub = semantic_splitter.create_documents([chunk])
+            final_chunks.extend([d.page_content for d in semantic_sub])
+        else:
+            final_chunks.append(chunk)
+
+    return final_chunks
+```
+
+**Advantages:** produces semantically coherent, self-contained chunks regardless of formatting. Very effective for unstructured documents (emails, meeting notes, transcripts).
+
+**Disadvantages:** slower (embedding model calls for each sentence). Variable chunk sizes complicate context window management. Sensitive to threshold choice.
+
+**When to use it:** unstructured documents, heterogeneous corpora, when retrieval quality takes priority over indexing speed.
+
+## 4. Agentic Chunking: Delegating the Decision to an LLM
+
+Agentic chunking is the newest and most costly strategy. An LLM analyses each document and determines the logical boundaries itself, identifying atomic propositions or concepts.
+
+```python
+import anthropic
+
+def agentic_chunk(document: str, client: anthropic.Anthropic) -> list[str]:
+    prompt = f"""Split this document into self-contained chunks.
+Each chunk must contain one complete idea.
+Return only the chunks separated by "---CHUNK---".
+
+Document:
+{document}"""
+
+    response = client.messages.create(
+        model="claude-sonnet-4-6",
+        max_tokens=4096,
+        messages=[{"role": "user", "content": prompt}]
+    )
+
+    chunks = response.content[0].text.split("---CHUNK---")
+    return [c.strip() for c in chunks if c.strip()]
+```
+
+**Advantages:** produces the most semantically coherent chunks. Can identify implicit structures (Q&A, unformatted lists, multi-step reasoning).
+
+**Disadvantages:** expensive (one LLM call per document or section), slow, non-deterministic. Hard to debug and scale on large volumes.
+
+**When to use it:** high-value, low-volume corpora. Very complex documents (legal contracts, medical protocols). Not suitable for real-time indexing.
+
+## Comparison: Which Strategy Should You Choose?
+
+| Strategy | Chunk Quality | Speed | Cost | Use Case |
+|---|---|---|---|---|
+| Fixed-size | Low | Very fast | None | Prototypes, logs |
+| Recursive | Good | Fast | None | Standard production |
+| Semantic | Very good | Medium | Moderate (embeddings) | Heterogeneous corpora |
+| Agentic | Excellent | Slow | High (LLM) | Premium low-volume corpus |
+
+## Practical Recommendations
+
+**To get started quickly:** `RecursiveCharacterTextSplitter` with 500-700 token chunks and 10-15% overlap. This is the pragmatic default for most production teams.
+
+**To improve precision without major overhead:** refine the separator list of `RecursiveCharacterTextSplitter` to match the actual format of your documents (headers, code blocks, domain-specific markers). This is the approach used on the Ailog RAG for LiveSession: adapting the separators to the LiveSession document format produced a measurable relevance improvement without any additional infrastructure cost. To go further, combine this recursive splitter (structural pre-splitting) with the semantic chunker (internal refinement).
+
+**For complex or sensitive documents:** agentic chunking is justified when response quality is critical and volume is low (hundreds of documents, not thousands).
+
+**An often-overlooked parameter:** overlap. Too little overlap loses context between chunks. Too much needlessly inflates the index and introduces duplicates in retrieval. 10-15% of the chunk size is a reliable heuristic.
+
+## TL;DR
+
+Chunking is the step that sets the quality ceiling of your RAG. No model can compensate for poor chunks. In production, the hybrid approach (recursive + semantic) offers the best quality/cost ratio for most use cases. Agentic chunking remains a niche option for high-value, low-volume corpora.
+
+Building a custom RAG or looking to optimise your end-to-end pipeline? [Get in touch](/en/contact).

@@ -23,6 +23,10 @@
 - [7 Advanced Metrics to Evaluate Your RAG in Production](https://pierrekasparian.com/en/blog/guide/rag-evaluation-metrics-production): The 7 advanced evaluation metrics to detect hidden accuracy gaps in a production RAG pipeline.
 - [Le RAG n'est pas mort : vers l'agentic RAG en entreprise](https://pierrekasparian.com/fr/blog/article/agentic-rag-entreprise): Pourquoi les fenêtres de contexte étendue ne tuent pas le retrieval augmented generation, et comment l'agentic RAG devient l'architecture dominante en production pour les PME.
 - [RAG Is Not Dead: The Rise of Agentic RAG in Enterprise](https://pierrekasparian.com/en/blog/article/agentic-rag-enterprise): Why long-context models haven't killed retrieval-augmented generation, and how agentic RAG is becoming the dominant production architecture for enterprises.
+- [Chunking RAG : 4 stratégies pour maximiser la précision](https://pierrekasparian.com/fr/blog/guide/strategies-chunking-rag): Comparatif des 4 stratégies de chunking pour RAG (fixed-size, recursive, semantic, agentic) avec exemples de code et recommandations de production. Inclut l'approche hybride semantic + recursive.
+- [RAG Chunking: 4 Strategies to Maximize Retrieval Precision](https://pierrekasparian.com/en/blog/guide/rag-chunking-strategies): Comparison of 4 RAG chunking strategies with code examples and production recommendations. Includes the hybrid semantic + recursive approach.
+- [Booster un RAG avec un cross-encoder reranker](https://pierrekasparian.com/fr/blog/guide/reranker-cross-encoder-rag): Guide complet sur l'intégration d'un reranker cross-encoder dans un pipeline RAG. Comparatif Cohere Rerank (cloud RGPD conforme) vs modèle local sentence-transformers.
+- [Boosting a RAG with a Cross-Encoder Reranker](https://pierrekasparian.com/en/blog/guide/cross-encoder-reranker-rag): Full guide on integrating a cross-encoder reranker into a RAG pipeline. Cohere Rerank (GDPR-compliant cloud) vs local sentence-transformers model comparison.
 
 ## About
 
