@@ -4,4 +4,4 @@ description: Fait un article en te servant du contenu de la newsletter tldr donn
 ---
 
 1. Parmi tous les sujets donnés, y en a t-ils qui te paraissent pertinents pour mon blog. Si oui sélectionne les et propose les moi pour validation
-2. Lis le skill redaction-article et rédige les articles sur les sujets sélectionnés
+2. Lis le skill redaction-article et rédige les articles sur les sujets sélectionnés, après avoir fetch le lien te permettant d'avoir toutes les infos sur les sujets sélectionnés
