@@ -1,0 +1,225 @@
+---
+title: "Fiabiliser une plateforme LLM en production"
+description: "Étude de cas Pretto : comment j'ai réduit la charge des workers d'une plateforme LLM interne en supprimant le base64 et en centralisant les clients tiers."
+date: "2026-05-28"
+tags: ["LLM production", "Refactoring", "Pretto", "Performance", "Case Study"]
+readingTime: 9
+---
+
+À mon arrivée chez Pretto, la plateforme LLM interne dégradait silencieusement la production : workers saturés en RAM, latences qui doublaient sans cause apparente, retries qui finissaient en cascade jusqu'au timeout client. La plateforme existait depuis plusieurs mois, fonctionnait sur papier, mais consommait beaucoup trop de ressources pour ce qu'elle faisait réellement.
+
+**Réponse** : deux causes structurelles expliquaient l'essentiel des incidents. D'abord, le pipeline téléchargeait chaque document puis le ré-encodait en base64 avant de l'envoyer aux providers LLM, alors qu'Anthropic, OpenAI et Mistral acceptent désormais des URLs directes. Ensuite, chaque module instanciait ses propres clients tiers (OpenAI, Redis, S3), sans pooling ni réutilisation. Corriger ces deux points a permis de diviser la consommation RAM des workers et de stabiliser la latence. Cet article raconte la refacto, et liste 8 autres causes courantes de dégradation à auditer sur n'importe quelle plateforme LLM.
+
+## Pourquoi une plateforme LLM se dégrade silencieusement en production ?
+
+Une plateforme LLM ne tombe presque jamais d'un seul coup. Elle se dégrade par paliers, et le diagnostic est piégeux pour trois raisons.
+
+**Premièrement, les LLM masquent les vrais coûts.** Quand une requête prend 4 secondes, on attribue spontanément la lenteur au modèle. C'est parfois faux : le temps perdu est avant ou après l'appel LLM, dans la sérialisation, le téléchargement ou la mise en forme du payload.
+
+**Deuxièmement, les retries amplifient les pannes.** Une stratégie de retry mal bornée transforme un pic de 5 % d'erreurs en surcharge totale du worker pool. Le système croit "s'auto-réparer" alors qu'il s'auto-attaque.
+
+**Troisièmement, les workers tiennent longtemps avant de mourir.** Une fuite RAM ou un client tiers mal recyclé n'éclate qu'au bout de plusieurs heures. Les redémarrages réguliers masquent le problème jusqu'au jour où le trafic monte.
+
+Chez Pretto, l'audit a montré que la majorité de la charge inutile venait de deux endroits très précis.
+
+## Cause #1 : pourquoi éviter le base64 quand les providers acceptent des URLs ?
+
+La plateforme traitait beaucoup de documents : PDFs, images de pièces justificatives, captures envoyées par les utilisateurs. Le pipeline historique faisait, pour chaque document :
+
+1. Téléchargement depuis le stockage objet
+2. Lecture en mémoire dans le worker
+3. Encodage base64
+4. Inclusion dans le payload JSON envoyé au provider LLM
+
+Le base64 augmente la taille du payload d'environ **33 %**, monopolise la RAM du worker pendant toute la durée de l'appel LLM, et ajoute un coût CPU non négligeable sur de gros documents. Tout ça pour un résultat strictement équivalent à passer une URL.
+
+Or, depuis 2024-2025, les providers majeurs acceptent des **URLs directes** pour les images et PDFs : Anthropic Claude ([vision via URL](https://docs.anthropic.com/en/docs/build-with-claude/vision)), OpenAI ([file inputs et image URLs](https://platform.openai.com/docs/guides/images-vision)), Mistral pour les modèles multimodaux. Le provider télécharge lui-même le fichier, sans passer par notre worker.
+
+### Avant : encodage base64 côté worker
+
+```python
+import base64
+import requests
+from anthropic import Anthropic
+
+client = Anthropic()
+
+def analyze_document(document_url: str, prompt: str) -> str:
+    # Télécharge le document dans la RAM du worker
+    raw = requests.get(document_url, timeout=30).content
+    # Encode en base64 (taille x1.33, CPU non trivial)
+    encoded = base64.standard_b64encode(raw).decode("utf-8")
+
+    response = client.messages.create(
+        model="claude-sonnet-4-5",
+        max_tokens=1024,
+        messages=[{
+            "role": "user",
+            "content": [
+                {
+                    "type": "image",
+                    "source": {
+                        "type": "base64",
+                        "media_type": "image/png",
+                        "data": encoded,
+                    },
+                },
+                {"type": "text", "text": prompt},
+            ],
+        }],
+    )
+    return response.content[0].text
+```
+
+### Après : URL directe, le worker ne touche jamais le fichier
+
+```python
+from anthropic import Anthropic
+
+client = Anthropic()
+
+def analyze_document(document_url: str, prompt: str) -> str:
+    response = client.messages.create(
+        model="claude-sonnet-4-5",
+        max_tokens=1024,
+        messages=[{
+            "role": "user",
+            "content": [
+                {
+                    "type": "image",
+                    "source": {"type": "url", "url": document_url},
+                },
+                {"type": "text", "text": prompt},
+            ],
+        }],
+    )
+    return response.content[0].text
+```
+
+Le worker ne télécharge plus, n'encode plus, ne tient plus le fichier en RAM pendant l'appel. Sur des documents de quelques Mo, l'économie est immédiate, et la latence baisse parce qu'on a supprimé un saut réseau entier (stockage objet vers worker).
+
+Préalable : les URLs doivent être accessibles depuis l'extérieur (signed URLs courtes, ou bucket lisible côté provider). C'est un compromis acceptable, mais à valider explicitement.
+
+## Cause #2 : pourquoi centraliser ses clients tiers via Factory ?
+
+Le deuxième problème était plus discret. Dans chaque module qui appelait un service tiers, on retrouvait un pattern du type `client = OpenAI()` ou `redis = Redis(host=...)` créé à l'intérieur de la fonction, parfois à chaque requête. Le résultat :
+
+- **Pas de pooling de connexions** : chaque instance ouvrait son propre pool HTTP, sans coordination
+- **Pas de rate limiting global** : impossible de plafonner les appels concurrents à un provider
+- **Pas de monitoring centralisé** : les métriques étaient éclatées par module
+- **Pression GC** : les clients créés à la volée n'étaient jamais réutilisés
+
+La solution est un pattern **Factory** appliqué de manière stricte : un seul point de création par type de client, des instances réutilisables, et un cache process-wide.
+
+### Avant : clients ad hoc partout
+
+```python
+# module_a.py
+from openai import OpenAI
+import redis
+
+def process_invoice(data):
+    client = OpenAI()  # nouveau pool HTTP à chaque appel
+    cache = redis.Redis(host="redis", port=6379)  # nouvelle connexion TCP
+    ...
+
+# module_b.py
+from openai import OpenAI
+
+def classify_email(text):
+    client = OpenAI()  # encore un pool, encore non partagé
+    ...
+```
+
+### Après : Factory centralisée et clients réutilisés
+
+```python
+# clients/factory.py
+from functools import lru_cache
+
+from anthropic import Anthropic
+from openai import OpenAI
+import httpx
+import redis
+
+@lru_cache(maxsize=1)
+def get_openai() -> OpenAI:
+    # Connection pooling explicite + timeouts bornés
+    http = httpx.Client(
+        limits=httpx.Limits(max_connections=100, max_keepalive_connections=20),
+        timeout=httpx.Timeout(30.0, connect=5.0),
+    )
+    return OpenAI(http_client=http)
+
+@lru_cache(maxsize=1)
+def get_anthropic() -> Anthropic:
+    return Anthropic(max_retries=2, timeout=30.0)
+
+@lru_cache(maxsize=1)
+def get_redis() -> redis.Redis:
+    pool = redis.ConnectionPool(
+        host="redis", port=6379,
+        max_connections=50,
+        socket_timeout=2.0,
+    )
+    return redis.Redis(connection_pool=pool)
+```
+
+```python
+# module_a.py
+from clients.factory import get_openai, get_redis
+
+def process_invoice(data):
+    client = get_openai()  # même instance partout dans le worker
+    cache = get_redis()
+    ...
+```
+
+Avec ce pattern, on récupère trois choses d'un coup : un vrai pool de connexions HTTP/TCP (voir la documentation [httpx connection pooling](https://www.python-httpx.org/advanced/resource-limits/)), un point unique pour brancher du rate limiting ou du logging, et une baisse mesurable de la pression sur le GC.
+
+Côté Pretto, ce changement a stabilisé les latences P95 qui jusque-là fluctuaient en fonction du nombre d'instances de clients en mémoire.
+
+## 8 autres causes courantes de lenteur d'une plateforme LLM
+
+L'audit a aussi remonté une série de problèmes plus classiques. Tableau de référence à utiliser pour auditer n'importe quelle plateforme LLM existante.
+
+| # | Cause | Symptôme | Remède |
+|---|-------|----------|--------|
+| 1 | **Retries non bornés** | Pic d'erreurs qui ne redescend jamais | Backoff exponentiel + budget de retry par requête + circuit breaker |
+| 2 | **Absence de timeouts** | Workers bloqués indéfiniment sur un appel LLM | Timeouts explicites à chaque couche (HTTP, LLM, DB) |
+| 3 | **Pas de circuit breaker** | Un provider down fait tomber toute la chaîne | Pattern circuit breaker par provider, fallback ou dégradation gracieuse |
+| 4 | **Sérialisation JSON lourde** | CPU à 100 % sur des payloads multi-Mo | `orjson`, streaming, ou bascule sur format binaire (protobuf) |
+| 5 | **Appels synchrones bloquants** | Workers idle qui attendent du réseau | Architecture asynchrone (`asyncio`, `httpx.AsyncClient`) |
+| 6 | **Logs synchrones bloquants** | Latence qui suit le débit de log | Logging asynchrone, batch writes, suppression des logs sur le hot path |
+| 7 | **Tokenizers dupliqués en mémoire** | RAM qui grimpe linéairement avec le nombre de modules | Singleton tokenizer chargé une fois par process |
+| 8 | **Pas de cache de réponses** | Mêmes prompts facturés plusieurs fois | Cache clé/valeur sur le hash du prompt + version du modèle |
+
+À cette liste s'ajoutent : la **mauvaise séparation IO vs CPU** (mettre du parsing PDF lourd dans le même event loop que les appels LLM, par exemple) et le **manque de batching** côté embeddings, où on appelle l'API une fois par document au lieu de regrouper.
+
+## Comment auditer une plateforme LLM existante ?
+
+La méthode que j'ai appliquée chez Pretto est reproductible. Quatre étapes.
+
+**1. Instrumenter les workers avant de toucher au code.** Métriques RAM, CPU, file d'attente, latence par endpoint. Sans baseline mesurée, toute optimisation est de la spéculation. Prometheus + Grafana suffisent largement.
+
+**2. Profiler un worker sous charge réelle.** Avec `py-spy` ou `scalene` sur un worker en production (ou en replay), on voit en quelques minutes où va le temps CPU et la mémoire. C'est souvent là qu'on découvre que 40 % du temps part dans la sérialisation ou le base64.
+
+**3. Tracer les payloads entrants et sortants.** Logger la taille des payloads envoyés aux providers, leur composition. Un payload de 4 Mo vers Anthropic est presque toujours un signal qu'on encode quelque chose qu'on devrait passer par URL.
+
+**4. Lister les points de création de clients tiers.** Un `grep` sur `OpenAI(`, `Anthropic(`, `Redis(`, `boto3.client(` dans le repo. Tout ce qui n'est pas dans un module factory dédié est une dette à rembourser.
+
+À partir de cette photo, on priorise par ratio impact / effort. Chez Pretto, supprimer le base64 a été l'action avec le meilleur ratio, suivie par la centralisation des clients.
+
+## Conclusion : TL;DR
+
+Une plateforme LLM en production se dégrade rarement à cause du modèle lui-même. Elle se dégrade à cause de ce qu'on fait autour : encodages inutiles, clients tiers mal gérés, retries non bornés, timeouts manquants.
+
+**Les trois enseignements clés** :
+
+1. **Passer des URLs aux providers** dès que possible. C'est gratuit, supporté par Anthropic, OpenAI, Mistral, et ça allège massivement les workers.
+2. **Centraliser tous les clients tiers** via un pattern Factory. Un seul endroit pour le pooling, les timeouts, les retries, le monitoring.
+3. **Auditer avec des métriques, pas avec des intuitions.** Instrumentation d'abord, refacto ensuite.
+
+Pour aller plus loin sur les architectures LLM en production, voir aussi le [pipeline de batch inference Pretto](/fr/projects/pretto-batch-inference) ou les autres [prestations d'intégration IA](/fr/prestations).
+
+Si vous avez une plateforme LLM en production qui dégrade silencieusement, ou si vous voulez un audit ciblé sur la **fiabilité et le coût d'intégration IA PME**, [parlons-en via le formulaire de contact](/fr/contact).

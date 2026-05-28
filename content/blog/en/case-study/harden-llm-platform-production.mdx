@@ -1,0 +1,225 @@
+---
+title: "Hardening an LLM platform in production"
+description: "Pretto case study: how I cut LLM worker memory pressure by removing base64 encoding and centralising third-party clients behind a Factory pattern."
+date: "2026-05-28"
+tags: ["LLM production", "Refactoring", "Pretto", "Performance", "Case Study"]
+readingTime: 9
+---
+
+When I joined Pretto, the internal LLM platform was quietly degrading production: workers ran out of RAM, latency doubled with no obvious cause, and unbounded retries cascaded into client timeouts. The platform had been running for months, looked fine on paper, but burned far more resources than it should have for the work it actually did.
+
+**Answer**: two structural issues caused most of the incidents. First, the pipeline downloaded each document then re-encoded it as base64 before sending it to the LLM providers, even though Anthropic, OpenAI and Mistral now accept direct URLs. Second, every module instantiated its own third-party clients (OpenAI, Redis, S3), with no pooling or reuse. Fixing those two points slashed worker RAM and stabilised latency. This article walks through the refactor and lists 8 other common degradation causes to audit on any LLM platform.
+
+## Why does an LLM platform quietly degrade in production?
+
+An LLM platform almost never falls over in one go. It degrades in steps, and the diagnosis is tricky for three reasons.
+
+**First, LLMs mask the real costs.** When a request takes 4 seconds, the instinct is to blame the model. That is often wrong: the wasted time sits before or after the LLM call, in serialisation, downloads or payload shaping.
+
+**Second, retries amplify incidents.** A poorly bounded retry strategy turns a 5% error spike into a full worker-pool overload. The system thinks it is self-healing while it is actually self-attacking.
+
+**Third, workers survive a long time before dying.** A memory leak or a badly recycled third-party client only explodes after hours. Periodic restarts mask the issue until traffic spikes.
+
+At Pretto, the audit showed most of the wasted load came from two very specific places.
+
+## Cause #1: why avoid base64 when providers accept URLs?
+
+The platform handled a lot of documents: PDFs, scanned proofs, screenshots uploaded by users. The legacy pipeline, for every document, did:
+
+1. Download from object storage
+2. Read into worker memory
+3. Encode as base64
+4. Embed inside the JSON payload sent to the LLM provider
+
+Base64 inflates payload size by roughly **33%**, pins worker RAM for the full duration of the LLM call, and adds non-trivial CPU cost on large documents. All of that for a result strictly equivalent to passing a URL.
+
+Since 2024-2025, the major providers all accept **direct URLs** for images and PDFs: Anthropic Claude ([URL-based vision](https://docs.anthropic.com/en/docs/build-with-claude/vision)), OpenAI ([file inputs and image URLs](https://platform.openai.com/docs/guides/images-vision)), Mistral on multimodal models. The provider fetches the file itself, with no detour through our worker.
+
+### Before: base64 encoding inside the worker
+
+```python
+import base64
+import requests
+from anthropic import Anthropic
+
+client = Anthropic()
+
+def analyze_document(document_url: str, prompt: str) -> str:
+    # Pulls the file into worker RAM
+    raw = requests.get(document_url, timeout=30).content
+    # Base64 encodes it (size x1.33, non-trivial CPU)
+    encoded = base64.standard_b64encode(raw).decode("utf-8")
+
+    response = client.messages.create(
+        model="claude-sonnet-4-5",
+        max_tokens=1024,
+        messages=[{
+            "role": "user",
+            "content": [
+                {
+                    "type": "image",
+                    "source": {
+                        "type": "base64",
+                        "media_type": "image/png",
+                        "data": encoded,
+                    },
+                },
+                {"type": "text", "text": prompt},
+            ],
+        }],
+    )
+    return response.content[0].text
+```
+
+### After: direct URL, the worker never touches the file
+
+```python
+from anthropic import Anthropic
+
+client = Anthropic()
+
+def analyze_document(document_url: str, prompt: str) -> str:
+    response = client.messages.create(
+        model="claude-sonnet-4-5",
+        max_tokens=1024,
+        messages=[{
+            "role": "user",
+            "content": [
+                {
+                    "type": "image",
+                    "source": {"type": "url", "url": document_url},
+                },
+                {"type": "text", "text": prompt},
+            ],
+        }],
+    )
+    return response.content[0].text
+```
+
+The worker stops downloading, encoding and holding the file in RAM during the LLM call. On multi-megabyte documents, the savings are immediate, and latency drops because we removed a full network hop (object storage to worker).
+
+Prerequisite: URLs must be reachable from the outside (short-lived signed URLs, or a provider-readable bucket). That is an acceptable tradeoff, but it has to be confirmed explicitly.
+
+## Cause #2: why centralise third-party clients behind a Factory?
+
+The second problem was subtler. Every module that called a third-party service contained a pattern like `client = OpenAI()` or `redis = Redis(host=...)`, created inside the function, sometimes on every request. The result:
+
+- **No connection pooling**: each instance opened its own HTTP pool, with no coordination
+- **No global rate limiting**: impossible to cap concurrent calls to a provider
+- **No centralised monitoring**: metrics were scattered across modules
+- **GC pressure**: clients created on the fly were never reused
+
+The fix is a **Factory** pattern, applied strictly: one creation point per client type, reusable instances, and a process-wide cache.
+
+### Before: ad hoc clients everywhere
+
+```python
+# module_a.py
+from openai import OpenAI
+import redis
+
+def process_invoice(data):
+    client = OpenAI()  # brand new HTTP pool every call
+    cache = redis.Redis(host="redis", port=6379)  # new TCP connection
+    ...
+
+# module_b.py
+from openai import OpenAI
+
+def classify_email(text):
+    client = OpenAI()  # another pool, still not shared
+    ...
+```
+
+### After: centralised Factory with reused clients
+
+```python
+# clients/factory.py
+from functools import lru_cache
+
+from anthropic import Anthropic
+from openai import OpenAI
+import httpx
+import redis
+
+@lru_cache(maxsize=1)
+def get_openai() -> OpenAI:
+    # Explicit connection pooling + bounded timeouts
+    http = httpx.Client(
+        limits=httpx.Limits(max_connections=100, max_keepalive_connections=20),
+        timeout=httpx.Timeout(30.0, connect=5.0),
+    )
+    return OpenAI(http_client=http)
+
+@lru_cache(maxsize=1)
+def get_anthropic() -> Anthropic:
+    return Anthropic(max_retries=2, timeout=30.0)
+
+@lru_cache(maxsize=1)
+def get_redis() -> redis.Redis:
+    pool = redis.ConnectionPool(
+        host="redis", port=6379,
+        max_connections=50,
+        socket_timeout=2.0,
+    )
+    return redis.Redis(connection_pool=pool)
+```
+
+```python
+# module_a.py
+from clients.factory import get_openai, get_redis
+
+def process_invoice(data):
+    client = get_openai()  # same instance everywhere in the worker
+    cache = get_redis()
+    ...
+```
+
+This pattern delivers three wins at once: real HTTP/TCP connection pooling (see [httpx connection pooling docs](https://www.python-httpx.org/advanced/resource-limits/)), a single hook for rate limiting and logging, and a measurable drop in GC pressure.
+
+At Pretto, that change stabilised P95 latencies that until then fluctuated based on how many client instances happened to be alive in memory.
+
+## 8 other common causes of LLM platform slowness
+
+The audit surfaced a series of more classic issues. Use this as a reference table when auditing any existing LLM platform.
+
+| # | Cause | Symptom | Fix |
+|---|-------|---------|-----|
+| 1 | **Unbounded retries** | Error spike that never decays | Exponential backoff + per-request retry budget + circuit breaker |
+| 2 | **Missing timeouts** | Workers blocked indefinitely on an LLM call | Explicit timeouts at every layer (HTTP, LLM, DB) |
+| 3 | **No circuit breaker** | One provider down takes the whole chain down | Per-provider circuit breaker, fallback or graceful degradation |
+| 4 | **Heavy JSON serialisation** | CPU at 100% on multi-MB payloads | `orjson`, streaming, or switch to binary format (protobuf) |
+| 5 | **Blocking synchronous calls** | Idle workers waiting on network | Async architecture (`asyncio`, `httpx.AsyncClient`) |
+| 6 | **Blocking synchronous logs** | Latency tracks log throughput | Async logging, batched writes, no logs on the hot path |
+| 7 | **Duplicate tokenizers in memory** | RAM grows linearly with the number of modules | Singleton tokenizer, loaded once per process |
+| 8 | **No response cache** | Same prompts billed many times | Key-value cache on prompt hash + model version |
+
+On top of that list: **poor IO vs CPU separation** (heavy PDF parsing on the same event loop as LLM calls, for example), and **missing batching** on embeddings, where the API is called once per document instead of grouped.
+
+## How do you audit an existing LLM platform?
+
+The method I applied at Pretto is reproducible. Four steps.
+
+**1. Instrument the workers before touching the code.** RAM, CPU, queue depth, per-endpoint latency. Without a measured baseline, every optimisation is speculation. Prometheus plus Grafana is enough.
+
+**2. Profile a worker under real load.** With `py-spy` or `scalene` on a live production worker (or a replay), you see within minutes where CPU and memory go. That is often where you discover 40% of the time goes into serialisation or base64.
+
+**3. Trace inbound and outbound payloads.** Log the size and shape of payloads sent to providers. A 4 MB payload going to Anthropic is almost always a signal that you are encoding something that should be passed as a URL.
+
+**4. List every place where third-party clients are created.** A simple `grep` on `OpenAI(`, `Anthropic(`, `Redis(`, `boto3.client(` across the repo. Anything that lives outside a dedicated factory module is technical debt to repay.
+
+From that snapshot, prioritise by impact-over-effort. At Pretto, removing base64 was the highest-ratio action, followed by centralising clients.
+
+## Conclusion: TL;DR
+
+An LLM platform in production rarely degrades because of the model itself. It degrades because of everything around it: useless encodings, mismanaged third-party clients, unbounded retries, missing timeouts.
+
+**Three key takeaways**:
+
+1. **Pass URLs to providers** whenever you can. It is free, supported by Anthropic, OpenAI, Mistral, and it lifts a huge load off your workers.
+2. **Centralise every third-party client** behind a Factory pattern. One place for pooling, timeouts, retries and monitoring.
+3. **Audit with metrics, not intuitions.** Instrument first, refactor second.
+
+For more on production LLM architectures, see also the [Pretto batch inference pipeline](/en/projects/pretto-batch-inference) or the broader [AI integration services](/en/prestations).
+
+If you run an LLM platform that quietly degrades in production, or you want a focused audit on **reliability and AI integration cost for SMBs**, [reach out through the contact form](/en/contact).
