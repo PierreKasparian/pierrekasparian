@@ -20,7 +20,7 @@
 
 ## About
 
-- [À propos](https://pierrekasparian.com/fr/about): Étudiant ingénieur en 4e année à l'UTT (Université de Technologie de Troyes), freelance IA depuis 2024, 9+ projets livrés. Expertise forte en conformité RGPD et hébergement européen.
+- [À propos](https://pierrekasparian.com/fr/about): Étudiant ingénieur en 4e année à l'UTT (Université de Technologie de Troyes), freelance IA depuis 2024, 11+ projets livrés. Expertise forte en conformité RGPD et hébergement européen.
 - [Projets](https://pierrekasparian.com/fr/projects): Portfolio complet des réalisations clients.
 
 ## Contact
