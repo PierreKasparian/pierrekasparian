@@ -19,6 +19,8 @@
 - [RAG multi-agent LiveSession - étude de cas](https://pierrekasparian.com/fr/blog/case-study/rag-multiagent-livesession): Retour d'expérience sur le déploiement d'un chatbot RAG multi-agent pour la SaaS LiveSession.
 - [7 métriques avancées pour évaluer son RAG en production](https://pierrekasparian.com/fr/blog/guide/metriques-evaluation-rag-production): Les 7 métriques d'évaluation avancées pour détecter les failles cachées d'un pipeline RAG en production : faithfulness-plus, concept drift, chain-of-evidence et plus.
 - [7 Advanced Metrics to Evaluate Your RAG in Production](https://pierrekasparian.com/en/blog/guide/rag-evaluation-metrics-production): The 7 advanced evaluation metrics to detect hidden accuracy gaps in a production RAG pipeline.
+- [Le RAG n'est pas mort : vers l'agentic RAG en entreprise](https://pierrekasparian.com/fr/blog/article/agentic-rag-entreprise): Pourquoi les fenêtres de contexte étendue ne tuent pas le retrieval augmented generation, et comment l'agentic RAG devient l'architecture dominante en production pour les PME.
+- [RAG Is Not Dead: The Rise of Agentic RAG in Enterprise](https://pierrekasparian.com/en/blog/article/agentic-rag-enterprise): Why long-context models haven't killed retrieval-augmented generation, and how agentic RAG is becoming the dominant production architecture for enterprises.
 
 ## About
 
