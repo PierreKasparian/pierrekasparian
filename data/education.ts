@@ -13,7 +13,7 @@ export interface Education {
 
 export const educations: Education[] = [
   {
-    slug: "LLM-course",
+    slug: "llm-course",
     title: {
       fr: "Formation LLM engineering",
       en: "LLM engineering course",

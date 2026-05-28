@@ -10,6 +10,7 @@ import { getAllArticles, getArticle, isBlogCategory } from "@/lib/mdx";
 import {
   buildOpenGraph,
   buildTwitterCard,
+  defaultOgImage,
   personSchema,
   SITE_URL,
 } from "@/lib/seo";
@@ -72,6 +73,7 @@ export default async function BlogPostPage({
     "@type": "BlogPosting",
     headline: article.meta.title,
     description: article.meta.description,
+    image: defaultOgImage.url,
     datePublished: article.meta.date,
     dateModified: article.meta.date,
     url: `${SITE_URL}/${lang}/blog/${category}/${slug}`,

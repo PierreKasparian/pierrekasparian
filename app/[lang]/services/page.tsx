@@ -17,7 +17,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { prestations } from "@/data/prestations";
 import { projects } from "@/data/projects";
-import { buildAlternates } from "@/lib/seo";
+import { buildAlternates, SITE_URL } from "@/lib/seo";
 
 import { getDictionary, hasLocale, type Locale } from "../dictionaries";
 
@@ -49,8 +49,27 @@ export default async function PrestationsPage({
   if (!hasLocale(lang)) notFound();
   const dict = await getDictionary(lang);
 
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: dict.prestations.faq.map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.a,
+      },
+    })),
+    url: `${SITE_URL}/${lang}/services`,
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+
       {/* HEADER */}
       <section className="border-b border-[var(--border)]">
         <div className="mx-auto max-w-6xl px-6 py-16 sm:py-24">
@@ -124,6 +143,28 @@ export default async function PrestationsPage({
                 </Card>
               );
             })}
+          </div>
+
+          {/* FAQ */}
+          <div className="mt-20">
+            <h2 className="text-2xl font-semibold tracking-tight">
+              {dict.prestations.faqHeading}
+            </h2>
+            <dl className="mt-6 divide-y divide-[var(--border)]">
+              {dict.prestations.faq.map((item, i) => (
+                <details key={i} className="group py-5">
+                  <summary className="flex cursor-pointer list-none items-start justify-between gap-4">
+                    <dt className="font-medium leading-snug">{item.q}</dt>
+                    <span className="mt-0.5 shrink-0 text-[var(--muted-foreground)] transition-transform group-open:rotate-180">
+                      ▾
+                    </span>
+                  </summary>
+                  <dd className="mt-3 text-sm leading-relaxed text-[var(--muted-foreground)]">
+                    {item.a}
+                  </dd>
+                </details>
+              ))}
+            </dl>
           </div>
 
           {/* CTA CONTACT */}

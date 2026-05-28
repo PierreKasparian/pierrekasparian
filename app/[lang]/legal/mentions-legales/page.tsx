@@ -2,122 +2,208 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { buildAlternatesFrOnly, SITE_URL } from "@/lib/seo";
-
 import { hasLocale } from "../../dictionaries";
 
-export async function generateMetadata(): Promise<Metadata> {
-  return {
-    title: "Mentions légales",
-    description: "Mentions légales du site pierrekasparian.com.",
-    alternates: {
-      languages: buildAlternatesFrOnly("/legal/mentions-legales"),
-    },
-  };
-}
+export const metadata: Metadata = {
+  title: "Mentions légales",
+  robots: "noindex",
+};
 
-export default async function LegalNoticePage({
+export default async function MentionsLegalesPage({
   params,
-}: PageProps<"/[lang]/legal/mentions-legales">) {
+}: {
+  params: Promise<{ lang: string }>;
+}) {
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
 
-  const contactEmail = "pierre.kasparian@pretto.fr";
-  const siteUrl = SITE_URL;
+  const isFr = lang === "fr";
 
   return (
     <article className="mx-auto max-w-3xl px-6 py-16">
-      <Link
-        href={`/${lang}`}
-        className="text-sm text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
-      >
-        {lang === "fr" ? "← Accueil" : "← Home"}
-      </Link>
-
-      <h1 className="mt-8 text-3xl font-semibold tracking-tight">
-        {lang === "fr" ? "Mentions légales" : "Legal Notice"}
+      <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+        {isFr ? "Mentions légales" : "Legal Notice"}
       </h1>
 
-      <div className="prose prose-neutral dark:prose-invert mt-10 max-w-none">
-        <h2>{lang === "fr" ? "1. Éditeur du site" : "1. Site publisher"}</h2>
-        <ul>
-          <li>
-            <strong>{lang === "fr" ? "Nom :" : "Name:"}</strong> Pierre
-            Kasparian
-          </li>
-          <li>
-            <strong>{lang === "fr" ? "Qualité :" : "Capacity:"}</strong>{" "}
-            {lang === "fr"
-              ? "Particulier - Étudiant ingénieur et freelance en intégration IA"
-              : "Individual - Engineering student and AI integration freelancer"}
-          </li>
-          <li>
-            <strong>{lang === "fr" ? "Contact :" : "Contact:"}</strong>{" "}
-            <a href={`mailto:${contactEmail}`}>{contactEmail}</a>
-          </li>
-          <li>
-            <strong>{lang === "fr" ? "Site web :" : "Website:"}</strong>{" "}
-            <a href={siteUrl}>{siteUrl}</a>
-          </li>
-        </ul>
+      {isFr ? (
+        <div className="mt-8 space-y-8 text-sm leading-relaxed text-[var(--muted-foreground)]">
+          <section>
+            <h2 className="mb-3 text-base font-semibold text-[var(--foreground)]">
+              1. Éditeur du site
+            </h2>
+            <p>
+              <strong>Pierre Kasparian</strong>
+              <br />
+              Auto-entrepreneur
+              <br />
+            </p>
+          </section>
 
-        <h2>{lang === "fr" ? "2. Hébergement" : "2. Hosting"}</h2>
-        <p>
-          {lang === "fr"
-            ? "Le site est hébergé par un prestataire d'hébergement européen. Pour connaître les coordonnées précises de l'hébergeur, veuillez nous contacter à l'adresse indiquée ci-dessus."
-            : "The site is hosted by a European hosting provider. For the hosting provider's exact details, please contact us at the address above."}
-        </p>
+          <section>
+            <h2 className="mb-3 text-base font-semibold text-[var(--foreground)]">
+              2. Hébergement
+            </h2>
+            <p>
+              <em>OVH</em>
+            </p>
+          </section>
 
-        <h2>
-          {lang === "fr"
-            ? "3. Propriété intellectuelle"
-            : "3. Intellectual property"}
-        </h2>
-        <p>
-          {lang === "fr"
-            ? `L'ensemble du contenu publié sur ${siteUrl} (textes, code, images) est la propriété exclusive de Pierre Kasparian, sauf mention contraire. Toute reproduction, représentation, modification ou exploitation non autorisée de tout ou partie de ce contenu est interdite.`
-            : `All content published on ${siteUrl} (text, code, images) is the exclusive property of Pierre Kasparian, unless otherwise stated. Any unauthorised reproduction, representation, modification or exploitation of all or part of this content is prohibited.`}
-        </p>
+          <section>
+            <h2 className="mb-3 text-base font-semibold text-[var(--foreground)]">
+              3. Propriété intellectuelle
+            </h2>
+            <p>
+              L&apos;ensemble des contenus présents sur ce site (textes, images,
+              code, logos) est la propriété exclusive de Pierre Kasparian, sauf
+              mention contraire. Toute reproduction, distribution ou utilisation
+              sans autorisation préalable écrite est interdite.
+            </p>
+          </section>
 
-        <h2>
-          {lang === "fr" ? "4. Données personnelles" : "4. Personal data"}
-        </h2>
-        <p>
-          {lang === "fr" ? (
-            <>
-              Le traitement des données personnelles collectées via ce site est
-              décrit dans la{" "}
-              <Link href={`/fr/legal/politique-de-confidentialite`}>
+          <section>
+            <h2 className="mb-3 text-base font-semibold text-[var(--foreground)]">
+              4. Données personnelles
+            </h2>
+            <p>
+              Les informations collectées via le formulaire de contact (nom,
+              adresse email, message) sont utilisées exclusivement pour répondre
+              à vos demandes. Elles ne sont ni vendues ni cédées à des tiers.
+              Pour exercer vos droits (accès, rectification, suppression),
+              <Link
+                href={`/${lang}/contact`}
+                className="text-[var(--foreground)] hover:underline"
+              >
+                utilisez le formulaire de contact
+              </Link>
+              . Consultez la{" "}
+              <Link
+                href={`/${lang}/legal/politique-de-confidentialite`}
+                className="text-[var(--foreground)] hover:underline"
+              >
                 politique de confidentialité
-              </Link>
-              .
-            </>
-          ) : (
-            <>
-              The processing of personal data collected via this site is
-              described in the{" "}
-              <Link href={`/fr/legal/politique-de-confidentialite`}>
-                privacy policy (in French)
-              </Link>
-              .
-            </>
-          )}
-        </p>
+              </Link>{" "}
+              pour plus d&apos;informations.
+            </p>
+          </section>
 
-        <h2>{lang === "fr" ? "5. Responsabilité" : "5. Liability"}</h2>
-        <p>
-          {lang === "fr"
-            ? "Pierre Kasparian s'efforce de maintenir les informations publiées sur ce site à jour et exactes, mais ne garantit pas l'exhaustivité ou l'exactitude de ces informations. Pierre Kasparian ne saurait être tenu responsable des dommages directs ou indirects résultant de l'utilisation de ce site."
-            : "Pierre Kasparian endeavours to keep the information published on this site up to date and accurate, but does not guarantee the completeness or accuracy of this information. Pierre Kasparian cannot be held liable for direct or indirect damages resulting from the use of this site."}
-        </p>
+          <section>
+            <h2 className="mb-3 text-base font-semibold text-[var(--foreground)]">
+              5. Cookies
+            </h2>
+            <p>
+              Ce site n&apos;utilise pas de cookies de tracking ou de mesure
+              d&apos;audience. Aucune donnée de navigation n&apos;est collectée
+              à des fins commerciales ou analytiques.
+            </p>
+          </section>
 
-        <h2>{lang === "fr" ? "6. Droit applicable" : "6. Applicable law"}</h2>
-        <p>
-          {lang === "fr"
-            ? "Le présent site et ses mentions légales sont soumis au droit français. En cas de litige, les tribunaux français sont seuls compétents."
-            : "This site and its legal notices are governed by French law. In the event of a dispute, French courts shall have sole jurisdiction."}
-        </p>
-      </div>
+          <section>
+            <h2 className="mb-3 text-base font-semibold text-[var(--foreground)]">
+              6. Loi applicable
+            </h2>
+            <p>
+              Les présentes mentions légales sont soumises au droit français.
+              Tout litige relatif à l&apos;utilisation de ce site sera soumis
+              aux tribunaux compétents français.
+            </p>
+          </section>
+        </div>
+      ) : (
+        <div className="mt-8 space-y-8 text-sm leading-relaxed text-[var(--muted-foreground)]">
+          <section>
+            <h2 className="mb-3 text-base font-semibold text-[var(--foreground)]">
+              1. Site publisher
+            </h2>
+            <p>
+              <strong>Pierre Kasparian</strong>
+              <br />
+              Sole trader (auto-entrepreneur)
+              <br />
+              Address: <em>[ADDRESS — to be completed]</em>
+              <br />
+              SIRET: <em>[SIRET — to be completed]</em>
+              <br />
+              Contact:{" "}
+              <Link
+                href={`/${lang}/contact`}
+                className="text-[var(--foreground)] hover:underline"
+              >
+                contact form
+              </Link>
+            </p>
+          </section>
+
+          <section>
+            <h2 className="mb-3 text-base font-semibold text-[var(--foreground)]">
+              2. Hosting
+            </h2>
+            <p>
+              <em>[Hosting provider name — to be completed]</em>
+              <br />
+              <em>[Hosting provider address — to be completed]</em>
+            </p>
+          </section>
+
+          <section>
+            <h2 className="mb-3 text-base font-semibold text-[var(--foreground)]">
+              3. Intellectual property
+            </h2>
+            <p>
+              All content on this site (texts, images, code, logos) is the
+              exclusive property of Pierre Kasparian unless otherwise stated.
+              Any reproduction, distribution or use without prior written
+              permission is prohibited.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="mb-3 text-base font-semibold text-[var(--foreground)]">
+              4. Personal data
+            </h2>
+            <p>
+              Information collected via the contact form (name, email, message)
+              is used solely to respond to your enquiries. It is never sold or
+              shared with third parties. To exercise your rights (access,
+              rectification, deletion),{" "}
+              <Link
+                href={`/${lang}/contact`}
+                className="text-[var(--foreground)] hover:underline"
+              >
+                use the contact form
+              </Link>
+              . See the{" "}
+              <Link
+                href={`/${lang}/legal/politique-de-confidentialite`}
+                className="text-[var(--foreground)] hover:underline"
+              >
+                privacy policy
+              </Link>{" "}
+              for more information.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="mb-3 text-base font-semibold text-[var(--foreground)]">
+              5. Cookies
+            </h2>
+            <p>
+              This site does not use tracking or analytics cookies. No browsing
+              data is collected for commercial or analytical purposes.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="mb-3 text-base font-semibold text-[var(--foreground)]">
+              6. Governing law
+            </h2>
+            <p>
+              This legal notice is governed by French law. Any dispute relating
+              to the use of this site shall be submitted to the competent French
+              courts.
+            </p>
+          </section>
+        </div>
+      )}
     </article>
   );
 }

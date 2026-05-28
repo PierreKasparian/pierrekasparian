@@ -1,218 +1,312 @@
-/* eslint-disable react/no-unescaped-entities */
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { buildAlternatesFrOnly, SITE_URL } from "@/lib/seo";
-
 import { hasLocale } from "../../dictionaries";
 
-export async function generateMetadata(): Promise<Metadata> {
-  return {
-    title: "Politique de confidentialité",
-    description:
-      "Politique de confidentialité et traitement des données personnelles conforme au RGPD pour pierrekasparian.com.",
-    alternates: {
-      languages: buildAlternatesFrOnly("/legal/politique-de-confidentialite"),
-    },
-  };
-}
+export const metadata: Metadata = {
+  title: "Politique de confidentialité",
+  robots: "noindex",
+};
 
-export default async function PrivacyPage({
+export default async function PolitiqueConfidentialitePage({
   params,
-}: PageProps<"/[lang]/legal/politique-de-confidentialite">) {
+}: {
+  params: Promise<{ lang: string }>;
+}) {
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
 
-  const lastUpdated = "27 mai 2026";
-  const contactEmail = "pierre.kasparian@pretto.fr";
-  const siteUrl = SITE_URL;
+  const isFr = lang === "fr";
 
   return (
     <article className="mx-auto max-w-3xl px-6 py-16">
-      <Link
-        href={`/${lang}`}
-        className="text-sm text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
-      >
-        {lang === "fr" ? "← Accueil" : "← Home"}
-      </Link>
-
-      <h1 className="mt-8 text-3xl font-semibold tracking-tight">
-        {lang === "fr"
-          ? "Politique de confidentialité"
-          : "Privacy Policy (French law)"}
+      <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+        {isFr ? "Politique de confidentialité" : "Privacy Policy"}
       </h1>
       <p className="mt-2 text-sm text-[var(--muted-foreground)]">
-        {lang === "fr"
-          ? `Dernière mise à jour : ${lastUpdated}`
-          : `Last updated: ${lastUpdated}`}
+        {isFr ? "Dernière mise à jour : mai 2026" : "Last updated: May 2026"}
       </p>
 
-      <div className="prose prose-neutral dark:prose-invert mt-10 max-w-none">
-        {lang === "fr" ? (
-          <>
-            <h2>1. Responsable du traitement</h2>
+      {isFr ? (
+        <div className="mt-8 space-y-8 text-sm leading-relaxed text-[var(--muted-foreground)]">
+          <section>
+            <h2 className="mb-3 text-base font-semibold text-[var(--foreground)]">
+              1. Responsable du traitement
+            </h2>
             <p>
-              Le responsable du traitement des données personnelles collectées
-              via le site <strong>{siteUrl}</strong> est :
+              Pierre Kasparian, auto-entrepreneur
+              <br />
+              Contact :{" "}
+              <Link
+                href={`/${lang}/contact`}
+                className="text-[var(--foreground)] hover:underline"
+              >
+                formulaire de contact
+              </Link>
             </p>
-            <ul>
-              <li>
-                <strong>Nom :</strong> Pierre Kasparian
-              </li>
-              <li>
-                <strong>Qualité :</strong> Freelance en intégration IA
-              </li>
-              <li>
-                <strong>Contact :</strong>{" "}
-                <a href={`mailto:${contactEmail}`}>{contactEmail}</a>
-              </li>
-            </ul>
+          </section>
 
-            <h2>2. Données collectées</h2>
+          <section>
+            <h2 className="mb-3 text-base font-semibold text-[var(--foreground)]">
+              2. Données collectées
+            </h2>
             <p>
-              Le site collecte des données personnelles uniquement via le
-              formulaire de contact. Les données collectées sont :
+              Ce site collecte uniquement les données que vous fournissez
+              volontairement via le formulaire de contact :
             </p>
-            <ul>
-              <li>Nom</li>
+            <ul className="mt-2 list-disc space-y-1 pl-5">
+              <li>Nom et prénom</li>
               <li>Adresse email</li>
               <li>Sujet du message</li>
               <li>Contenu du message</li>
             </ul>
-            <p>
-              Aucune donnée sensible au sens de l'article 9 du RGPD n'est
-              collectée. Le site n'utilise pas de cookies de traçage ou
-              publicitaires.
+            <p className="mt-2">
+              Aucune donnée n&apos;est collectée automatiquement (pas de cookies
+              analytiques, pas de trackers tiers).
             </p>
+          </section>
 
-            <h2>3. Finalité et base légale du traitement</h2>
+          <section>
+            <h2 className="mb-3 text-base font-semibold text-[var(--foreground)]">
+              3. Finalité et base légale
+            </h2>
             <p>
-              Les données collectées via le formulaire de contact sont traitées
-              dans le seul but de répondre à vos demandes et d'établir un
-              contact professionnel.
+              Les données du formulaire de contact sont traitées sur la base de
+              l&apos;intérêt légitime (article 6(1)(f) du RGPD) afin de répondre
+              à vos demandes de renseignement et de collaborer sur des projets
+              professionnels.
             </p>
-            <p>
-              La base légale du traitement est le <strong>consentement</strong>{" "}
-              (article 6.1.a du RGPD) : en envoyant le formulaire, vous
-              consentez explicitement au traitement de vos données pour les
-              finalités décrites.
-            </p>
+          </section>
 
-            <h2>4. Destinataires des données</h2>
+          <section>
+            <h2 className="mb-3 text-base font-semibold text-[var(--foreground)]">
+              4. Durée de conservation
+            </h2>
             <p>
-              Vos données sont traitées exclusivement par Pierre Kasparian et ne
-              sont pas transmises à des tiers, sauf obligation légale.
+              Les données de contact sont conservées le temps nécessaire pour
+              répondre à votre demande, et au maximum 3 ans à compter du dernier
+              échange, conformément aux préconisations de la CNIL.
             </p>
-            <p>
-              Le formulaire de contact est traité via une API hébergée en
-              Europe. Aucune donnée n'est transmise à des serveurs situés hors
-              de l'Union européenne.
-            </p>
+          </section>
 
-            <h2>5. Durée de conservation</h2>
+          <section>
+            <h2 className="mb-3 text-base font-semibold text-[var(--foreground)]">
+              5. Destinataires
+            </h2>
             <p>
-              Les données issues du formulaire de contact sont conservées
-              pendant une durée maximale de <strong>3 ans</strong> à compter de
-              la dernière interaction, puis supprimées.
+              Les données ne sont ni vendues, ni louées, ni transmises à des
+              tiers. Elles sont traitées uniquement par Pierre Kasparian dans le
+              cadre de ses activités professionnelles.
             </p>
+          </section>
 
-            <h2>6. Vos droits</h2>
+          <section>
+            <h2 className="mb-3 text-base font-semibold text-[var(--foreground)]">
+              6. Vos droits
+            </h2>
             <p>
               Conformément au RGPD (articles 15 à 22), vous disposez des droits
-              suivants sur vos données :
+              suivants :
             </p>
-            <ul>
-              <li>
-                <strong>Droit d'accès :</strong> obtenir une copie des données
-                vous concernant
-              </li>
-              <li>
-                <strong>Droit de rectification :</strong> corriger des données
-                inexactes
-              </li>
-              <li>
-                <strong>Droit à l'effacement :</strong> demander la suppression
-                de vos données
-              </li>
-              <li>
-                <strong>Droit à la portabilité :</strong> recevoir vos données
-                dans un format structuré
-              </li>
-              <li>
-                <strong>Droit d'opposition :</strong> vous opposer au traitement
-                de vos données
-              </li>
-              <li>
-                <strong>Droit de retrait du consentement :</strong> retirer
-                votre consentement à tout moment
-              </li>
+            <ul className="mt-2 list-disc space-y-1 pl-5">
+              <li>Droit d&apos;accès à vos données</li>
+              <li>Droit de rectification</li>
+              <li>Droit à l&apos;effacement</li>
+              <li>Droit à la limitation du traitement</li>
+              <li>Droit d&apos;opposition</li>
+              <li>Droit à la portabilité</li>
             </ul>
-            <p>
-              Pour exercer ces droits, contactez-nous à :{" "}
-              <a href={`mailto:${contactEmail}`}>{contactEmail}</a>. Une réponse
-              sera apportée dans un délai d'un mois.
-            </p>
-            <p>
-              Vous avez également le droit d'introduire une réclamation auprès
-              de la <strong>CNIL</strong> (Commission Nationale de
-              l'Informatique et des Libertés) :{" "}
+            <p className="mt-2">
+              Pour exercer ces droits,{" "}
+              <Link
+                href={`/${lang}/contact`}
+                className="text-[var(--foreground)] hover:underline"
+              >
+                contactez-moi via le formulaire de contact
+              </Link>
+              . En cas de litige, vous pouvez saisir la{" "}
               <a
                 href="https://www.cnil.fr"
                 target="_blank"
                 rel="noopener noreferrer"
+                className="text-[var(--foreground)] hover:underline"
               >
-                www.cnil.fr
+                CNIL
               </a>
-            </p>
-
-            <h2>7. Sécurité des données</h2>
-            <p>
-              Des mesures techniques et organisationnelles appropriées sont
-              mises en oeuvre pour protéger vos données contre tout accès non
-              autorisé, perte, destruction ou divulgation. Le site est servi
-              exclusivement via HTTPS et les données de formulaire sont
-              transmises de manière chiffrée.
-            </p>
-
-            <h2>8. Cookies</h2>
-            <p>
-              Ce site n'utilise pas de cookies de traçage ou publicitaires. Des
-              cookies techniques strictement nécessaires au fonctionnement du
-              site peuvent être utilisés mais ne collectent aucune donnée
-              personnelle.
-            </p>
-
-            <h2>9. Modifications</h2>
-            <p>
-              Cette politique peut être mise à jour en cas d'évolution légale ou
-              technique. La date de dernière mise à jour est indiquée en haut de
-              cette page.
-            </p>
-          </>
-        ) : (
-          <>
-            <p>
-              This privacy policy is primarily written in French, as required by
-              French law (RGPD / GDPR Article 13). Please refer to the French
-              version for the full legal text, or{" "}
-              <Link href={`/fr/legal/politique-de-confidentialite`}>
-                click here to read it in French
-              </Link>
               .
             </p>
-            <h2>Summary</h2>
+          </section>
+
+          <section>
+            <h2 className="mb-3 text-base font-semibold text-[var(--foreground)]">
+              7. Cookies
+            </h2>
             <p>
-              Personal data collected via the contact form (name, email,
-              subject, message) is processed solely to respond to your inquiry.
-              It is stored for a maximum of 3 years, hosted in the EU, and not
-              shared with third parties. You can exercise your GDPR rights
-              (access, rectification, deletion, portability, opposition) by
-              contacting <a href={`mailto:${contactEmail}`}>{contactEmail}</a>.
+              Ce site n&apos;utilise aucun cookie de mesure d&apos;audience, de
+              reciblage publicitaire ou de partage sur les réseaux sociaux.
+              Seuls des cookies strictement nécessaires au fonctionnement
+              technique du site peuvent être déposés.
             </p>
-          </>
-        )}
-      </div>
+          </section>
+
+          <section>
+            <h2 className="mb-3 text-base font-semibold text-[var(--foreground)]">
+              8. Modifications
+            </h2>
+            <p>
+              Cette politique peut être mise à jour. La date de dernière
+              modification est indiquée en haut de cette page.
+            </p>
+          </section>
+
+          <p className="pt-4">
+            <Link
+              href={`/${lang}/legal/mentions-legales`}
+              className="text-[var(--foreground)] hover:underline"
+            >
+              Voir les mentions légales
+            </Link>
+          </p>
+        </div>
+      ) : (
+        <div className="mt-8 space-y-8 text-sm leading-relaxed text-[var(--muted-foreground)]">
+          <section>
+            <h2 className="mb-3 text-base font-semibold text-[var(--foreground)]">
+              1. Data controller
+            </h2>
+            <p>
+              Pierre Kasparian, sole trader (auto-entrepreneur)
+              <br />
+              Contact:{" "}
+              <Link
+                href={`/${lang}/contact`}
+                className="text-[var(--foreground)] hover:underline"
+              >
+                contact form
+              </Link>
+            </p>
+          </section>
+
+          <section>
+            <h2 className="mb-3 text-base font-semibold text-[var(--foreground)]">
+              2. Data collected
+            </h2>
+            <p>
+              This site only collects data you voluntarily provide via the
+              contact form:
+            </p>
+            <ul className="mt-2 list-disc space-y-1 pl-5">
+              <li>First and last name</li>
+              <li>Email address</li>
+              <li>Message subject</li>
+              <li>Message content</li>
+            </ul>
+            <p className="mt-2">
+              No data is collected automatically (no analytics cookies, no
+              third-party trackers).
+            </p>
+          </section>
+
+          <section>
+            <h2 className="mb-3 text-base font-semibold text-[var(--foreground)]">
+              3. Purpose and legal basis
+            </h2>
+            <p>
+              Contact form data is processed on the basis of legitimate interest
+              (Article 6(1)(f) GDPR) to respond to your enquiries and discuss
+              potential professional collaborations.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="mb-3 text-base font-semibold text-[var(--foreground)]">
+              4. Retention period
+            </h2>
+            <p>
+              Contact data is retained for as long as necessary to respond to
+              your request, and for a maximum of 3 years from the last exchange.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="mb-3 text-base font-semibold text-[var(--foreground)]">
+              5. Recipients
+            </h2>
+            <p>
+              Your data is never sold, rented or shared with third parties. It
+              is processed solely by Pierre Kasparian for professional purposes.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="mb-3 text-base font-semibold text-[var(--foreground)]">
+              6. Your rights
+            </h2>
+            <p>
+              Under the GDPR (Articles 15 to 22), you have the following rights:
+            </p>
+            <ul className="mt-2 list-disc space-y-1 pl-5">
+              <li>Right of access</li>
+              <li>Right to rectification</li>
+              <li>Right to erasure</li>
+              <li>Right to restriction of processing</li>
+              <li>Right to object</li>
+              <li>Right to data portability</li>
+            </ul>
+            <p className="mt-2">
+              To exercise these rights,{" "}
+              <Link
+                href={`/${lang}/contact`}
+                className="text-[var(--foreground)] hover:underline"
+              >
+                use the contact form
+              </Link>
+              . You may also lodge a complaint with your national supervisory
+              authority (in France:{" "}
+              <a
+                href="https://www.cnil.fr"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[var(--foreground)] hover:underline"
+              >
+                CNIL
+              </a>
+              ).
+            </p>
+          </section>
+
+          <section>
+            <h2 className="mb-3 text-base font-semibold text-[var(--foreground)]">
+              7. Cookies
+            </h2>
+            <p>
+              This site uses no analytics, retargeting or social sharing
+              cookies. Only technically necessary cookies may be set for the
+              site&apos;s basic operation.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="mb-3 text-base font-semibold text-[var(--foreground)]">
+              8. Changes
+            </h2>
+            <p>
+              This policy may be updated. The date of last modification is shown
+              at the top of this page.
+            </p>
+          </section>
+
+          <p className="pt-4">
+            <Link
+              href={`/${lang}/legal/mentions-legales`}
+              className="text-[var(--foreground)] hover:underline"
+            >
+              View legal notice
+            </Link>
+          </p>
+        </div>
+      )}
     </article>
   );
 }

@@ -159,7 +159,30 @@
     "heading": "Mes prestations",
     "subtitle": "Du chatbot intelligent à l'infrastructure data, en passant par l'automatisation de vos processus.",
     "contactCta": "Discutons de votre projet",
-    "relatedProjects": "Projets associés"
+    "relatedProjects": "Projets associés",
+    "faqHeading": "Questions fréquentes",
+    "faq": [
+      {
+        "q": "Quelle est la différence entre un chatbot RAG et ChatGPT ?",
+        "a": "Un chatbot RAG répond en s'appuyant exclusivement sur vos documents internes. Contrairement à ChatGPT, il ne génère pas de réponses hors-contexte et chaque réponse est traçable jusqu'à sa source. Résultat : aucune hallucination sur vos données métier."
+      },
+      {
+        "q": "Puis-je utiliser ces services tout en restant conforme au RGPD ?",
+        "a": "Oui. Toutes les intégrations peuvent être déployées avec un hébergement européen ou on-premise, sans transfert de données vers des serveurs américains. Je travaille prioritairement avec Mistral AI et OVHcloud pour les cas nécessitant une conformité RGPD stricte."
+      },
+      {
+        "q": "Quel est le délai typique pour livrer un projet IA ?",
+        "a": "Pour un chatbot RAG ou une automatisation ciblée, comptez 2 à 4 semaines selon la complexité et la qualité des données source. Un pipeline data ou un MVP SaaS peut nécessiter 4 à 8 semaines. Un cadrage précis est effectué avant toute estimation."
+      },
+      {
+        "q": "J'ai peu de données internes. Puis-je quand même bénéficier d'un LLM ?",
+        "a": "Absolument. Les LLM modernes fonctionnent très bien avec quelques dizaines de documents bien structurés. La phase de data engineering permet aussi de consolider et d'enrichir des données existantes, même fragmentées, avant de les exploiter."
+      },
+      {
+        "q": "Comment se déroule une mission type ?",
+        "a": "Appel de cadrage (30 min) pour comprendre le besoin, proposition technique et devis sous 48h, développement itératif avec points hebdomadaires, puis livraison avec documentation et transfert de compétences pour que votre équipe soit autonome."
+      }
+    ]
   },
   "blog": {
     "metaTitle": "Blog",

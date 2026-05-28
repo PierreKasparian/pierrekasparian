@@ -25,6 +25,15 @@ export function buildAlternatesFrOnly(path: string) {
 }
 
 /**
+ * Default OG image used as fallback across all pages.
+ * Replace with a proper 1200x630 branded image at /og-image.jpg when available.
+ */
+export const defaultOgImage = {
+  url: `${SITE_URL}/IMG_4704.jpg`,
+  alt: "Pierre Kasparian — Freelance IA & data",
+};
+
+/**
  * Build `openGraph` metadata for Next.js generateMetadata.
  * @param title - page title
  * @param description - page description
@@ -44,6 +53,7 @@ export function buildOpenGraph(
     siteName: "Pierre Kasparian",
     locale: locale === "fr" ? "fr_FR" : "en_US",
     alternateLocale: [locale === "fr" ? "en_US" : "fr_FR"],
+    images: [defaultOgImage],
   };
 }
 
@@ -94,6 +104,7 @@ export const personSchema = {
     occupationLocation: { "@type": "Country", name: "France" },
     skills: "LLM, RAG, RGPD, Python, LangChain, Mistral, OpenAI, dbt, Airflow",
   },
+  image: `${SITE_URL}/IMG_4704.jpg`,
   sameAs: [
     "https://www.linkedin.com/in/pierre-kasparian-486101259/",
     "https://github.com/PierreKasparian/",

@@ -1,51 +1,129 @@
 ---
-title: "Comment intégrer un LLM sans violer le RGPD"
-description: "Un guide pratique pour les PME françaises qui veulent utiliser l'IA générative en restant conformes."
+title: "Intégrer un LLM sans violer le RGPD : guide 2025"
+description: "Guide complet pour les PME françaises : quels articles du RGPD s'appliquent aux LLM, pourquoi le Cloud Act pose problème, et quelles architectures permettent de rester conforme."
 date: "2025-01-15"
-tags: ["LLM", "RGPD", "Conformité"]
-readingTime: 6
+tags: ["LLM", "RGPD", "Conformité", "IA souveraine", "hébergement EU"]
+readingTime: 7
 ---
 
-L'essor des LLM soulève une question cruciale pour les entreprises françaises et européennes : **peut-on utiliser ChatGPT ou des modèles similaires en restant conforme au RGPD ?**
+L'essor des LLM soulève une question concrète pour les entreprises françaises et européennes : **peut-on utiliser un LLM en restant conforme au RGPD ?**
 
-La réponse est oui — mais à condition de faire les bons choix architecturaux dès le départ.
+La réponse courte : oui, mais pas avec n'importe quelle architecture. La majorité des intégrations "plug and play" (envoyer des prompts directement à l'API OpenAI) exposent l'entreprise à des violations réglementaires sérieuses, y compris quand les données semblent anodines. Ce guide explique pourquoi, et quelles alternatives permettent de déployer l'IA générative en toute légalité.
 
-## Le problème
+## Pourquoi envoyer des données à OpenAI pose un problème RGPD
 
-Quand vous envoyez des données à une API comme OpenAI, ces données transitent vers des serveurs américains soumis au Cloud Act. Si vos prompts contiennent des données personnelles (noms, e-mails, contenu de tickets clients, données RH), vous êtes soumis aux obligations du RGPD :
+### Qu'est-ce qu'une donnée personnelle au sens de l'Article 4 RGPD ?
 
-- **Obligation de transparence** : informer les personnes concernées
-- **Transfert hors EU** : nécessite des garanties adéquates (clauses contractuelles types, mais OpenAI n'offre pas de garantie forte)
-- **Conservation des données** : les données d'entraînement et de fine-tuning peuvent poser problème
+L'**Article 4(1) du RGPD** définit la donnée personnelle comme "toute information se rapportant à une personne physique identifiée ou identifiable." Cette définition est volontairement large. Un nom, une adresse e-mail, un numéro de ticket client, un extrait de conversation, une référence à un salarié dans un document interne : toutes ces informations sont des données personnelles.
 
-## Les solutions
+Conséquence directe : si vos prompts contiennent des informations sur des clients, employés, ou prospects, vous traitez des données personnelles au sens du RGPD, et toutes les obligations afférentes s'appliquent.
 
-### 1. Hébergement EU
+### Le Cloud Act 2018 : le risque qui vient des États-Unis
 
-Privilégiez des fournisseurs qui hébergent leurs modèles en Europe :
+Le **CLOUD Act** (Clarifying Lawful Overseas Use of Data Act, loi américaine de 2018) autorise les autorités américaines (FBI, DOJ) à contraindre toute entreprise américaine à leur communiquer des données stockées sur ses serveurs, y compris des serveurs situés en Europe. OpenAI, Microsoft, Google, Amazon Web Services sont toutes des entreprises américaines soumises à cette loi.
 
-- **Mistral AI** (Paris) — modèles frontier avec API RGPD-friendly
-- **OVHcloud AI Deploy** — hébergement on-premise ou cloud FR
-- **Azure West Europe + DPA** — acceptable avec un Data Processing Agreement signé
+En pratique : si vous envoyez des données clients à l'API d'OpenAI, ces données peuvent légalement être consultées par des autorités américaines, sans que vous en soyez informé. Le RGPD et le Cloud Act sont structurellement incompatibles sur ce point.
 
-### 2. Modèles open source on-premise
+La CJUE a d'ailleurs rappelé ce conflit dans l'arrêt **Schrems II (16 juillet 2020)**, qui a invalidé le Privacy Shield précisément parce que les entreprises américaines ne peuvent pas garantir une protection équivalente au RGPD face à la surveillance étatique américaine.
 
-Des modèles comme **Mistral 7B**, **Llama 3** ou **Qwen** peuvent être hébergés directement sur votre infrastructure. Aucun token ne quitte votre périmètre. Avec une GPU correcte (ou via vLLM sur CPU), les performances sont suffisantes pour la plupart des cas d'usage internes.
+### L'Article 44 RGPD : les transferts hors UE sont encadrés
 
-### 3. Anonymisation des inputs
+L'**Article 44 du RGPD** pose le principe fondamental : tout transfert de données personnelles vers un pays tiers (hors UE/EEE) est interdit sauf s'il respecte les conditions des Articles 45 à 49. En clair, envoyer des données à un serveur américain n'est pas automatiquement illégal, mais cela requiert une base juridique spécifique.
 
-Avant d'envoyer un prompt à un LLM externe, passez-le dans une pipeline d'anonymisation : remplacement des PII (noms, e-mails, téléphones, SIRET) par des tokens réversibles. La réponse du modèle est ensuite désanonymisée côté serveur.
+L'**Article 46** liste les garanties acceptables : décision d'adéquation de la Commission européenne, clauses contractuelles types (CCT), règles d'entreprise contraignantes (BCR). OpenAI propose des CCT dans son DPA, mais plusieurs autorités de protection des données européennes ont émis des réserves sur leur effectivité face au Cloud Act.
 
-### 4. Architecture "privacy by design"
+**Le risque réel pour une PME :** en cas de contrôle CNIL, vous devrez démontrer que votre transfert est couvert par une garantie adéquate ET que cette garantie est effective en pratique. "OpenAI nous a fait signer un DPA" ne suffit pas si les données restent exposées au Cloud Act.
 
-La meilleure approche : concevoir l'intégration avec le RGPD en tête, pas après coup. Cela signifie :
+### L'Article 28 RGPD : le contrat avec votre sous-traitant
 
-- Logger les échanges avec le modèle (droit d'accès, droit à l'oubli)
-- Documenter les flux de données dans votre registre de traitements
-- Vérifier que votre DPO (si vous en avez un) valide l'architecture
+Dès que vous utilisez un tiers pour traiter des données personnelles pour votre compte (y compris un fournisseur d'API IA), cet Article oblige à signer un **Data Processing Agreement (DPA)**. Ce contrat doit préciser les finalités du traitement, les mesures de sécurité, les sous-traitants ultérieurs, les modalités d'exercice des droits des personnes.
+
+OpenAI et les grands fournisseurs proposent des DPA, mais leur portée réelle varie. Vérifier que le DPA couvre explicitement le fait que les données ne servent pas à réentraîner les modèles est indispensable.
+
+### Les sanctions : Article 83 RGPD
+
+L'**Article 83** prévoit des amendes pouvant atteindre **4% du chiffre d'affaires mondial annuel** ou 20 millions d'euros (le montant le plus élevé s'applique). La CNIL a déjà sanctionné des entreprises françaises pour des transferts illicites vers des outils américains : Clearview AI, Google Analytics, et plusieurs sites utilisant des CDN américains.
+
+## Quelles architectures permettent de rester conforme ?
+
+### Option 1 : Fournisseurs IA avec hébergement européen
+
+La solution la plus simple pour les entreprises qui veulent utiliser une API externe. Plusieurs acteurs proposent des modèles de qualité frontier avec données hébergées en Europe :
+
+- **Mistral AI** (Paris) : modèles Mistral Small, Medium, Large, hébergés en France, API avec DPA conforme RGPD. Priorité à recommander pour les cas d'usage cloud.
+- **OVHcloud AI Deploy** : déploiement de modèles open source (Llama, Mistral) sur infrastructure française, aucun transfert hors EU.
+- **Microsoft Azure West Europe + DPA enterprise** : acceptable si le DPA est bien configuré et que les données ne quittent pas la région EU. Moins recommandé en raison du Cloud Act résiduel.
+
+Le [guide de la CNIL sur l'intelligence artificielle](https://www.cnil.fr/fr/intelligence-artificielle) recommande de vérifier systématiquement la localisation effective des données, pas seulement la localisation contractuelle.
+
+### Option 2 : Modèles open source en auto-hébergement
+
+C'est l'architecture la plus robuste sur le plan RGPD : **aucune donnée ne quitte votre infrastructure.** Des modèles comme **Mistral 7B**, **Llama 3 8B/70B**, **Qwen 2.5** ou **Phi-3** peuvent être déployés sur vos propres serveurs (on-premise ou VPS européen).
+
+La stack typique :
+
+```bash
+# Inférence CPU/GPU avec vLLM
+pip install vllm
+vllm serve mistralai/Mistral-7B-Instruct-v0.3 --port 8000
+```
+
+Ou via **Ollama** pour un déploiement simplifié en local :
+
+```bash
+ollama run mistral:7b
+```
+
+Les performances sur GPU récente (RTX 4090, A100) sont tout à fait acceptables pour des usages internes : chatbots documentaires, extraction d'information, classification, synthèse.
+
+### Option 3 : Anonymisation des inputs avant envoi
+
+Si votre cas d'usage impose un LLM externe (performances, coût, raison contractuelle), une pipeline d'anonymisation peut réduire significativement le risque :
+
+1. Détection des PII dans le prompt (noms, e-mails, numéros, adresses, SIRET) avec un modèle de NER (spaCy fr, GLiNER, Presidio)
+2. Remplacement par des tokens réversibles : `Jean Dupont` → `PERSONNE_001`
+3. Envoi du prompt anonymisé au LLM externe
+4. Désanonymisation de la réponse côté serveur
+
+Limites : cette approche ne couvre pas tous les cas (contextes implicites, inférences sur l'identité) et ne supprime pas les obligations de l'Article 44. Elle réduit l'exposition mais ne remplace pas une analyse juridique.
+
+### Option 4 : Architecture privacy by design (Article 25 RGPD)
+
+L'**Article 25 du RGPD** impose le principe de "protection des données dès la conception" (privacy by design). Pour une intégration LLM, cela signifie concevoir l'architecture avec les questions suivantes répondues avant le premier déploiement :
+
+- Quelles catégories de données transitent dans les prompts ? (Article 9 pour les données sensibles : santé, convictions religieuses, etc.)
+- Quel est le registre de traitements mis à jour ? (Article 30)
+- Comment les droits des personnes sont-ils exercés : accès, rectification, effacement ? (Articles 15-17)
+- Les logs des échanges avec le LLM sont-ils conservés, et pour quelle durée ?
+- Un DPO (délégué à la protection des données) doit-il être consulté ? (Article 37)
+
+## Tableau récapitulatif : quel fournisseur pour quel niveau de conformité ?
+
+| Architecture | Risque RGPD | Complexité | Recommandé pour |
+|---|---|---|---|
+| OpenAI API (sans DPA) | Très élevé | Faible | Aucun cas professionnel avec données perso |
+| OpenAI API + DPA + CCT | Moyen | Faible | Données non-sensibles, surveillance du Cloud Act |
+| Mistral AI (API EU) | Faible | Faible | Déploiement cloud, données clients |
+| OVHcloud + modèle open source | Très faible | Moyen | PME avec exigences RGPD strictes |
+| On-premise + Llama/Mistral | Quasi-nul | Élevé | Données sensibles, secteur régulé (santé, RH, finance) |
+| Pipeline d'anonymisation + LLM externe | Faible | Moyen-élevé | Compromis coût/conformité |
+
+## Ce que recommande la CNIL en 2024-2025
+
+La CNIL a publié plusieurs prises de position sur l'IA générative. Les points clés :
+
+- Un LLM peut être un **sous-traitant** (Article 28) ou un **responsable de traitement conjoint** selon la configuration. Cette distinction a des implications importantes sur les responsabilités.
+- L'utilisation d'un LLM pour traiter des données de santé ou des données sensibles (Article 9) requiert une **Analyse d'Impact sur la Protection des Données (AIPD, Article 35)** préalable.
+- Les entreprises doivent documenter leur base légale pour chaque traitement impliquant un LLM (Article 6 : intérêt légitime, consentement, exécution d'un contrat...).
+
+La CNIL maintient une [page dédiée à l'IA](https://www.cnil.fr/fr/intelligence-artificielle) mise à jour régulièrement, avec des recommandations sectorielles (RH, santé, marketing).
 
 ## Conclusion
 
-La conformité RGPD n'est pas incompatible avec l'IA — elle demande simplement une architecture réfléchie. Si votre cas d'usage traite des données sensibles, un audit préalable peut vous éviter des sanctions coûteuses.
+La conformité RGPD n'est pas incompatible avec l'IA générative. Elle demande une architecture réfléchie et une connaissance minimale des articles clés : Article 4 (définitions), Article 6 (base légale), Article 25 (privacy by design), Article 28 (DPA sous-traitant), Article 44 (transferts hors UE), Article 83 (sanctions).
 
-N'hésitez pas à me contacter pour discuter de votre situation.
+Les PME qui traitent des données clients ou RH ont tout intérêt à privilégier des fournisseurs européens (Mistral AI, OVHcloud) ou des déploiements on-premise dès le départ. Corriger l'architecture après coup coûte significativement plus cher que de bien la concevoir.
+
+Si votre cas d'usage traite des données sensibles ou que vous opérez dans un secteur régulé (santé, finance, droit), un audit préalable de l'architecture IA peut vous éviter des sanctions qui atteignent jusqu'à 4% de votre chiffre d'affaires mondial.
+
+[Contactez-moi](/fr/contact) pour discuter de votre situation et évaluer l'architecture adaptée à vos contraintes.

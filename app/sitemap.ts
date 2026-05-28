@@ -14,13 +14,14 @@ const staticRoutes: {
   path: string;
   priority: number;
   changeFreq: MetadataRoute.Sitemap[number]["changeFrequency"];
+  lastmod: string;
 }[] = [
-  { path: "", priority: 1.0, changeFreq: "weekly" },
-  { path: "/about", priority: 0.8, changeFreq: "monthly" },
-  { path: "/services", priority: 0.9, changeFreq: "monthly" },
-  { path: "/projects", priority: 0.8, changeFreq: "monthly" },
-  { path: "/blog", priority: 0.7, changeFreq: "weekly" },
-  { path: "/contact", priority: 0.7, changeFreq: "yearly" },
+  { path: "", priority: 1.0, changeFreq: "weekly", lastmod: "2026-05-27" },
+  { path: "/about", priority: 0.8, changeFreq: "monthly", lastmod: "2025-06-01" },
+  { path: "/services", priority: 0.9, changeFreq: "monthly", lastmod: "2026-05-27" },
+  { path: "/projects", priority: 0.8, changeFreq: "monthly", lastmod: "2026-05-27" },
+  { path: "/blog", priority: 0.7, changeFreq: "weekly", lastmod: "2026-05-27" },
+  { path: "/contact", priority: 0.7, changeFreq: "yearly", lastmod: "2025-06-01" },
   // /tools excluded until content is ready
 ];
 
@@ -37,7 +38,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   for (const route of staticRoutes) {
     entries.push({
       url: `${BASE_URL}/fr${route.path}`,
-      lastModified: new Date(),
+      lastModified: new Date(route.lastmod),
       changeFrequency: route.changeFreq,
       priority: route.priority,
       alternates: { languages: langAlternates(route.path) },
@@ -49,7 +50,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     const routePath = `/projects/${project.slug}`;
     entries.push({
       url: `${BASE_URL}/fr${routePath}`,
-      lastModified: new Date(),
+      lastModified: new Date("2026-05-27"),
       changeFrequency: "monthly",
       priority: 0.7,
       alternates: { languages: langAlternates(routePath) },
@@ -59,7 +60,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // /education - listing page
   entries.push({
     url: `${BASE_URL}/fr/education`,
-    lastModified: new Date(),
+    lastModified: new Date("2025-06-01"),
     changeFrequency: "monthly",
     priority: 0.5,
     alternates: { languages: langAlternates("/education") },
@@ -70,7 +71,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     const routePath = `/education/${education.slug}`;
     entries.push({
       url: `${BASE_URL}/fr${routePath}`,
-      lastModified: new Date(),
+      lastModified: new Date("2025-06-01"),
       changeFrequency: "monthly",
       priority: 0.5,
       alternates: { languages: langAlternates(routePath) },

@@ -1,51 +1,129 @@
 ---
-title: "How to integrate a LLM without violating GDPR"
-description: "A practical guide for EU companies wanting to use generative AI while staying compliant."
+title: "Integrating an LLM without violating GDPR: 2025 guide"
+description: "Complete guide for EU companies: which GDPR articles apply to LLMs, why the Cloud Act is a problem, and which architectures keep you compliant."
 date: "2025-01-15"
-tags: ["LLM", "GDPR", "Compliance"]
-readingTime: 6
+tags: ["LLM", "GDPR", "Compliance", "Sovereign AI", "EU hosting"]
+readingTime: 7
 ---
 
-The rise of LLMs raises a crucial question for European businesses: **can you use ChatGPT or similar models while staying GDPR-compliant?**
+The rise of LLMs raises a concrete question for European businesses: **can you use an LLM while staying GDPR-compliant?**
 
-The answer is yes — but only if you make the right architectural choices from the start.
+Short answer: yes, but not with just any architecture. Most "plug and play" integrations (sending prompts directly to the OpenAI API) expose companies to serious regulatory violations, even when the data appears innocuous. This guide explains why, and which alternatives let you deploy generative AI legally.
 
-## The problem
+## Why sending data to OpenAI creates a GDPR problem
 
-When you send data to an API like OpenAI, that data travels to US servers subject to the Cloud Act. If your prompts contain personal data (names, emails, customer ticket content, HR data), you're subject to GDPR obligations:
+### What counts as personal data under Article 4 GDPR?
 
-- **Transparency requirement**: inform the data subjects
-- **Transfer outside the EU**: requires adequate safeguards (standard contractual clauses, but OpenAI doesn't offer strong guarantees)
-- **Data retention**: training and fine-tuning data can be problematic
+**Article 4(1) of the GDPR** defines personal data as "any information relating to an identified or identifiable natural person." This definition is deliberately broad. A name, an email address, a customer ticket number, a snippet of conversation, a reference to an employee in an internal document: all of these are personal data.
 
-## Solutions
+Direct consequence: if your prompts contain information about customers, employees, or prospects, you are processing personal data under the GDPR, and all the associated obligations apply.
 
-### 1. EU hosting
+### The Cloud Act 2018: the risk that comes from the US
 
-Choose providers that host their models in Europe:
+The **CLOUD Act** (Clarifying Lawful Overseas Use of Data Act, US law enacted in 2018) allows American authorities (FBI, DOJ) to compel any US company to hand over data stored on its servers, including servers located in Europe. OpenAI, Microsoft, Google, and Amazon Web Services are all US companies subject to this law.
 
-- **Mistral AI** (Paris) — frontier models with a GDPR-friendly API
-- **OVHcloud AI Deploy** — on-premise or FR-cloud hosting
-- **Azure West Europe + DPA** — acceptable with a signed Data Processing Agreement
+In practice: if you send customer data to the OpenAI API, those data can legally be accessed by US authorities without you being notified. The GDPR and the Cloud Act are structurally incompatible on this point.
 
-### 2. Open-source on-premise models
+The Court of Justice of the EU reinforced this conflict in the **Schrems II ruling (16 July 2020)**, which invalidated the Privacy Shield precisely because US companies cannot guarantee GDPR-equivalent protection against US state surveillance.
 
-Models like **Mistral 7B**, **Llama 3**, or **Qwen** can be hosted directly on your own infrastructure. No token leaves your perimeter. With a decent GPU (or via vLLM on CPU), performance is sufficient for most internal use cases.
+### Article 44 GDPR: transfers outside the EU are restricted
 
-### 3. Input anonymisation
+**Article 44 of the GDPR** establishes the fundamental principle: any transfer of personal data to a third country (outside the EU/EEA) is prohibited unless it meets the conditions of Articles 45 to 49. Sending data to a US server is not automatically illegal, but it requires a specific legal basis.
 
-Before sending a prompt to an external LLM, run it through an anonymisation pipeline: replace PII (names, emails, phone numbers) with reversible tokens. The model's response is then de-anonymised server-side.
+**Article 46** lists acceptable safeguards: an adequacy decision from the European Commission, Standard Contractual Clauses (SCCs), or Binding Corporate Rules (BCRs). OpenAI offers SCCs in its DPA, but several European data protection authorities have raised concerns about their effectiveness in the face of the Cloud Act.
 
-### 4. Privacy-by-design architecture
+**The real risk for an SME:** if the supervisory authority investigates, you will need to demonstrate that your transfer is covered by an adequate safeguard AND that this safeguard is effective in practice. "OpenAI made us sign a DPA" is not enough if the data remains exposed to the Cloud Act.
 
-The best approach: design the integration with GDPR in mind from the start, not as an afterthought. This means:
+### Article 28 GDPR: the contract with your processor
 
-- Logging exchanges with the model (right of access, right to erasure)
-- Documenting data flows in your processing register
-- Having your DPO (if you have one) validate the architecture
+Whenever you use a third party to process personal data on your behalf (including an AI API provider), this Article requires a **Data Processing Agreement (DPA)**. This contract must specify the purposes of processing, security measures, sub-processors, and the procedures for exercising data subject rights.
+
+OpenAI and the major providers offer DPAs, but their actual scope varies. It is essential to verify that the DPA explicitly covers the fact that data is not used to retrain the models.
+
+### Sanctions: Article 83 GDPR
+
+**Article 83** provides for fines of up to **4% of annual worldwide turnover** or €20 million (whichever is higher). The French CNIL has already sanctioned French companies for unlawful transfers to US tools: Clearview AI, Google Analytics, and several websites using US CDNs.
+
+## Which architectures allow you to stay compliant?
+
+### Option 1: AI providers with European hosting
+
+The simplest solution for companies that want to use an external API. Several providers offer frontier-quality models with data hosted in Europe:
+
+- **Mistral AI** (Paris): Mistral Small, Medium, and Large models hosted in France, API with GDPR-compliant DPA. The recommended default for cloud use cases.
+- **OVHcloud AI Deploy**: deployment of open-source models (Llama, Mistral) on French infrastructure, no transfer outside the EU.
+- **Microsoft Azure West Europe + enterprise DPA**: acceptable if the DPA is properly configured and data does not leave the EU region. Less recommended due to residual Cloud Act exposure.
+
+The [CNIL guide on artificial intelligence](https://www.cnil.fr/fr/intelligence-artificielle) recommends systematically verifying the effective location of data, not just the contractual location.
+
+### Option 2: Self-hosted open-source models
+
+This is the most robust architecture from a GDPR perspective: **no data ever leaves your infrastructure.** Models such as **Mistral 7B**, **Llama 3 8B/70B**, **Qwen 2.5**, or **Phi-3** can be deployed on your own servers (on-premise or a European VPS).
+
+A typical stack:
+
+```bash
+# CPU/GPU inference with vLLM
+pip install vllm
+vllm serve mistralai/Mistral-7B-Instruct-v0.3 --port 8000
+```
+
+Or via **Ollama** for simplified local deployment:
+
+```bash
+ollama run mistral:7b
+```
+
+Performance on modern GPUs (RTX 4090, A100) is fully adequate for most internal use cases: document chatbots, information extraction, classification, and summarisation.
+
+### Option 3: Input anonymisation before sending
+
+If your use case requires an external LLM (performance, cost, or contractual reasons), an anonymisation pipeline can significantly reduce your exposure:
+
+1. Detect PII in the prompt (names, emails, phone numbers, addresses, VAT numbers) using an NER model (spaCy, GLiNER, Presidio)
+2. Replace them with reversible tokens: `John Smith` → `PERSON_001`
+3. Send the anonymised prompt to the external LLM
+4. De-anonymise the response server-side
+
+Limitations: this approach does not cover all cases (implicit context, identity inferences) and does not eliminate the obligations under Article 44. It reduces exposure but does not replace legal analysis.
+
+### Option 4: Privacy-by-design architecture (Article 25 GDPR)
+
+**Article 25 of the GDPR** mandates the principle of "data protection by design and by default." For an LLM integration, this means having the following questions answered before the first deployment:
+
+- What categories of data appear in the prompts? (Article 9 for special categories: health, religious beliefs, etc.)
+- Is the processing register up to date? (Article 30)
+- How are data subject rights exercised: access, rectification, erasure? (Articles 15-17)
+- Are logs of exchanges with the LLM retained, and for how long?
+- Should a DPO (Data Protection Officer) be consulted? (Article 37)
+
+## Summary table: which provider for which compliance level?
+
+| Architecture | GDPR risk | Complexity | Recommended for |
+|---|---|---|---|
+| OpenAI API (no DPA) | Very high | Low | No professional use case with personal data |
+| OpenAI API + DPA + SCCs | Medium | Low | Non-sensitive data, Cloud Act monitoring required |
+| Mistral AI (EU API) | Low | Low | Cloud deployment, customer data |
+| OVHcloud + open-source model | Very low | Medium | SMEs with strict GDPR requirements |
+| On-premise + Llama/Mistral | Near-zero | High | Sensitive data, regulated sectors (health, HR, finance) |
+| Anonymisation pipeline + external LLM | Low | Medium-high | Cost/compliance trade-off |
+
+## What CNIL recommends in 2024-2025
+
+The CNIL has published several positions on generative AI. Key points:
+
+- An LLM can be a **processor** (Article 28) or a **joint controller** depending on the configuration. This distinction has significant implications for responsibilities.
+- Using an LLM to process health data or special-category data (Article 9) requires a prior **Data Protection Impact Assessment (DPIA, Article 35)**.
+- Companies must document their legal basis for each processing activity involving an LLM (Article 6: legitimate interest, consent, contract performance...).
+
+The CNIL maintains a [dedicated AI page](https://www.cnil.fr/fr/intelligence-artificielle) that is regularly updated, with sector-specific guidance covering HR, healthcare, and marketing.
 
 ## Conclusion
 
-GDPR compliance is not incompatible with AI — it simply requires thoughtful architecture. If your use case processes sensitive data, an upfront audit can save you from costly penalties.
+GDPR compliance is not incompatible with generative AI. It requires a considered architecture and a working knowledge of the key articles: Article 4 (definitions), Article 6 (legal basis), Article 25 (privacy by design), Article 28 (processor DPA), Article 44 (transfers outside the EU), Article 83 (sanctions).
 
-Feel free to get in touch to discuss your situation.
+SMEs that handle customer or HR data should default to European providers (Mistral AI, OVHcloud) or on-premise deployments from the outset. Fixing the architecture after the fact costs significantly more than designing it correctly from the start.
+
+If your use case processes sensitive data or you operate in a regulated sector (healthcare, finance, law), an upfront architecture audit can protect you from fines that reach up to 4% of your global annual turnover.
+
+[Contact me](/en/contact) to discuss your situation and identify the architecture that fits your constraints.

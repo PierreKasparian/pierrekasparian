@@ -159,7 +159,30 @@
     "heading": "My services",
     "subtitle": "From intelligent chatbots to data infrastructure and process automation.",
     "contactCta": "Let's discuss your project",
-    "relatedProjects": "Related projects"
+    "relatedProjects": "Related projects",
+    "faqHeading": "Frequently asked questions",
+    "faq": [
+      {
+        "q": "What is the difference between a RAG chatbot and ChatGPT?",
+        "a": "A RAG chatbot answers exclusively from your internal documents. Unlike ChatGPT, it doesn't generate out-of-context responses and every answer is traceable to its source. The result: no hallucinations on your business data."
+      },
+      {
+        "q": "Can I use these services while staying GDPR-compliant?",
+        "a": "Yes. All integrations can be deployed with European hosting or on-premise, with no data transfer to US servers. I primarily work with Mistral AI and OVHcloud for use cases requiring strict GDPR compliance."
+      },
+      {
+        "q": "How long does a typical AI project take to deliver?",
+        "a": "For a RAG chatbot or targeted automation, expect 2 to 4 weeks depending on complexity and source data quality. A data pipeline or SaaS MVP typically takes 4 to 8 weeks. A precise scoping call is done before any estimate."
+      },
+      {
+        "q": "I have limited internal data. Can I still benefit from an LLM?",
+        "a": "Absolutely. Modern LLMs work very well with a few dozen well-structured documents. The data engineering phase can also help consolidate and enrich existing data, even when fragmented, before putting it to use."
+      },
+      {
+        "q": "How does a typical engagement work?",
+        "a": "A scoping call (30 min) to understand your needs, a technical proposal and quote within 48h, iterative development with weekly check-ins, then delivery with documentation and knowledge transfer so your team is fully autonomous."
+      }
+    ]
   },
   "blog": {
     "metaTitle": "Blog",

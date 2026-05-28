@@ -4,11 +4,7 @@
 
 ## Services
 
-- [Chatbots RAG intelligents](https://pierrekasparian.com/fr/services/agents-ia): Assistants sur mesure qui répondent en s'appuyant sur vos documents internes (PDF, mails, bases de connaissances). Hébergement européen ou sur site disponible.
-- [Ingénierie des données](https://pierrekasparian.com/fr/services/data-engineering): Pipelines ETL fiables de zéro à la production. Stack moderne : Python, dbt, Airflow. De la connexion de nouvelles sources à la préparation de datasets pour l'entraînement de modèles.
-- [Automatisation par l'IA](https://pierrekasparian.com/fr/services/automatisation-ia): Agents IA qui orchestrent plusieurs modèles et s'intègrent à vos outils (CRM, APIs, bases de données). Classification documents, extraction information, résumés automatiques.
-- [Développement SaaS](https://pierrekasparian.com/fr/services/saas-ai): De l'idée au MVP avec IA intégrée dès la conception. Stack Next.js, Python, Docker.
-- [Machine learning](https://pierrekasparian.com/fr/services/machine-learning): Modèles entraînés sur vos données métier pour classification, prédiction et enrichissement.
+- [Services IA & data — Pierre Kasparian](https://pierrekasparian.com/fr/services): Chatbots RAG sur vos documents internes, agents IA multi-modèles, pipelines de données (ETL, dbt, Airflow), machine learning sur mesure et automatisation IA. Hébergement européen, conformité RGPD garantie.
 
 ## Blog
 

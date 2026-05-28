@@ -61,3 +61,5 @@ Toutes les routes vivent sous `app/[lang]/` :
 - Toutes les modifs faites dans une langue doivent etre traduits dans l'autre langue (fr.json et en.json)
 
 After a code edit, check if lint is alright
+
+do not write any email, if you need to set contact infos, redirect to the contact form
