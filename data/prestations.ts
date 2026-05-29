@@ -89,6 +89,13 @@ export const prestations: Prestation[] = [
           en: "Production deployment on your infrastructure or EU cloud, technical documentation and knowledge transfer to your team.",
         },
       },
+      {
+        title: { fr: "Maintenance", en: "Maintenance" },
+        body: {
+          fr: "Accompagnement à la prise en main, mise à jour des documents sources et ajustements de l'assistant selon les retours d'usage de votre équipe.",
+          en: "Onboarding support, source document updates and assistant adjustments based on your team's real usage feedback.",
+        },
+      },
     ],
     faq: [
       {
@@ -192,6 +199,13 @@ export const prestations: Prestation[] = [
           en: "Deployment with pipeline error alerts, data freshness tests and technical documentation for your team.",
         },
       },
+      {
+        title: { fr: "Maintenance", en: "Maintenance" },
+        body: {
+          fr: "Accompagnement à la prise en main des pipelines, ajustements selon l'évolution des sources et support ponctuel pour les nouvelles intégrations.",
+          en: "Pipeline onboarding support, adjustments as data sources evolve and occasional support for new integrations.",
+        },
+      },
     ],
     faq: [
       {
@@ -293,6 +307,13 @@ export const prestations: Prestation[] = [
         body: {
           fr: "Validation des sorties sur un échantillon représentatif, mise en production avec monitoring des erreurs et points hebdomadaires les premières semaines.",
           en: "Output validation on a representative sample, production deployment with error monitoring and weekly check-ins for the first few weeks.",
+        },
+      },
+      {
+        title: { fr: "Maintenance", en: "Maintenance" },
+        body: {
+          fr: "Accompagnement à la prise en main des workflows automatisés, ajustements selon les cas réels et évolution des agents si les besoins métier changent.",
+          en: "Onboarding support for automated workflows, real-world adjustments and agent evolution as business needs change.",
         },
       },
     ],
@@ -402,6 +423,13 @@ export const prestations: Prestation[] = [
           en: "Production deployment on your host or EU cloud, developer documentation and knowledge transfer for team autonomy.",
         },
       },
+      {
+        title: { fr: "Maintenance", en: "Maintenance" },
+        body: {
+          fr: "Accompagnement à la prise en main du produit, corrections des premiers retours en production et évolutions mineures selon les retours utilisateurs.",
+          en: "Product onboarding support, early production fixes and minor iterations based on user feedback.",
+        },
+      },
     ],
     faq: [
       {
@@ -505,6 +533,13 @@ export const prestations: Prestation[] = [
         body: {
           fr: "Packaging du modèle (API REST ou batch), intégration dans vos systèmes existants et monitoring des performances en production.",
           en: "Model packaging (REST API or batch), integration into your existing systems and production performance monitoring.",
+        },
+      },
+      {
+        title: { fr: "Maintenance", en: "Maintenance" },
+        body: {
+          fr: "Accompagnement à la prise en main du modèle en production, suivi des métriques et ajustements si les distributions de données évoluent.",
+          en: "Model onboarding support in production, metric tracking and adjustments if data distributions drift.",
         },
       },
     ],

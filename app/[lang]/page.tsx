@@ -11,6 +11,7 @@ import {
   Search,
   Sparkles,
   Star,
+  Wrench,
   Zap,
   type LucideIcon,
 } from "lucide-react";
@@ -416,15 +417,15 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
             </p>
           </div>
 
-          <ol className="relative grid gap-8 md:grid-cols-4 md:gap-6">
+          <ol className="relative grid gap-8 md:grid-cols-5 md:gap-6">
             {/* Horizontal connector line (desktop only) */}
             <div
               aria-hidden="true"
-              className="absolute top-6 right-[12.5%] left-[12.5%] hidden h-px bg-[var(--border)] md:block"
+              className="absolute top-6 right-[10%] left-[10%] hidden h-px bg-[var(--border)] md:block"
             />
 
             {dict.home.processSteps.map((step, i) => {
-              const Icon = [Search, Compass, Code2, Rocket][i] ?? Sparkles;
+              const Icon = [Search, Compass, Code2, Rocket, Wrench][i] ?? Sparkles;
               return (
                 <li
                   key={step.title}
