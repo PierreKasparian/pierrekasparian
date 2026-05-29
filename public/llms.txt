@@ -38,6 +38,14 @@
 - [MCP Tunnel : connecter des agents IA à vos systèmes privés](https://pierrekasparian.com/fr/blog/article/mcp-tunnel-connecter-agents-ia-systemes-prives): Le Secure MCP Tunnel d'OpenAI connecte des agents IA à vos serveurs internes sans les exposer sur internet. Architecture, déploiement et analyse RGPD.
 - [Secure MCP Tunnel: Connect AI Agents to Private Systems](https://pierrekasparian.com/en/blog/article/mcp-tunnel-connect-ai-agents-private-systems): OpenAI's Secure MCP Tunnel lets AI agents access internal tools without exposing your servers to the internet. Architecture breakdown and GDPR analysis.
 
+## Outils gratuits
+
+- [Outils IA gratuits](https://pierrekasparian.com/fr/tools): Collection d'outils en ligne pour les équipes qui travaillent avec l'IA : simulateur VRAM, calculateur de coût RAG, générateur de réponses IA, générateur de schémas JSON.
+- [Simulateur VRAM](https://pierrekasparian.com/fr/tools/vram-simulator): Estimez la VRAM nécessaire pour charger un modèle LLM selon sa taille, la précision (fp32/fp16/int8/int4) et le nombre de GPUs.
+- [Calculateur de coût RAG](https://pierrekasparian.com/fr/tools/rag-cost-calculator): Estimez le coût d'un pipeline RAG (embedding, stockage vectoriel, génération) selon votre volume de documents et de requêtes.
+- [Générateur de réponses IA](https://pierrekasparian.com/fr/tools/ai-answer-generator): Obtenez une réponse IA structurée à n'importe quelle question, sans inscription.
+- [Générateur de schémas JSON](https://pierrekasparian.com/fr/tools/schema-generator): Générez un schéma JSON Schema ou Pydantic à partir d'une description en langage naturel.
+
 ## About
 
 - [À propos](https://pierrekasparian.com/fr/about): Étudiant ingénieur en 4e année à l'UTT (Université de Technologie de Troyes), freelance IA depuis 2024, 11+ projets livrés. Expertise forte en conformité RGPD et hébergement européen.

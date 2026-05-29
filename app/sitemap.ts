@@ -43,7 +43,36 @@ const staticRoutes: {
     changeFreq: "yearly",
     lastmod: "2025-06-01",
   },
-  // /tools excluded until content is ready
+  {
+    path: "/tools",
+    priority: 0.7,
+    changeFreq: "monthly",
+    lastmod: "2026-05-29",
+  },
+  {
+    path: "/tools/ai-answer-generator",
+    priority: 0.6,
+    changeFreq: "monthly",
+    lastmod: "2026-05-29",
+  },
+  {
+    path: "/tools/rag-cost-calculator",
+    priority: 0.6,
+    changeFreq: "monthly",
+    lastmod: "2026-05-29",
+  },
+  {
+    path: "/tools/vram-simulator",
+    priority: 0.6,
+    changeFreq: "monthly",
+    lastmod: "2026-05-29",
+  },
+  {
+    path: "/tools/schema-generator",
+    priority: 0.6,
+    changeFreq: "monthly",
+    lastmod: "2026-05-29",
+  },
 ];
 
 function langAlternates(path: string): Record<Locale, string> {

@@ -307,6 +307,98 @@
     "suggest": "Vous avez besoin d'un outil spécifique ?",
     "toolsGrid": "Outils disponibles",
     "blogSection": "Articles récents",
+    "ragCost": {
+      "metaTitle": "Calculateur de Coûts RAG & LLM gratuit - Budget API OpenAI & Anthropic",
+      "metaDescription": "Estimez vos coûts mensuels d'API LLM pour un projet RAG. Calcul transparent avec formules détaillées pour GPT, Claude et Mistral. Outil gratuit sans inscription.",
+      "heading": "Calculateur de Coûts RAG & LLM",
+      "description": "Estimez votre budget d'architecture LLM en quelques secondes. Calcul des tokens d'input, d'output et du coût d'indexing vectoriel pour GPT, Claude et Mistral.",
+      "badge": "Gratuit · Calcul en temps réel"
+    },
+    "schemaGenerator": {
+      "metaTitle": "Générateur Pydantic et JSON Schema pour Structured Outputs - OpenAI Function Calling",
+      "metaDescription": "Décrivez vos données en langage naturel et obtenez le schéma Pydantic ou JSON Schema exact pour OpenAI Function Calling et Instructor. Gratuit, sans inscription.",
+      "heading": "Générateur de Schéma pour Structured Outputs",
+      "description": "Décrivez en langage naturel les données à extraire et obtenez instantanément le schéma Pydantic (Python) ou JSON Schema prêt à l'emploi pour OpenAI Function Calling ou Instructor.",
+      "badge": "Gratuit · Powered by Groq",
+      "descriptionLabel": "Décrivez les données à extraire",
+      "descriptionPlaceholder": "Ex : Je veux extraire le nom de l'entreprise, le montant HT, la date de facture et une liste d'articles avec description, quantité et prix unitaire.",
+      "formatLabel": "Format de sortie",
+      "formats": {
+        "pydantic": "Pydantic (Python)",
+        "json": "JSON Schema"
+      },
+      "submit": "Générer le schéma",
+      "loading": "Génération en cours...",
+      "resultLabel": "Schéma généré",
+      "copy": "Copier",
+      "copied": "Copié !",
+      "errorEmpty": "Veuillez décrire les données à extraire.",
+      "errorApi": "Une erreur est survenue. Veuillez réessayer.",
+      "placeholderTitle": "Votre schéma apparaîtra ici",
+      "placeholderBody": "Décrivez les données à gauche et cliquez sur Générer.",
+      "promptTitle": "Prompt Système utilisé par cet outil",
+      "promptIntro": "Par transparence totale, voici le prompt exact envoyé à l'API Groq (Llama 3.3 70B). Le format affiché correspond au format sélectionné.",
+      "promptWhyTitle": "Pourquoi ce prompt évite les hallucinations",
+      "promptWhy": "Le Few-Shot prompting ancre le modèle sur un format de sortie exact via un exemple. La règle \"Output ONLY valid code\" supprime tout texte parasite. La température à 0.1 garantit une sortie déterministe. Les règles numérotées forment une checklist que le LLM suit séquentiellement.",
+      "howItWorksTitle": "Comment ça fonctionne ?",
+      "howItWorksSteps": [
+        {
+          "title": "Décrivez vos données",
+          "body": "Écrivez en langage naturel ce que vous voulez extraire : champs, types attendus, listes imbriquées."
+        },
+        {
+          "title": "Choisissez le format",
+          "body": "Pydantic pour un projet Python avec Instructor ou LangChain. JSON Schema pour une intégration directe avec l'API OpenAI."
+        },
+        {
+          "title": "Copiez et utilisez",
+          "body": "Le schéma est prêt à l'emploi. Collez-le dans votre code et branchez votre extraction LLM en quelques lignes."
+        }
+      ],
+      "guideTitle": "Pourquoi le typage strict est indispensable pour connecter l'IA à vos bases de données",
+      "guideIntro": "Connecter un LLM à PostgreSQL, BigQuery ou une API REST sans typage strict revient à envoyer un formulaire sans validation : les données arrivent, mais dans n'importe quel format. Le JSON devient inexploitable, les insertions échouent, et votre pipeline s'arrête à la première exception.",
+      "guideSections": [
+        {
+          "title": "Le problème du LLM libre",
+          "body": "Sans schéma, un LLM renvoie du texte libre. \"amount\": \"1 200,00 €\" au lieu de 1200.0 comme float. \"date\": \"le 15 mars\" au lieu de \"2024-03-15\". Ces formats sont illisibles pour un moteur SQL ou une API REST qui attend des types précis."
+        },
+        {
+          "title": "Structured Outputs : la solution",
+          "body": "OpenAI Function Calling et Instructor forcent le modèle à produire du JSON valide conforme à votre schéma. Plus de chaîne à parser manuellement, plus d'exception sur un format inattendu. La sortie est directement injectable dans votre base de données."
+        },
+        {
+          "title": "Pydantic ou JSON Schema ?",
+          "body": "Pydantic est idéal en Python : validation automatique, sérialisation native, intégration directe avec Instructor et LangChain. JSON Schema convient pour les environnements multi-langages ou quand vous appelez directement l'API OpenAI sans SDK."
+        },
+        {
+          "title": "En production : PostgreSQL et BigQuery",
+          "body": "Avec un schéma Pydantic, vous pouvez utiliser .model_dump() pour insérer directement dans SQLAlchemy ou BigQuery Storage Write API. Chaque champ est typé, validé et documenté. Le pipeline LLM vers base de données devient fiable et maintenable."
+        }
+      ],
+      "faqTitle": "Questions fréquentes",
+      "faq": [
+        {
+          "q": "Quelle est la différence entre Pydantic et JSON Schema pour les Structured Outputs ?",
+          "a": "Pydantic génère une classe Python avec validation intégrée, idéale pour les projets Python utilisant Instructor ou LangChain. JSON Schema est un format universel directement supporté par l'API OpenAI, utile si vous travaillez en multi-langage ou appelez l'API sans SDK Python."
+        },
+        {
+          "q": "Le schéma généré est-il compatible avec Instructor ?",
+          "a": "Oui. Le schéma Pydantic généré utilise Pydantic v2 avec BaseModel et Field, ce qui est directement compatible avec Instructor (client.chat.completions.create avec response_model=VotreModele)."
+        },
+        {
+          "q": "Puis-je utiliser JSON Schema avec l'API OpenAI directement ?",
+          "a": "Oui. Passez le schéma généré dans le paramètre response_format : { type: 'json_schema', json_schema: { name: 'MonSchema', schema: votreSchema } } lors de l'appel à l'API OpenAI."
+        },
+        {
+          "q": "Comment sont gérés les champs optionnels ?",
+          "a": "En Pydantic, Optional[T] indique un champ qui peut être absent dans le texte source (None par défaut). En JSON Schema, les champs absents du tableau \"required\" sont optionnels. Le générateur gère cette logique automatiquement selon votre description."
+        },
+        {
+          "q": "Quelle technologie alimente cet outil ?",
+          "a": "L'outil utilise Llama 3.3 70B de Meta via l'API Groq, avec une température de 0.1 pour des résultats déterministes. Le prompt système inclut un exemple Few-Shot pour ancrer le format de sortie."
+        }
+      ]
+    },
     "aiAnswer": {
       "metaTitle": "Générateur de réponses IA gratuit - sans inscription",
       "metaDescription": "Générez des réponses adaptées à votre ton grâce à l'IA. 100% gratuit, sans compte requis. Professionnel, concis, pédagogique ou décontracté.",
@@ -376,6 +468,66 @@
           "a": "Oui, entièrement gratuit, sans compte requis. Il est mis à disposition comme ressource libre par Pierre Kasparian."
         }
       ]
+    },
+    "vramSimulator": {
+      "metaTitle": "Simulateur VRAM LLM - Quelle carte graphique pour un modèle IA on-premise ?",
+      "metaDescription": "Calculez la VRAM nécessaire pour héberger un LLM open-source en local. Recommandations GPU : RTX 4090, A100, H100. Compatible Llama 3, Mistral, Qwen. Gratuit.",
+      "heading": "Simulateur VRAM & Hardware pour LLM On-Premise",
+      "description": "Entrez la taille du modèle, la quantification et la fenêtre de contexte pour estimer la mémoire GPU requise et les configurations matérielles compatibles.",
+      "badge": "Outil gratuit · Calcul en temps réel",
+      "intro": "Le principal goulot d'étranglement pour héberger un LLM en interne est la mémoire GPU (VRAM). Ce calculateur vous donne une estimation précise basée sur les paramètres réels du modèle : nombre de couches, têtes d'attention GQA et fenêtre de contexte.",
+      "modelLabel": "Taille du modèle",
+      "quantLabel": "Quantification",
+      "contextLabel": "Fenêtre de contexte",
+      "quantLabels": {
+        "FP16": "FP16 — précision maximale",
+        "INT8": "INT8 — bon compromis",
+        "Q4_K_M": "Q4_K_M — 4-bit, usage courant"
+      },
+      "resultTitle": "VRAM requise",
+      "baseVramLabel": "Mémoire modèle",
+      "kvCacheLabel": "KV Cache",
+      "hardwareTitle": "Configurations compatibles",
+      "noHardware": "Aucune configuration standard ne supporte ce besoin en VRAM. Un cluster multi-GPU personnalisé est nécessaire.",
+      "hwTypes": {
+        "consumer": "Grand public",
+        "pro": "Pro Workstation",
+        "datacenter": "Datacenter",
+        "apple": "Apple Silicon"
+      },
+      "noteNvlink": "Parallélisme tensoriel via PCIe (le NVLink n'existe pas sur la série RTX 40)",
+      "noteApple": "Mémoire unifiée, débit < GPU NVIDIA datacenter",
+      "methodTitle": "Méthodologie technique",
+      "methodBody": "Les calculs suivent les formules standard de la communauté open-source. La marge de 20% couvre les buffers système, l'overhead PyTorch/CUDA et les activations intermédiaires. Le KV Cache est calculé en FP16 (2 octets) quelles que soient les options de quantification du modèle.",
+      "methodFormula": "// 1. VRAM de base (GB)\nbase_vram = params_milliards × (bits_quantification ÷ 8) × 1.2\n\nExemple : Llama 3 8B en Q4_K_M (4 bits)\n→ base = 8 × (4÷8) × 1.2 = 4.8 GB\n\n// 2. KV Cache (GB)\nkv_cache = (2 × L × H_kv × d_head × N_ctx × 2) ÷ 1 073 741 824\n  L      = nombre de couches\n  H_kv   = têtes d'attention KV (architecture GQA)\n  d_head = dimension par tête (128 pour Llama/Mistral)\n  N_ctx  = tokens de contexte\n\nExemple : 8B, 8 192 tokens (8k)\n→ kv = (2×32×8×128×8 192×2) ÷ 1 073 741 824 = 1.0 GB\n\n// Paramètres par taille de modèle (architecture GQA)\n 7B / 8B : 32 couches, 8 têtes KV\n     13B : 40 couches, 8 têtes KV\n     34B : 48 couches, 8 têtes KV\n     70B : 80 couches, 8 têtes KV",
+      "section1Title": "Comment calculer la VRAM pour un LLM",
+      "section1Body": "La mémoire GPU requise se décompose en deux parties : la mémoire du modèle et le KV Cache. La mémoire du modèle dépend directement du nombre de paramètres et de la précision numérique choisie. Un modèle de 7 milliards de paramètres en FP16 (2 octets par paramètre) occupe environ 16,8 GB en comptant l'overhead système. La quantification réduit cette empreinte : Q4_K_M divise la taille par quatre par rapport au FP16, rendant possible l'inférence sur des GPU grand public comme le RTX 4090 même pour des modèles 13B à 34B.",
+      "section2Title": "Quelle carte graphique pour Llama 3 et Mistral",
+      "section2Body": "Llama 3 8B quantifié en Q4_K_M nécessite environ 5 à 6 GB de VRAM en inférence, ce qui le rend compatible avec un RTX 3080 ou supérieur. Le modèle 70B requiert une configuration plus sérieuse : au minimum un A100 80GB ou deux RTX 4090 en parallélisme tensoriel via PCIe (le NVLink a été retiré de la série RTX 40). Pour une utilisation en entreprise avec un contexte long (32k à 128k tokens), il faut prévoir une marge supplémentaire pour le KV Cache, qui peut atteindre plusieurs dizaines de gigaoctets sur les contextes les plus longs.",
+      "section3Title": "Héberger un LLM on-premise en entreprise",
+      "section3Body": "L'hébergement on-premise d'un LLM présente des avantages concrets : aucune donnée ne quitte votre infrastructure, les coûts à la requête sont éliminés, et vous gardez la maîtrise totale de votre pipeline IA. Du point de vue RGPD, c'est la solution la plus robuste pour traiter des données sensibles (contrats, données patients, informations financières). Une configuration typique pour une PME consiste en un serveur avec 1 ou 2 RTX 4090, suffisant pour faire tourner un modèle 13B à 34B quantifié en production.",
+      "faqTitle": "Questions fréquentes",
+      "faq": [
+        {
+          "q": "Quelle est la différence entre FP16, INT8 et Q4_K_M ?",
+          "a": "FP16 utilise 2 octets par paramètre pour une précision maximale. INT8 réduit à 1 octet avec une légère perte de qualité. Q4_K_M utilise 4 bits par paramètre (0,5 octet) : c'est le compromis standard de la communauté llama.cpp, avec une perte de qualité quasi imperceptible pour la plupart des tâches."
+        },
+        {
+          "q": "Le KV Cache peut-il être déchargé sur la RAM CPU ?",
+          "a": "Oui, certains frameworks (llama.cpp, exllama2) permettent d'offloader une partie du KV Cache en RAM système, mais au prix d'une latence nettement plus élevée. Pour une inférence fluide en production, le KV Cache entier doit tenir en VRAM."
+        },
+        {
+          "q": "Ces estimations sont-elles exactes pour tous les modèles ?",
+          "a": "Ce simulateur utilise les architectures standards de type Llama/Mistral/Qwen. Les modèles avec une architecture différente (Falcon, Mamba, etc.) peuvent présenter des besoins légèrement différents. Les estimations incluent une marge de 20% et sont intentionnellement conservatives."
+        },
+        {
+          "q": "Un Mac Apple Silicon peut-il faire tourner un LLM en production ?",
+          "a": "Oui, grâce à la mémoire unifiée, les Macs M2/M3 Ultra peuvent faire tourner des modèles 70B. La bande passante mémoire reste inférieure à celle des GPU NVIDIA datacenter, mais le rapport performance/coût est excellent pour du déploiement on-premise léger ou du prototypage."
+        }
+      ],
+      "ctaTitle": "Déployer des modèles open-source sur vos serveurs sans fuite de données est ma spécialité.",
+      "ctaBody": "Architecture GPU, choix du modèle, quantification, intégration RGPD : je vous accompagne de l'estimation matérielle au déploiement en production.",
+      "ctaButton": "Discuter de votre projet d'infrastructure"
     }
   },
   "contact": {

@@ -1,4 +1,11 @@
-import { ArrowRight, Bot, Sparkles } from "lucide-react";
+import {
+  ArrowRight,
+  Bot,
+  Braces,
+  Calculator,
+  Cpu,
+  Sparkles,
+} from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -95,6 +102,105 @@ export default async function ToolsPage({
                 </div>
                 <p className="text-sm text-[var(--muted-foreground)]">
                   {dict.tools.aiAnswer.description}
+                </p>
+              </div>
+
+              <div className="transition-gap mt-auto flex items-center gap-1 text-sm font-medium text-[var(--primary)] group-hover:gap-2">
+                <span>
+                  {lang === "fr" ? "Essayer l'outil" : "Try the tool"}
+                </span>
+                <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />
+              </div>
+            </Link>
+
+            {/* RAG Cost Calculator */}
+            <Link
+              href={`/${lang}/tools/rag-cost-calculator`}
+              className="group relative flex flex-col gap-4 overflow-hidden rounded-xl border border-[var(--border)] p-6 transition-all hover:border-[var(--primary)]/30 hover:shadow-[var(--primary)]/5 hover:shadow-lg"
+            >
+              <div className="absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-[var(--primary)] to-[var(--accent-strong)] opacity-0 transition-opacity group-hover:opacity-100" />
+
+              <div className="inline-flex size-10 items-center justify-center rounded-lg bg-gradient-to-br from-[var(--primary)] to-[var(--accent-strong)]">
+                <Calculator className="size-5 text-white" />
+              </div>
+
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <p className="leading-snug font-medium">
+                    {dict.tools.ragCost.heading}
+                  </p>
+                  <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-medium text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">
+                    {lang === "fr" ? "Gratuit" : "Free"}
+                  </span>
+                </div>
+                <p className="text-sm text-[var(--muted-foreground)]">
+                  {dict.tools.ragCost.description}
+                </p>
+              </div>
+
+              <div className="transition-gap mt-auto flex items-center gap-1 text-sm font-medium text-[var(--primary)] group-hover:gap-2">
+                <span>
+                  {lang === "fr" ? "Essayer l'outil" : "Try the tool"}
+                </span>
+                <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />
+              </div>
+            </Link>
+
+            {/* VRAM Simulator */}
+            <Link
+              href={`/${lang}/tools/vram-simulator`}
+              className="group relative flex flex-col gap-4 overflow-hidden rounded-xl border border-[var(--border)] p-6 transition-all hover:border-[var(--primary)]/30 hover:shadow-[var(--primary)]/5 hover:shadow-lg"
+            >
+              <div className="absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-[var(--primary)] to-[var(--accent-strong)] opacity-0 transition-opacity group-hover:opacity-100" />
+
+              <div className="inline-flex size-10 items-center justify-center rounded-lg bg-gradient-to-br from-[var(--primary)] to-[var(--accent-strong)]">
+                <Cpu className="size-5 text-white" />
+              </div>
+
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <p className="leading-snug font-medium">
+                    {dict.tools.vramSimulator.heading}
+                  </p>
+                  <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-medium text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">
+                    {lang === "fr" ? "Gratuit" : "Free"}
+                  </span>
+                </div>
+                <p className="text-sm text-[var(--muted-foreground)]">
+                  {dict.tools.vramSimulator.description}
+                </p>
+              </div>
+
+              <div className="transition-gap mt-auto flex items-center gap-1 text-sm font-medium text-[var(--primary)] group-hover:gap-2">
+                <span>
+                  {lang === "fr" ? "Essayer l'outil" : "Try the tool"}
+                </span>
+                <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />
+              </div>
+            </Link>
+
+            {/* Schema Generator */}
+            <Link
+              href={`/${lang}/tools/schema-generator`}
+              className="group relative flex flex-col gap-4 overflow-hidden rounded-xl border border-[var(--border)] p-6 transition-all hover:border-[var(--primary)]/30 hover:shadow-[var(--primary)]/5 hover:shadow-lg"
+            >
+              <div className="absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-[var(--primary)] to-[var(--accent-strong)] opacity-0 transition-opacity group-hover:opacity-100" />
+
+              <div className="inline-flex size-10 items-center justify-center rounded-lg bg-gradient-to-br from-[var(--primary)] to-[var(--accent-strong)]">
+                <Braces className="size-5 text-white" />
+              </div>
+
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <p className="leading-snug font-medium">
+                    {dict.tools.schemaGenerator.heading}
+                  </p>
+                  <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-medium text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">
+                    {lang === "fr" ? "Gratuit" : "Free"}
+                  </span>
+                </div>
+                <p className="text-sm text-[var(--muted-foreground)]">
+                  {dict.tools.schemaGenerator.description}
                 </p>
               </div>
 

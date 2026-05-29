@@ -1,9 +1,9 @@
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Database, FileCode2, Layers, Zap } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { AiAnswerGenerator } from "@/components/tools/AiAnswerGenerator";
+import { SchemaGenerator } from "@/components/tools/SchemaGenerator";
 import {
   buildAlternates,
   buildBreadcrumbSchema,
@@ -31,35 +31,40 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { lang } = await params;
   const dict = await getDictionary(lang as Locale);
-  const a = dict.tools.aiAnswer;
+  const s = dict.tools.schemaGenerator;
   return {
-    title: a.metaTitle,
-    description: a.metaDescription,
-    alternates: { languages: buildAlternates("/tools/ai-answer-generator") },
-    openGraph: buildOpenGraph(a.metaTitle, a.metaDescription, lang),
-    twitter: buildTwitterCard(a.metaTitle, a.metaDescription),
+    title: s.metaTitle,
+    description: s.metaDescription,
+    alternates: {
+      canonical: buildAlternates("/tools/schema-generator")[lang as Locale],
+      languages: buildAlternates("/tools/schema-generator"),
+    },
+    openGraph: buildOpenGraph(s.metaTitle, s.metaDescription, lang),
+    twitter: buildTwitterCard(s.metaTitle, s.metaDescription),
   };
 }
 
-export default async function AiAnswerGeneratorPage({ params }: Props) {
+const GUIDE_ICONS = [FileCode2, Zap, Layers, Database];
+
+export default async function SchemaGeneratorPage({ params }: Props) {
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
   const dict = await getDictionary(lang);
-  const a = dict.tools.aiAnswer;
+  const s = dict.tools.schemaGenerator;
 
   const breadcrumbSchema = buildBreadcrumbSchema([
     { name: lang === "fr" ? "Accueil" : "Home", url: `${SITE_URL}/${lang}` },
     { name: dict.tools.heading, url: `${SITE_URL}/${lang}/tools` },
-    { name: a.heading },
+    { name: s.heading },
   ]);
 
   const webAppSchema = {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    name: a.heading,
-    description: a.metaDescription,
-    url: `${SITE_URL}/${lang}/tools/ai-answer-generator`,
-    applicationCategory: "UtilitiesApplication",
+    name: s.heading,
+    description: s.metaDescription,
+    url: `${SITE_URL}/${lang}/tools/schema-generator`,
+    applicationCategory: "DeveloperApplication",
     operatingSystem: "Web",
     isAccessibleForFree: true,
     inLanguage: lang === "fr" ? "fr-FR" : "en-US",
@@ -73,12 +78,51 @@ export default async function AiAnswerGeneratorPage({ params }: Props) {
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: a.faq.map((item: { q: string; a: string }) => ({
+    mainEntity: s.faq.map((item: { q: string; a: string }) => ({
       "@type": "Question",
       name: item.q,
       acceptedAnswer: { "@type": "Answer", text: item.a },
     })),
   };
+
+  const instructorExample =
+    lang === "fr"
+      ? `import instructor
+from openai import OpenAI
+# Collez votre classe Pydantic ici
+
+client = instructor.from_openai(OpenAI())
+
+result = client.chat.completions.create(
+    model="gpt-4o-mini",
+    response_model=Invoice,  # votre classe générée
+    messages=[{
+        "role": "user",
+        "content": f"Extrais les données de cette facture :\\n{texte_facture}"
+    }]
+)
+
+# result est un objet Invoice typé et validé
+print(result.model_dump())
+# -> {"company_name": "Acme Corp", "amount_before_tax": 1200.0, ...}`
+      : `import instructor
+from openai import OpenAI
+# Paste your Pydantic class here
+
+client = instructor.from_openai(OpenAI())
+
+result = client.chat.completions.create(
+    model="gpt-4o-mini",
+    response_model=Invoice,  # your generated class
+    messages=[{
+        "role": "user",
+        "content": f"Extract data from this invoice:\\n{invoice_text}"
+    }]
+)
+
+# result is a typed, validated Invoice object
+print(result.model_dump())
+# -> {"company_name": "Acme Corp", "amount_before_tax": 1200.0, ...}`;
 
   return (
     <>
@@ -113,25 +157,25 @@ export default async function AiAnswerGeneratorPage({ params }: Props) {
               {dict.tools.heading}
             </Link>
             {" / "}
-            {a.heading}
+            {s.heading}
           </p>
           <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[var(--primary)]/20 bg-[var(--primary)]/5 px-3 py-1 text-xs font-medium text-[var(--primary)]">
             <span className="size-1.5 rounded-full bg-emerald-500" />
-            {a.badge}
+            {s.badge}
           </div>
           <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
-            {a.heading}
+            {s.heading}
           </h1>
           <p className="mt-4 max-w-2xl text-lg text-[var(--muted-foreground)]">
-            {a.description}
+            {s.description}
           </p>
         </div>
       </section>
 
       {/* GENERATOR */}
       <section>
-        <div className="mx-auto max-w-3xl px-6 py-16">
-          <AiAnswerGenerator dict={a} defaultLang={lang} />
+        <div className="mx-auto max-w-6xl px-6 py-16">
+          <SchemaGenerator dict={s} />
         </div>
       </section>
 
@@ -139,10 +183,10 @@ export default async function AiAnswerGeneratorPage({ params }: Props) {
       <section className="border-t border-[var(--border)] bg-[var(--secondary)]/40">
         <div className="mx-auto max-w-6xl px-6 py-16">
           <h2 className="mb-10 text-2xl font-semibold tracking-tight">
-            {a.howItWorksTitle}
+            {s.howItWorksTitle}
           </h2>
           <div className="grid gap-8 sm:grid-cols-3">
-            {a.howItWorksSteps.map((step, i) => (
+            {s.howItWorksSteps.map((step, i) => (
               <div key={i} className="flex flex-col gap-3">
                 <div className="inline-flex size-9 items-center justify-center rounded-full bg-[var(--primary)] text-sm font-bold text-[var(--primary-foreground)]">
                   {i + 1}
@@ -157,14 +201,65 @@ export default async function AiAnswerGeneratorPage({ params }: Props) {
         </div>
       </section>
 
-      {/* FAQ */}
+      {/* GUIDE */}
       <section className="border-t border-[var(--border)]">
+        <div className="mx-auto max-w-6xl px-6 py-16">
+          <h2 className="mb-4 text-2xl font-semibold tracking-tight">
+            {s.guideTitle}
+          </h2>
+          <p className="mb-12 max-w-3xl text-[var(--muted-foreground)]">
+            {s.guideIntro}
+          </p>
+
+          <div className="grid gap-6 sm:grid-cols-2">
+            {s.guideSections.map((section, i) => {
+              const Icon = GUIDE_ICONS[i % GUIDE_ICONS.length] ?? FileCode2;
+              return (
+                <div
+                  key={i}
+                  className="space-y-3 rounded-xl border border-[var(--border)] p-6"
+                >
+                  <div className="inline-flex size-9 items-center justify-center rounded-lg bg-[var(--primary)]/10">
+                    <Icon className="size-4 text-[var(--primary)]" />
+                  </div>
+                  <p className="font-medium">{section.title}</p>
+                  <p className="text-sm leading-relaxed text-[var(--muted-foreground)]">
+                    {section.body}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Usage example with Instructor */}
+          <div className="mt-10 space-y-4">
+            <h3 className="text-lg font-semibold">
+              {lang === "fr"
+                ? "Utilisation avec Instructor (Python)"
+                : "Usage with Instructor (Python)"}
+            </h3>
+            <p className="text-sm text-[var(--muted-foreground)]">
+              {lang === "fr"
+                ? "Une fois le schéma Pydantic généré, branchez-le directement dans Instructor pour une extraction structurée sans parsing manuel :"
+                : "Once you have your Pydantic schema, plug it directly into Instructor for structured extraction with zero manual parsing:"}
+            </p>
+            <div className="overflow-hidden rounded-lg bg-[#1e1e1e]">
+              <pre className="overflow-x-auto px-5 py-5 font-mono text-sm leading-relaxed whitespace-pre text-[#d4d4d4]">
+                {instructorExample}
+              </pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="border-t border-[var(--border)] bg-[var(--secondary)]/40">
         <div className="mx-auto max-w-3xl px-6 py-16">
           <h2 className="mb-8 text-2xl font-semibold tracking-tight">
-            {a.faqTitle}
+            {s.faqTitle}
           </h2>
           <div className="divide-y divide-[var(--border)]">
-            {a.faq.map((item, i) => (
+            {s.faq.map((item, i) => (
               <details key={i} className="group py-5">
                 <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-medium">
                   {item.q}
@@ -184,19 +279,19 @@ export default async function AiAnswerGeneratorPage({ params }: Props) {
         <div className="mx-auto max-w-6xl px-6 py-16 text-center">
           <p className="text-lg font-medium">
             {lang === "fr"
-              ? "Besoin d'une intégration IA sur mesure ?"
-              : "Need a custom AI integration?"}
+              ? "Vos pipelines de données ont besoin de plus que de simples schémas ?"
+              : "Your data pipelines need more than just schemas?"}
           </p>
-          <p className="mt-2 text-sm text-[var(--muted-foreground)]">
+          <p className="mx-auto mt-2 max-w-xl text-sm text-[var(--muted-foreground)]">
             {lang === "fr"
-              ? "Cet outil est une démo. Je construis des solutions IA complètes pour les entreprises."
-              : "This tool is a demo. I build full AI solutions for businesses."}
+              ? "Je configure vos agents et pipelines ETL connectés aux LLM, du prototype à la production."
+              : "I set up your LLM-connected agents and ETL pipelines, from prototype to production."}
           </p>
           <Link
             href={`/${lang}/contact`}
             className="mt-6 inline-flex items-center gap-2 rounded-lg bg-[var(--primary)] px-5 py-2.5 text-sm font-medium text-[var(--primary-foreground)] transition-opacity hover:opacity-80"
           >
-            {lang === "fr" ? "Discutons de votre projet" : "Let's talk"}
+            {lang === "fr" ? "Prendre contact" : "Get in touch"}
           </Link>
         </div>
       </section>
