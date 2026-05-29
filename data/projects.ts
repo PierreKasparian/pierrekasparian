@@ -26,7 +26,7 @@ export const projects: Project[] = [
   {
     slug: "pretto-langfuse",
     title: {
-      fr: "Plateforme d'évaluation de prompts - Pretto",
+      fr: "Plateforme d'évaluation de prompts - Société Pretto",
       en: "Prompt Evaluation Platform - Pretto",
     },
     description: {
@@ -45,7 +45,7 @@ export const projects: Project[] = [
   {
     slug: "pretto-prompt-pipeline",
     title: {
-      fr: "Pipeline d'auto-amélioration de prompt - Pretto",
+      fr: "Pipeline d'auto-amélioration de prompt - Société Pretto",
       en: "Prompt Auto-improvement Pipeline - Pretto",
     },
     description: {
@@ -65,7 +65,7 @@ export const projects: Project[] = [
   {
     slug: "pretto-batch-inference",
     title: {
-      fr: "Service d'inférence batch - Pretto",
+      fr: "Service d'inférence batch - Société Pretto",
       en: "Batch Inference Service - Pretto",
     },
     description: {
@@ -84,7 +84,7 @@ export const projects: Project[] = [
   {
     slug: "pretto-email-pipeline",
     title: {
-      fr: "Pipeline de traitement d'emails - Pretto",
+      fr: "Pipeline de traitement d'emails - Société Pretto",
       en: "Email Processing Pipeline - Pretto",
     },
     description: {
@@ -105,7 +105,7 @@ export const projects: Project[] = [
   {
     slug: "pretto-llm-platform",
     title: {
-      fr: "Fiabilisation de la plateforme LLM - Pretto",
+      fr: "Fiabilisation de la plateforme LLM - Société Pretto",
       en: "LLM Platform Reliability - Pretto",
     },
     description: {
@@ -125,7 +125,7 @@ export const projects: Project[] = [
   {
     slug: "ailog-rag",
     title: {
-      fr: "Chatbot RAG multi-clients - LiveSession",
+      fr: "Chatbot RAG multi-clients - Société LiveSession",
       en: "Multi-tenant RAG chatbot - LiveSession",
     },
     description: {
@@ -147,7 +147,7 @@ export const projects: Project[] = [
   {
     slug: "livesession-formation",
     title: {
-      fr: "Formation RAG - LiveSession",
+      fr: "Formation RAG - Société LiveSession",
       en: "RAG Training - LiveSession",
     },
     description: {
@@ -187,7 +187,7 @@ export const projects: Project[] = [
   {
     slug: "medee-doddee",
     title: {
-      fr: "Développement web - Doddee",
+      fr: "Développement web - Société Doddee",
       en: "Web development - Doddee",
     },
     description: {
@@ -207,7 +207,7 @@ export const projects: Project[] = [
   {
     slug: "medee-ml",
     title: {
-      fr: "Classification automatique d'entreprises - Médée",
+      fr: "Classification automatique d'entreprises - Société Médée",
       en: "Automatic business classification - Médée",
     },
     description: {
