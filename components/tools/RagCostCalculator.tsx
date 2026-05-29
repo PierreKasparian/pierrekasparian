@@ -33,7 +33,7 @@ const MODELS: [Model, ...Model[]] = [
   },
   {
     id: "gpt-4-5",
-    name: "GPT-4.5",
+    name: "GPT-5.5",
     provider: "openai",
     inputPricePerM: 5,
     outputPricePerM: 30,
