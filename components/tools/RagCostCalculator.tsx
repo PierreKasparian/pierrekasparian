@@ -303,7 +303,7 @@ export function RagCostCalculator({ lang }: Props) {
             inputPricePerM: customInputPrice,
             outputPricePerM: customOutputPrice,
           }
-        : (MODELS.find((m) => m.id === selectedModel) ?? MODELS[0]),
+        : (MODELS.find((m) => m.id === selectedModel) ?? MODELS[0]!),
     [selectedModel, t.customLabel, customInputPrice, customOutputPrice],
   );
 
