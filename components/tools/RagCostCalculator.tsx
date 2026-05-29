@@ -273,8 +273,8 @@ function formatLargeNumber(value: number, lang: Lang): string {
       : `${(value / 1_000_000).toFixed(1)}M`;
   if (value >= 1_000)
     return lang === "fr"
-      ? `${Math.round(value / 1_000)} k`
-      : `${Math.round(value / 1_000)}K`;
+      ? `${String(Math.round(value / 1_000))} k`
+      : `${String(Math.round(value / 1_000))}K`;
   return value.toString();
 }
 
@@ -293,16 +293,19 @@ export function RagCostCalculator({ lang }: Props) {
   const [customInputPrice, setCustomInputPrice] = useState(1.0);
   const [customOutputPrice, setCustomOutputPrice] = useState(3.0);
 
-  const model: Model =
-    selectedModel === "custom"
-      ? {
-          id: "custom",
-          name: t.customLabel,
-          provider: "custom",
-          inputPricePerM: customInputPrice,
-          outputPricePerM: customOutputPrice,
-        }
-      : MODELS.find((m) => m.id === selectedModel)!;
+  const model: Model = useMemo(
+    () =>
+      selectedModel === "custom"
+        ? {
+            id: "custom",
+            name: t.customLabel,
+            provider: "custom",
+            inputPricePerM: customInputPrice,
+            outputPricePerM: customOutputPrice,
+          }
+        : (MODELS.find((m) => m.id === selectedModel) ?? MODELS[0]),
+    [selectedModel, t.customLabel, customInputPrice, customOutputPrice],
+  );
 
   const calc = useMemo(() => {
     const pages =
@@ -359,9 +362,9 @@ export function RagCostCalculator({ lang }: Props) {
                 min={1}
                 max={1_000_000}
                 value={volumeValue}
-                onChange={(e) =>
-                  setVolumeValue(Math.max(1, Number(e.target.value)))
-                }
+                onChange={(e) => {
+                  setVolumeValue(Math.max(1, Number(e.target.value)));
+                }}
                 className="min-w-0 flex-1 bg-[var(--background)] px-4 py-2.5 text-sm focus:outline-none"
               />
               <div className="flex border-l border-[var(--border)]">
@@ -369,7 +372,7 @@ export function RagCostCalculator({ lang }: Props) {
                   <button
                     key={u}
                     type="button"
-                    onClick={() => setVolumeUnit(u)}
+                    onClick={() => { setVolumeUnit(u); }}
                     className={`px-3 py-2.5 text-xs font-medium transition-colors ${
                       volumeUnit === u
                         ? "bg-[var(--primary)] text-[var(--primary-foreground)]"
@@ -394,7 +397,7 @@ export function RagCostCalculator({ lang }: Props) {
               min={1}
               max={100_000}
               value={users}
-              onChange={(e) => setUsers(Math.max(1, Number(e.target.value)))}
+              onChange={(e) => { setUsers(Math.max(1, Number(e.target.value))); }}
               className="w-full rounded-lg border border-[var(--border)] bg-[var(--background)] px-4 py-2.5 text-sm focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/20 focus:outline-none"
             />
           </div>
@@ -410,9 +413,9 @@ export function RagCostCalculator({ lang }: Props) {
               min={1}
               max={1_000}
               value={questionsPerDay}
-              onChange={(e) =>
-                setQuestionsPerDay(Math.max(1, Number(e.target.value)))
-              }
+              onChange={(e) => {
+                setQuestionsPerDay(Math.max(1, Number(e.target.value)));
+              }}
               className="w-full rounded-lg border border-[var(--border)] bg-[var(--background)] px-4 py-2.5 text-sm focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/20 focus:outline-none"
             />
           </div>
@@ -456,7 +459,7 @@ export function RagCostCalculator({ lang }: Props) {
                       <button
                         key={m.id}
                         type="button"
-                        onClick={() => setSelectedModel(m.id)}
+                        onClick={() => { setSelectedModel(m.id); }}
                         className={`rounded-lg border px-3 py-1.5 text-sm font-medium transition-colors ${
                           selectedModel === m.id
                             ? accentClass
@@ -497,7 +500,7 @@ export function RagCostCalculator({ lang }: Props) {
                 </p>
                 <button
                   type="button"
-                  onClick={() => setSelectedModel("custom")}
+                  onClick={() => { setSelectedModel("custom"); }}
                   className={`rounded-lg border px-3 py-1.5 text-sm font-medium transition-colors ${
                     selectedModel === "custom"
                       ? "border-amber-400 bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300 dark:border-amber-700"

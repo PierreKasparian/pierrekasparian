@@ -1,10 +1,8 @@
 import { defineConfig, globalIgnores } from "eslint/config";
 import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";
-import prettierConfig from "eslint-config-prettier/flat";
 import importPlugin from "eslint-plugin-import";
 import jsxA11y from "eslint-plugin-jsx-a11y";
-import prettierPlugin from "eslint-plugin-prettier/recommended";
 import tseslint from "typescript-eslint";
 
 const eslintConfig = defineConfig([
@@ -49,7 +47,6 @@ const eslintConfig = defineConfig([
           alphabetize: { order: "asc", caseInsensitive: true },
         },
       ],
-      "prettier/prettier": "warn",
       "import/no-default-export": "off",
       "import/no-unresolved": "off",
       "@typescript-eslint/consistent-type-imports": [
@@ -90,9 +87,6 @@ const eslintConfig = defineConfig([
       "@typescript-eslint/require-await": "off",
     },
   },
-  prettierPlugin,
-  prettierConfig,
-  { rules: { "prettier/prettier": "warn" } },
   globalIgnores([
     ".next/**",
     "out/**",
